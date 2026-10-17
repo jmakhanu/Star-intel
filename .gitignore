@@ -1,0 +1,7 @@
+.env
+vault/
+reports/
+logs/
+__pycache__/
+*.pdf
+*.db
