@@ -1,3 +1,4 @@
+import time
 import requests
 import argparse
 import json
@@ -126,7 +127,7 @@ def scrape_client(state: PipelineState):
     try:
         response = requests.get(f"https://r.jina.ai/{state['client_url']}", timeout=20)
         response.raise_for_status()
-        context = response.text[:4500]
+        context = response.text[:3000]
         print(f"    [+] Ingested {len(context)} chars of client baseline data.")
     except Exception as e:
         context = f"Client scrape failed for {c_domain}: {e}"
@@ -140,7 +141,7 @@ def scrape_and_hash(state: PipelineState):
     try:
         response = requests.get(f"https://r.jina.ai/{state['target_url']}", timeout=20)
         response.raise_for_status()
-        raw_text = response.text[:5500]
+        raw_text = response.text[:3800]
         print(f"    [+] Ingested {len(raw_text)} chars of competitor intelligence.")
     except Exception as e:
         raw_text = f"Scrape failed for {domain}: {e}"
@@ -175,7 +176,7 @@ def primary_analyst(state: PipelineState):
     except Exception:
         extracted_dict = {"pricing_model": "Opaque / Enterprise Quote", "key_features": [], "vulnerabilities": []}
 
-    llm_text = ChatGroq(model="openai/gpt-oss-120b", temperature=0.2, max_tokens=2048)
+    llm_text = ChatGroq(model="openai/gpt-oss-120b", temperature=0.2, max_tokens=3200)
     text_prompt = f"""
     You are Lead Defense & Enterprise Strategist at Star Intel. 
     You work EXCLUSIVELY FOR OUR CLIENT ({state['client_domain']}) to defeat TARGET COMPETITOR ({state['target_domain']}).
@@ -186,7 +187,10 @@ def primary_analyst(state: PipelineState):
     TARGET COMPETITOR'S DATA ({state['target_domain']}):
     {state['raw_markdown']}
 
-    Write a detailed, exhaustive, multi-section Markdown intelligence dossier. Do NOT write a short summary. Expand deeply on every point with concrete technical and commercial analysis.
+    Write a detailed, exhaustive, multi-section Markdown intelligence dossier.
+    CRITICAL FORMATTING & GROUNDING RULES:
+    1. DO NOT USE MARKDOWN TABLES (| col | col |). Wide tables break the PDF renderer. Use structured ### subheadings and bold bullet points instead.
+    2. ZERO HALLUCINATION POLICY: Only cite metrics, specs, and claims explicitly supported by the scraped text. NEVER invent unverified hardware specs (like fake CPU models, fake satellite masses, or fake AWS instance types). If a spec is undisclosed on their site, explicitly flag its opacity as a competitive blind spot.
 
     Include these exact sections:
     ## 1. Executive Threat Summary & Market Posture
@@ -236,13 +240,17 @@ def should_refine(state: PipelineState):
     return "commit"
 
 def analyst_refine(state: PipelineState):
-    print("[*] 4. Lead Strategist: Hardening final multi-page brief for OUR CLIENT...")
-    llm = ChatGroq(model="openai/gpt-oss-120b", temperature=0.15, max_tokens=2500)
+    print("[*] 4. Lead Strategist: Cooling down Groq TPM window (20s) then hardening final brief...")
+    time.sleep(20)
+    llm = ChatGroq(model="openai/gpt-oss-120b", temperature=0.15, max_tokens=3200)
 
     refine_prompt = f"""
     You are the Lead Strategist at Star Intel working EXCLUSIVELY FOR {state['client_domain']} to defeat {state['target_domain']}.
     Rewrite and expand the draft dossier below to address the Red Team critique. 
-    Make the analysis thorough, highly technical, and ruthless. Avoid generic fluff.
+    Make the analysis thorough, highly technical, and ruthless.
+    CRITICAL RULES:
+    1. DO NOT USE MARKDOWN TABLES (| col | col |)—use clean bulleted lists and bold labels so the PDF renders cleanly.
+    2. Remove any fabricated/unverified hardware numbers not grounded in the raw data. Ensure ALL 5 SECTIONS (especially Section 5: Field Sales Battlecard) are written in full.
 
     DRAFT DOSSIER:
     {state['draft_report']}
