@@ -3,5 +3,5 @@ vault/
 reports/
 logs/
 __pycache__/
-*.pdf
 *.db
+reports/*.pdf
