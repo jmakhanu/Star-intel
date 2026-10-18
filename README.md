@@ -1,6 +1,7 @@
 # ✦ Star Intel | Autonomous B2B Competitive Intelligence Engine
 
-**Live Web Portal:** https://jmakhanu.github.io/star-intel/
+**Repository:** https://github.com/jmakhanu/Star-intel  
+**Live Web Portal:** https://jmakhanu.github.io/Star-intel/
 
 ### 📄 View Live Sample Deliverables (Generated Automatically in 35 Seconds)
 * **[Aerospace & Defense Sample (Capella Space vs. ICEYE)](samples/Sample_Aerospace_Capella_vs_ICEYE.pdf)** — Full 5-section SAR satellite technical & commercial battlecard.
