@@ -176,7 +176,7 @@ def primary_analyst(state: PipelineState):
     except Exception:
         extracted_dict = {"pricing_model": "Opaque / Enterprise Quote", "key_features": [], "vulnerabilities": []}
 
-    llm_text = ChatGroq(model="openai/gpt-oss-120b", temperature=0.2, max_tokens=3200)
+    llm_text = ChatGroq(model="openai/gpt-oss-120b", temperature=0.1, max_tokens=3000, reasoning_effort="low")
     text_prompt = f"""
     You are Lead Defense & Enterprise Strategist at Star Intel. 
     You work EXCLUSIVELY FOR OUR CLIENT ({state['client_domain']}) to defeat TARGET COMPETITOR ({state['target_domain']}).
@@ -240,9 +240,9 @@ def should_refine(state: PipelineState):
     return "commit"
 
 def analyst_refine(state: PipelineState):
-    print("[*] 4. Lead Strategist: Cooling down Groq TPM window (20s) then hardening final brief...")
-    time.sleep(20)
-    llm = ChatGroq(model="openai/gpt-oss-120b", temperature=0.15, max_tokens=3200)
+    print("[*] 4. Lead Strategist: Cooling down Groq TPM window (35s) then hardening final brief...")
+    time.sleep(35)
+    llm = ChatGroq(model="openai/gpt-oss-120b", temperature=0.1, max_tokens=3600, reasoning_effort="low")
 
     refine_prompt = f"""
     You are the Lead Strategist at Star Intel working EXCLUSIVELY FOR {state['client_domain']} to defeat {state['target_domain']}.
@@ -250,7 +250,7 @@ def analyst_refine(state: PipelineState):
     Make the analysis thorough, highly technical, and ruthless.
     CRITICAL RULES:
     1. DO NOT USE MARKDOWN TABLES (| col | col |)—use clean bulleted lists and bold labels so the PDF renders cleanly.
-    2. Remove any fabricated/unverified hardware numbers not grounded in the raw data. Ensure ALL 5 SECTIONS (especially Section 5: Field Sales Battlecard) are written in full.
+    2. STRICT LENGTH & GROUNDING: Keep Sections 1, 2, 3, and 4 concise (maximum 150 words per section) so you have plenty of space to write Section 5 in complete detail. NEVER invent external citations (no fake FCC/ESA filings, no fake NRO audits, no invented $/km2 prices). End the report with "--- END OF DOSSIER ---" after completing all 4 trap questions and rebuttals in Section 5.
 
     DRAFT DOSSIER:
     {state['draft_report']}
