@@ -221,7 +221,7 @@ def red_team_critic(state: PipelineState):
 
     critic_prompt = f"""
     You are the Chief Strategy Officer of {state['target_domain']}. You intercepted a competitive dossier written for your rival ({state['client_domain']}).
-    Dissect this report. Point out where the analyst was too generic, missed specific technical details from the raw data, or wrote weak sales attack vectors.
+    Dissect this report. Point out where the analyst was too generic or wrote weak sales attack vectors. DO NOT ask the analyst to invent unverified specs, prices, or regulatory filings not present in the scraped text.
 
     DRAFT REPORT:
     {state['draft_report']}
