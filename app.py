@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-Star Intel Web SaaS Platform (v4.5 — Orbital Command UI)
+Star Intel Web SaaS Platform
 Self-serve web portal with custom SVG vector graphics, architecture pipeline,
-ROI bento cards, and live competitor/pricing teardown engine.
+ROI bento cards, Founding Test User conversion flow, and live teardown engine.
 """
 
 import os
@@ -61,25 +61,19 @@ LANDING_HTML = """<!DOCTYPE html>
     margin: 0 auto;
     padding: 20px 24px;
     border-bottom: 1px solid var(--border-subtle);
+    flex-wrap: wrap;
+    gap: 12px;
   }
   .brand {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
     font-weight: 800;
-    font-size: 16px;
+    font-size: 17px;
     letter-spacing: 1.5px;
     color: var(--text);
   }
-  .brand-tag {
-    font-size: 11px;
-    padding: 3px 8px;
-    border-radius: 4px;
-    background: rgba(56, 189, 248, 0.12);
-    color: var(--cyan);
-    border: 1px solid var(--border);
-  }
-  .nav-pills { display: flex; gap: 16px; align-items: center; }
+  .nav-pills { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
   .status-pill {
     display: flex;
     align-items: center;
@@ -92,6 +86,18 @@ LANDING_HTML = """<!DOCTYPE html>
     font-size: 12px;
     font-weight: 600;
   }
+  .beta-cta-nav {
+    background: rgba(56, 189, 248, 0.12);
+    border: 1px solid var(--border);
+    color: var(--cyan);
+    padding: 6px 14px;
+    border-radius: 99px;
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: 0.2s;
+  }
+  .beta-cta-nav:hover { background: var(--cyan); color: #050811; }
   .pulse-dot {
     width: 8px;
     height: 8px;
@@ -273,7 +279,7 @@ LANDING_HTML = """<!DOCTYPE html>
     margin: 0 0 24px;
   }
 
-  /* 4-PILLAR BENTO GRID (WHAT WE DO & BENEFITS) */
+  /* 4-PILLAR BENTO GRID */
   .bento-4 {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(265px, 1fr));
@@ -337,6 +343,45 @@ LANDING_HTML = """<!DOCTYPE html>
     border: 1px solid var(--border);
     padding: 4px 8px;
     border-radius: 6px;
+  }
+
+  /* EARLY ADOPTER / TEST USER PILOT BANNER */
+  .pilot-card {
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(6, 78, 59, 0.35));
+    border: 1px solid rgba(16, 185, 129, 0.4);
+    border-radius: 14px;
+    padding: 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  .pilot-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .btn-pilot-primary {
+    background: #10b981;
+    color: #04130e;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 14px;
+    text-decoration: none;
+    transition: 0.2s;
+  }
+  .btn-pilot-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+  .btn-pilot-secondary {
+    background: rgba(30, 41, 59, 0.85);
+    color: var(--text);
+    border: 1px solid var(--border);
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    text-decoration: none;
   }
 
   /* LOADER & RESULTS */
@@ -424,12 +469,13 @@ LANDING_HTML = """<!DOCTYPE html>
   }
   .footer {
     border-top: 1px solid var(--border-subtle);
-    padding: 28px 24px;
+    padding: 32px 24px;
     text-align: center;
     color: var(--muted);
-    font-size: 13px;
+    font-size: 13.5px;
     margin-top: 60px;
   }
+  .footer a { color: var(--cyan); text-decoration: none; }
 </style>
 </head>
 <body>
@@ -442,10 +488,11 @@ LANDING_HTML = """<!DOCTYPE html>
         <circle cx="12" cy="12" r="3" fill="#38bdf8"/>
         <path d="M12 3v3M12 18v3M3 12h3M18 12h3"/>
       </svg>
-      STAR INTEL <span class="brand-tag mono">v4.5 ORBITAL</span>
+      STAR INTEL
     </div>
     <div class="nav-pills">
-      <div class="status-pill"><span class="pulse-dot"></span> Multi-Agent 120B Engine Online</div>
+      <div class="status-pill"><span class="pulse-dot"></span> Autonomous Multi-Agent Engine Online</div>
+      <a href="#pilot" class="beta-cta-nav">Join Founding Test Cohort →</a>
     </div>
   </nav>
 
@@ -479,7 +526,7 @@ LANDING_HTML = """<!DOCTYPE html>
 
       <div class="loader-box" id="loader">
         [1/3] Scraping live product & pricing signals via Jina Reader...<br>
-        [2/3] Running 120B Multi-Agent Competitor Matrix + Red-Team CSO Loop...<br>
+        [2/3] Running Multi-Agent Competitor Matrix + Red-Team CSO Loop...<br>
         [3/3] Verifying live DNS & rendering executive battlecard (~25s)...
       </div>
     </div>
@@ -604,7 +651,7 @@ LANDING_HTML = """<!DOCTYPE html>
       <div class="pipe-step">
         <span class="step-num">03</span>
         <div>
-          <strong>120B Extractor + Red-Team</strong>
+          <strong>Multi-Agent + Red-Team</strong>
           <div style="font-size:13px;color:var(--muted);">Synthesizes competitor matrix and runs adversarial CSO vulnerability checks.</div>
         </div>
       </div>
@@ -618,9 +665,32 @@ LANDING_HTML = """<!DOCTYPE html>
     </div>
   </section>
 
+  <!-- FOUNDING TEST USER / EARLY ACCESS COHORT -->
+  <section class="section" id="pilot">
+    <div class="pilot-card">
+      <div style="max-width:680px;">
+        <div class="section-title mono" style="color:#34d399;">FOUNDING DESIGN PARTNER PROGRAM</div>
+        <h2 style="margin:6px 0 10px;font-size:24px;">Want Automated Weekly Competitor, Pricing & Lead Briefings?</h2>
+        <p style="margin:0;color:#cbd5e1;font-size:14.5px;">
+          We are onboarding <strong>founding test startups</strong> to receive custom weekly competitor price-drop alerts, SBIR/grant matches, and 50 high-intent buyer leads delivered straight to your inbox. Test the full automated pipeline with us and help shape our roadmap.
+        </p>
+      </div>
+      <div class="pilot-actions">
+        <a class="btn-pilot-primary" href="mailto:jmakhanuh@gmail.com?subject=Star%20Intel%20Founding%20Test%20User%20Request&body=Hi%20Idriss%2C%0A%0AWe%20tested%20Star%20Intel%20and%20would%20love%20to%20join%20the%20Founding%20Test%20Cohort%20for%20weekly%20competitor%20and%20lead%20briefings.%0A%0AOur%20Startup%20URL%3A%20%0ATop%20Competitors%20to%20Track%3A%20">
+          ✉ Request Custom Pilot (Email)
+        </a>
+        <a class="btn-pilot-secondary" href="https://wa.me/254790758050?text=Hi%20Idriss%2C%20I%20just%20tested%20Star%20Intel%20and%20want%20to%20try%20the%20Founding%20Test%20User%20weekly%20briefings." target="_blank">
+          💬 WhatsApp / Call (+254790758050)
+        </a>
+      </div>
+    </div>
+  </section>
+
   <footer class="footer">
-    Engineered by <strong>Idriss James Makhanu</strong> (BSc Astronomy & Astrophysics) • Star Intel Multi-Agent Intelligence Engine •
-    <a href="https://github.com/jmakhanu/Star-intel" target="_blank" style="color:var(--cyan);text-decoration:none;">GitHub Repository</a>
+    Built by <strong>Idriss</strong> &nbsp;|&nbsp;
+    Email: <a href="mailto:jmakhanuh@gmail.com">jmakhanuh@gmail.com</a> &nbsp;|&nbsp;
+    Phone / WhatsApp: <a href="tel:+254790758050">+254790758050</a> &nbsp;|&nbsp;
+    <a href="https://github.com/jmakhanu/Star-intel" target="_blank">GitHub</a>
   </footer>
 
 <script>
@@ -676,6 +746,7 @@ function renderDashboard(d) {
   const comps = d.competitor_matrix || [];
   const plays = d.growth_playbooks || [];
   const em = d.ready_to_send_customer_email || {};
+  const domainName = encodeURIComponent(d.domain || '');
 
   let rowsHtml = comps.map(c => `
     <tr>
@@ -704,7 +775,12 @@ function renderDashboard(d) {
           DNS Verified: ${d.dns_live ? 'ONLINE' : 'UNVERIFIED'} | Published Site Contacts: ${(d.verified_emails||[]).join(', ') || 'Protected / Use Contact Form'}
         </div>
       </div>
-      <button class="btn-dl" onclick="downloadCSV()">⬇ Export Competitor Matrix (.CSV)</button>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <button class="btn-dl" onclick="downloadCSV()">⬇ Export Competitor Matrix (.CSV)</button>
+        <a class="btn-pilot-primary" href="mailto:jmakhanuh@gmail.com?subject=Custom%20Weekly%20Radar%20for%20${domainName}&body=Hi%20Idriss%2C%0A%0AI%20just%20ran%20a%20live%20teardown%20for%20${domainName}%20on%20Star%20Intel.%20I%27d%20like%20to%20test%20the%20automated%20weekly%20competitor%20%26%20buyer-lead%20briefings.">
+          ⚡ Activate Weekly Radar for ${d.domain}
+        </a>
+      </div>
     </div>
 
     <h3 style="margin-bottom:12px;">1. Pricing & Packaging Arbitrage</h3>
@@ -792,6 +868,6 @@ ready_to_send_customer_email (keys: subject, body)."""
 
 
 if __name__ == "__main__":
-    print(f"[+] Star Intel v4.5 Orbital Command UI running at: http://localhost:{PORT}")
+    print(f"[+] Star Intel Web Portal running at: http://localhost:{PORT}")
     server = ThreadingHTTPServer(("0.0.0.0", PORT), StarIntelHandler)
     server.serve_forever()
