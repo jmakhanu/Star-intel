@@ -467,8 +467,8 @@ LANDING_HTML = """<!DOCTYPE html>
         </p>
       </div>
       <div style="display:flex;gap:12px;flex-wrap:wrap;">
-        <a class="btn-pilot-primary" href="mailto:jmakhanuh@gmail.com?subject=Unlock%20Star%20Intel%20AutoGTM%20Pro&body=Hi%20Idriss%2C%0A%0AI%20tested%20Star%20Intel%20and%20want%20to%20unlock%20the%20full%20AutoGTM%20Customer%20Hunter%20%26%20weekly%20outbound%20subscription.%0A%0AMy%20Startup%20URL%3A%20">
-          ✉ Unlock Full Customer List (Email Idriss)
+        <a class="btn-pilot-primary" href="https://paystack.shop/pay/star-intel-pro" target="_blank">
+          💳 Subscribe to AutoGTM Pro ($49/mo)
         </a>
         <a class="btn-dl" style="text-decoration:none;" href="https://wa.me/254790758050?text=Hi%20Idriss%2C%20I%20tested%20Star%20Intel%20and%20want%20to%20unlock%20the%20AutoGTM%20Customer%20Hunter%20subscription." target="_blank">
           💬 WhatsApp (+254790758050)
@@ -578,8 +578,8 @@ function renderDashboard(d) {
         <p style="font-size:13px;color:#cbd5e1;max-width:360px;margin:0 0 14px;">
           Get verified emails, buying triggers, and automated outbound sequences for ${d.startup_name || d.domain}.
         </p>
-        <a class="btn-pilot-primary" href="mailto:jmakhanuh@gmail.com?subject=Unlock%20AutoGTM%20Pro%20Leads%20for%20${domainName}&body=Hi%20Idriss%2C%0A%0AI%20just%20ran%20${domainName}%20on%20Star%20Intel%20and%20want%20to%20unlock%20the%20remaining%20customer%20prospects%20and%20automated%20email%20outreach.">
-          ⚡ Request Founding Test Access
+        <a class="btn-pilot-primary" href="https://paystack.shop/pay/star-intel-pro" target="_blank">
+          💳 Unlock Prospect + 50 Weekly Leads ($49/mo)
         </a>
       </div>` : ''}
     </div>`;
@@ -602,8 +602,8 @@ function renderDashboard(d) {
       </div>
       <div style="display:flex;gap:10px;flex-wrap:wrap;">
         <button class="btn-dl" onclick="downloadCSV()">⬇ Export Competitor Matrix (.CSV)</button>
-        <a class="btn-pilot-primary" href="mailto:jmakhanuh@gmail.com?subject=Activate%20AutoGTM%20Pro%20for%20${domainName}">
-          ⚡ Unlock Full 50-Lead AutoGTM Campaign
+        <a class="btn-pilot-primary" href="https://paystack.shop/pay/star-intel-pro" target="_blank">
+          💳 Upgrade to AutoGTM Pro ($49/mo)
         </a>
       </div>
     </div>
