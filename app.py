@@ -467,7 +467,7 @@ LANDING_HTML = """<!DOCTYPE html>
         </p>
       </div>
       <div style="display:flex;gap:12px;flex-wrap:wrap;">
-        <a class="btn-pilot-primary" href="https://paystack.shop/pay/star-intel-pro" target="_blank">
+        <a class="btn-pilot-primary" href="mailto:jmakhanuh@gmail.com?subject=Activate%20Star%20Intel%20AutoGTM%20Prohref="https://paystack.shop/pay/star-intel-pro" target="_blank"body=Hi%20Idriss%2C%20I%20want%20to%20subscribe%20to%20Star%20Intel%20AutoGTM%20Pro%20(%2449%2Fmo).%20My%20startup%20URL%20is%3A%20">
           💳 Subscribe to AutoGTM Pro ($49/mo)
         </a>
         <a class="btn-dl" style="text-decoration:none;" href="https://wa.me/254790758050?text=Hi%20Idriss%2C%20I%20tested%20Star%20Intel%20and%20want%20to%20unlock%20the%20AutoGTM%20Customer%20Hunter%20subscription." target="_blank">
@@ -578,7 +578,7 @@ function renderDashboard(d) {
         <p style="font-size:13px;color:#cbd5e1;max-width:360px;margin:0 0 14px;">
           Get verified emails, buying triggers, and automated outbound sequences for ${d.startup_name || d.domain}.
         </p>
-        <a class="btn-pilot-primary" href="https://paystack.shop/pay/star-intel-pro" target="_blank">
+        <a class="btn-pilot-primary" href="mailto:jmakhanuh@gmail.com?subject=Activate%20Star%20Intel%20AutoGTM%20Prohref="https://paystack.shop/pay/star-intel-pro" target="_blank"body=Hi%20Idriss%2C%20I%20want%20to%20subscribe%20to%20Star%20Intel%20AutoGTM%20Pro%20(%2449%2Fmo).%20My%20startup%20URL%20is%3A%20">
           💳 Unlock Prospect + 50 Weekly Leads ($49/mo)
         </a>
       </div>` : ''}
@@ -602,7 +602,7 @@ function renderDashboard(d) {
       </div>
       <div style="display:flex;gap:10px;flex-wrap:wrap;">
         <button class="btn-dl" onclick="downloadCSV()">⬇ Export Competitor Matrix (.CSV)</button>
-        <a class="btn-pilot-primary" href="https://paystack.shop/pay/star-intel-pro" target="_blank">
+        <a class="btn-pilot-primary" href="mailto:jmakhanuh@gmail.com?subject=Activate%20Star%20Intel%20AutoGTM%20Prohref="https://paystack.shop/pay/star-intel-pro" target="_blank"body=Hi%20Idriss%2C%20I%20want%20to%20subscribe%20to%20Star%20Intel%20AutoGTM%20Pro%20(%2449%2Fmo).%20My%20startup%20URL%20is%3A%20">
           💳 Upgrade to AutoGTM Pro ($49/mo)
         </a>
       </div>
