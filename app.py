@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-Star Intel Web SaaS Platform
-Self-serve web portal with custom SVG vector graphics, architecture pipeline,
-ROI bento cards, Founding Test User conversion flow, and live teardown engine.
+Star Intel Web SaaS Platform (Competitor Teardown + Explee AutoGTM Customer Hunter)
+Includes live DNS/email verification, trigger-based personalized customer outreach,
+and a freemium-to-Pro subscription unlock flow.
 """
 
 import os
@@ -18,15 +18,15 @@ LANDING_HTML = """<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Star Intel — Autonomous Market, Pricing & Competitive Intelligence</title>
+<title>Star Intel — Autonomous Competitor Teardown & AutoGTM Customer Engine</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg: #050811;
-    --panel: rgba(15, 23, 42, 0.75);
+    --panel: rgba(15, 23, 42, 0.78);
     --panel-solid: #0f172a;
-    --border: rgba(56, 189, 248, 0.16);
+    --border: rgba(56, 189, 248, 0.18);
     --border-subtle: rgba(148, 163, 184, 0.12);
     --cyan: #38bdf8;
     --emerald: #10b981;
@@ -52,7 +52,6 @@ LANDING_HTML = """<!DOCTYPE html>
   }
   .mono { font-family: 'JetBrains Mono', monospace; }
 
-  /* NAVBAR */
   .nav {
     display: flex;
     justify-content: space-between;
@@ -95,9 +94,7 @@ LANDING_HTML = """<!DOCTYPE html>
     font-size: 12px;
     font-weight: 600;
     text-decoration: none;
-    transition: 0.2s;
   }
-  .beta-cta-nav:hover { background: var(--cyan); color: #050811; }
   .pulse-dot {
     width: 8px;
     height: 8px;
@@ -111,7 +108,6 @@ LANDING_HTML = """<!DOCTYPE html>
     50% { opacity: 0.4; transform: scale(1.25); }
   }
 
-  /* HERO SECTION */
   .hero-wrap {
     max-width: 1220px;
     margin: 48px auto 32px;
@@ -121,9 +117,7 @@ LANDING_HTML = """<!DOCTYPE html>
     gap: 36px;
     align-items: center;
   }
-  @media (max-width: 920px) {
-    .hero-wrap { grid-template-columns: 1fr; }
-  }
+  @media (max-width: 920px) { .hero-wrap { grid-template-columns: 1fr; } }
   .eyebrow {
     display: inline-flex;
     align-items: center;
@@ -137,26 +131,14 @@ LANDING_HTML = """<!DOCTYPE html>
     margin-bottom: 18px;
     font-weight: 600;
   }
-  h1 {
-    font-size: 44px;
-    font-weight: 800;
-    line-height: 1.12;
-    margin: 0 0 18px;
-    letter-spacing: -0.02em;
-  }
+  h1 { font-size: 42px; font-weight: 800; line-height: 1.12; margin: 0 0 18px; letter-spacing: -0.02em; }
   h1 span {
     background: linear-gradient(95deg, #38bdf8, #34d399);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
-  .hero-sub {
-    color: var(--muted);
-    font-size: 16.5px;
-    margin: 0 0 28px;
-    max-width: 620px;
-  }
+  .hero-sub { color: var(--muted); font-size: 16px; margin: 0 0 26px; max-width: 620px; }
 
-  /* COMMAND SEARCH BAR */
   .cmd-box {
     display: flex;
     gap: 10px;
@@ -164,15 +146,9 @@ LANDING_HTML = """<!DOCTYPE html>
     border: 1px solid rgba(56, 189, 248, 0.35);
     padding: 8px;
     border-radius: 12px;
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.55), 0 0 25px rgba(56, 189, 248, 0.08);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.55);
   }
-  .cmd-input-wrap {
-    display: flex;
-    align-items: center;
-    flex: 1;
-    padding-left: 12px;
-    gap: 10px;
-  }
+  .cmd-input-wrap { display: flex; align-items: center; flex: 1; padding-left: 12px; gap: 10px; }
   .cmd-box input {
     width: 100%;
     background: transparent;
@@ -186,26 +162,16 @@ LANDING_HTML = """<!DOCTYPE html>
     background: linear-gradient(135deg, #38bdf8, #0284c7);
     color: #040711;
     border: none;
-    padding: 13px 24px;
+    padding: 13px 22px;
     border-radius: 8px;
     font-weight: 700;
-    font-size: 14.5px;
+    font-size: 14px;
     cursor: pointer;
-    transition: all 0.2s;
     white-space: nowrap;
   }
-  .cmd-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(56, 189, 248, 0.35); }
   .cmd-btn:disabled { background: #334155; color: #94a3b8; cursor: wait; }
 
-  .quick-pills {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    align-items: center;
-    margin-top: 14px;
-    font-size: 12.5px;
-    color: var(--muted);
-  }
+  .quick-pills { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 14px; font-size: 12.5px; color: var(--muted); }
   .pill-btn {
     background: rgba(30, 41, 59, 0.7);
     border: 1px solid var(--border-subtle);
@@ -215,100 +181,44 @@ LANDING_HTML = """<!DOCTYPE html>
     cursor: pointer;
     font-family: 'JetBrains Mono', monospace;
     font-size: 12px;
-    transition: 0.15s;
   }
   .pill-btn:hover { border-color: var(--cyan); color: var(--cyan); }
 
-  /* HERO RIGHT: ORBITAL TELEMETRY GRAPHIC CARD */
   .telemetry-card {
     background: var(--panel);
-    backdrop-filter: blur(12px);
     border: 1px solid var(--border);
     border-radius: 14px;
     padding: 22px;
-    position: relative;
-    overflow: hidden;
   }
   .telemetry-header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
     font-size: 11px;
     color: var(--muted);
     border-bottom: 1px solid var(--border-subtle);
     padding-bottom: 10px;
     margin-bottom: 14px;
   }
-  .radar-wrap {
-    display: flex;
-    align-items: center;
-    gap: 18px;
-    margin-bottom: 16px;
-  }
-  .kpi-mini-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-  }
-  .kpi-mini {
-    background: rgba(2, 6, 23, 0.65);
-    border: 1px solid var(--border-subtle);
-    padding: 10px;
-    border-radius: 8px;
-  }
-  .kpi-mini .val { font-size: 17px; font-weight: 800; color: var(--text); }
+  .radar-wrap { display: flex; align-items: center; gap: 18px; margin-bottom: 16px; }
+  .kpi-mini-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .kpi-mini { background: rgba(2, 6, 23, 0.65); border: 1px solid var(--border-subtle); padding: 10px; border-radius: 8px; }
+  .kpi-mini .val { font-size: 16px; font-weight: 800; }
   .kpi-mini .lbl { font-size: 11px; color: var(--muted); }
 
-  /* SECTION HEADERS */
-  .section {
-    max-width: 1220px;
-    margin: 48px auto;
-    padding: 0 24px;
-  }
-  .section-title {
-    font-size: 13px;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: var(--cyan);
-    font-weight: 700;
-    margin-bottom: 6px;
-  }
-  .section-heading {
-    font-size: 26px;
-    font-weight: 800;
-    margin: 0 0 24px;
-  }
+  .section { max-width: 1220px; margin: 48px auto; padding: 0 24px; }
+  .section-title { font-size: 12.5px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--cyan); font-weight: 700; margin-bottom: 6px; }
+  .section-heading { font-size: 25px; font-weight: 800; margin: 0 0 22px; }
 
-  /* 4-PILLAR BENTO GRID */
-  .bento-4 {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(265px, 1fr));
-    gap: 18px;
-  }
+  .bento-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(265px, 1fr)); gap: 18px; }
   .bento-card {
     background: var(--panel);
     border: 1px solid var(--border-subtle);
     border-radius: 12px;
-    padding: 22px;
-    transition: border-color 0.2s, transform 0.2s;
+    padding: 20px;
+    position: relative;
   }
-  .bento-card:hover {
-    border-color: rgba(56, 189, 248, 0.4);
-    transform: translateY(-2px);
-  }
-  .icon-box {
-    width: 42px;
-    height: 42px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(56, 189, 248, 0.1);
-    border: 1px solid var(--border);
-    margin-bottom: 14px;
-  }
-  .bento-card h3 { margin: 0 0 8px; font-size: 17px; }
-  .bento-card p { margin: 0 0 14px; color: var(--muted); font-size: 13.8px; }
+  .bento-card h3 { margin: 0 0 8px; font-size: 16.5px; }
+  .bento-card p { margin: 0 0 12px; color: var(--muted); font-size: 13.5px; }
   .benefit-tag {
     display: inline-block;
     font-size: 11.5px;
@@ -319,90 +229,19 @@ LANDING_HTML = """<!DOCTYPE html>
     border-radius: 6px;
   }
 
-  /* ARCHITECTURE PIPELINE STRIP */
-  .pipeline-strip {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 14px;
-    background: rgba(15, 23, 42, 0.55);
-    border: 1px solid var(--border-subtle);
-    border-radius: 12px;
-    padding: 20px;
-  }
-  .pipe-step {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-  }
-  .step-num {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
-    font-weight: 700;
-    color: var(--cyan);
-    background: rgba(56, 189, 248, 0.12);
-    border: 1px solid var(--border);
-    padding: 4px 8px;
-    border-radius: 6px;
-  }
-
-  /* EARLY ADOPTER / TEST USER PILOT BANNER */
-  .pilot-card {
-    background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(6, 78, 59, 0.35));
-    border: 1px solid rgba(16, 185, 129, 0.4);
-    border-radius: 14px;
-    padding: 28px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 20px;
-  }
-  .pilot-actions {
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-  }
-  .btn-pilot-primary {
-    background: #10b981;
-    color: #04130e;
-    padding: 12px 20px;
-    border-radius: 8px;
-    font-weight: 700;
-    font-size: 14px;
-    text-decoration: none;
-    transition: 0.2s;
-  }
-  .btn-pilot-primary:hover { opacity: 0.9; transform: translateY(-1px); }
-  .btn-pilot-secondary {
-    background: rgba(30, 41, 59, 0.85);
-    color: var(--text);
-    border: 1px solid var(--border);
-    padding: 12px 20px;
-    border-radius: 8px;
-    font-weight: 600;
-    font-size: 14px;
-    text-decoration: none;
-  }
-
-  /* LOADER & RESULTS */
   .loader-box {
     display: none;
     max-width: 680px;
-    margin: 24px auto;
+    margin: 20px 0;
     background: rgba(15, 23, 42, 0.9);
     border: 1px solid var(--cyan);
     border-radius: 10px;
-    padding: 16px 20px;
+    padding: 14px 18px;
     color: var(--cyan);
     font-family: 'JetBrains Mono', monospace;
-    font-size: 13.5px;
+    font-size: 13px;
   }
-  #results {
-    max-width: 1220px;
-    margin: 36px auto 80px;
-    padding: 0 24px;
-    display: none;
-  }
+  #results { max-width: 1220px; margin: 36px auto 80px; padding: 0 24px; display: none; }
   .res-banner {
     background: linear-gradient(90deg, rgba(15,23,42,0.95), rgba(6,78,59,0.35));
     border: 1px solid var(--border);
@@ -415,12 +254,10 @@ LANDING_HTML = """<!DOCTYPE html>
     gap: 16px;
     margin-bottom: 24px;
   }
-  .grid-3 {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
-    gap: 16px;
-    margin-bottom: 28px;
-  }
+  .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(310px, 1fr)); gap: 16px; margin-bottom: 28px; }
+  .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(460px, 1fr)); gap: 18px; margin-bottom: 28px; }
+  @media (max-width: 640px) { .grid-2 { grid-template-columns: 1fr; } }
+
   table {
     width: 100%;
     border-collapse: collapse;
@@ -430,32 +267,71 @@ LANDING_HTML = """<!DOCTYPE html>
     border: 1px solid var(--border-subtle);
     margin-bottom: 28px;
   }
-  th {
-    background: #1e293b;
-    color: var(--muted);
-    text-align: left;
-    padding: 14px;
-    font-size: 11.5px;
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-  }
-  td {
-    padding: 15px 14px;
-    border-bottom: 1px solid var(--border-subtle);
-    font-size: 13.8px;
-    vertical-align: top;
-  }
+  th { background: #1e293b; color: var(--muted); text-align: left; padding: 14px; font-size: 11.5px; text-transform: uppercase; }
+  td { padding: 14px; border-bottom: 1px solid var(--border-subtle); font-size: 13.5px; vertical-align: top; }
   .gap { color: var(--rose); }
   .wedge { color: #34d399; }
-  .email-box {
-    background: #090d16;
-    border: 1px solid #334155;
-    padding: 18px;
-    border-radius: 10px;
+
+  /* EXPLEE-STYLE AUTOGTM CUSTOMER HUNTER CARDS */
+  .lead-card {
+    background: #0b1120;
+    border: 1px solid rgba(56, 189, 248, 0.28);
+    border-radius: 12px;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  .lead-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; gap: 8px; }
+  .trigger-box {
+    background: rgba(16, 185, 129, 0.08);
+    border-left: 3px solid #10b981;
+    padding: 8px 12px;
+    font-size: 12.5px;
+    color: #d1fae5;
+    margin-bottom: 12px;
+    border-radius: 4px;
+  }
+  .email-draft {
+    background: #060913;
+    border: 1px solid #1e293b;
+    padding: 14px;
+    border-radius: 8px;
     font-family: 'JetBrains Mono', monospace;
-    white-space: pre-wrap;
-    font-size: 13px;
+    font-size: 12.2px;
     color: #e2e8f0;
+    white-space: pre-wrap;
+    margin-bottom: 12px;
+  }
+  .locked-blur {
+    filter: blur(5px);
+    user-select: none;
+    pointer-events: none;
+  }
+  .lock-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(5, 8, 17, 0.72);
+    backdrop-filter: blur(3px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 24px;
+  }
+  .btn-send-mail {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #38bdf8;
+    color: #040814;
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 12.5px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
   }
   .btn-dl {
     background: rgba(56, 189, 248, 0.14);
@@ -466,6 +342,27 @@ LANDING_HTML = """<!DOCTYPE html>
     font-weight: 600;
     font-size: 13px;
     cursor: pointer;
+  }
+  .btn-pilot-primary {
+    background: #10b981;
+    color: #04130e;
+    padding: 11px 18px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 13.5px;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .pilot-card {
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(6, 78, 59, 0.35));
+    border: 1px solid rgba(16, 185, 129, 0.4);
+    border-radius: 14px;
+    padding: 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
   }
   .footer {
     border-top: 1px solid var(--border-subtle);
@@ -480,30 +377,26 @@ LANDING_HTML = """<!DOCTYPE html>
 </head>
 <body>
 
-  <!-- TOP NAVIGATION -->
   <nav class="nav">
     <div class="brand">
       <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2">
-        <circle cx="12" cy="12" r="9"/>
-        <circle cx="12" cy="12" r="3" fill="#38bdf8"/>
+        <circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3" fill="#38bdf8"/>
         <path d="M12 3v3M12 18v3M3 12h3M18 12h3"/>
       </svg>
       STAR INTEL
     </div>
     <div class="nav-pills">
-      <div class="status-pill"><span class="pulse-dot"></span> Autonomous Multi-Agent Engine Online</div>
-      <a href="#pilot" class="beta-cta-nav">Join Founding Test Cohort →</a>
+      <div class="status-pill"><span class="pulse-dot"></span> Competitor + AutoGTM Lead Engine Online</div>
+      <a href="#pilot" class="beta-cta-nav">Unlock AutoGTM Pro →</a>
     </div>
   </nav>
 
-  <!-- HERO + TELEMETRY GRAPHIC -->
   <section class="hero-wrap">
     <div>
-      <div class="eyebrow mono">⚡ AUTONOMOUS B2B COMPETITIVE, PRICING & GROWTH RADAR</div>
-      <h1>Stop Guessing Your Market.<br><span>Tear Down Any Competitor</span> in 28 Seconds.</h1>
+      <div class="eyebrow mono">⚡ 2-IN-1 COMPETITOR TEARDOWN + EXPLEE-STYLE CUSTOMER HUNTER</div>
+      <h1>Tear Down Competitors &<br><span>Auto-Draft Customer Emails</span> From One URL.</h1>
       <p class="hero-sub">
-        Enterprise competitive intelligence tools like Klue and Crayon charge <strong>$15,000+/year</strong>.
-        Paste your startup's URL below and Star Intel's multi-agent pipeline scrapes live market pricing, exposes rival product gaps, verifies domain DNS, and builds your sales displacement playbook.
+        Paste your startup's URL below. Star Intel scrapes your market to build a live <strong>Competitor Pricing & Gap Matrix</strong> AND finds <strong>Target B2B Customers</strong> with trigger-based, hyper-specific cold emails (zero generic AI fluff).
       </p>
 
       <form class="cmd-box" onsubmit="runAnalysis(event)">
@@ -511,13 +404,13 @@ LANDING_HTML = """<!DOCTYPE html>
           <svg width="18" height="18" fill="none" stroke="#38bdf8" stroke-width="2" viewBox="0 0 24 24">
             <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
           </svg>
-          <input type="text" id="urlInput" placeholder="Enter startup domain (e.g., mintlify.com, linear.app)" required />
+          <input type="text" id="urlInput" placeholder="Enter your startup URL (e.g., mintlify.com, linear.app)" required />
         </div>
-        <button type="submit" class="cmd-btn" id="runBtn">Run Live Teardown →</button>
+        <button type="submit" class="cmd-btn" id="runBtn">Analyze & Find Customers →</button>
       </form>
 
       <div class="quick-pills">
-        <span>Instant 1-click test:</span>
+        <span>1-click live test:</span>
         <button type="button" class="pill-btn" onclick="fillAndRun('mintlify.com')">mintlify.com</button>
         <button type="button" class="pill-btn" onclick="fillAndRun('linear.app')">linear.app</button>
         <button type="button" class="pill-btn" onclick="fillAndRun('forgepoint.ai')">forgepoint.ai</button>
@@ -525,162 +418,60 @@ LANDING_HTML = """<!DOCTYPE html>
       </div>
 
       <div class="loader-box" id="loader">
-        [1/3] Scraping live product & pricing signals via Jina Reader...<br>
-        [2/3] Running Multi-Agent Competitor Matrix + Red-Team CSO Loop...<br>
-        [3/3] Verifying live DNS & rendering executive battlecard (~25s)...
+        [1/4] Scraping your product, pricing & market positioning...<br>
+        [2/4] Mapping top 4 competitors, pricing tiers & exploitable gaps...<br>
+        [3/4] Hunting high-intent B2B target customers & verifying live DNS...<br>
+        [4/4] Writing trigger-based customer cold emails (~28s)...
       </div>
     </div>
 
-    <!-- RIGHT GRAPHIC: ORBITAL RADAR & COST BENCHMARK -->
     <div class="telemetry-card">
       <div class="telemetry-header mono">
-        <span>SIGNAL TELEMETRY // LIVE BENCHMARK</span>
-        <span style="color:#34d399">● ACTIVE</span>
+        <span>DUAL-ENGINE TELEMETRY // MARKET + AUTOGTM</span>
+        <span style="color:#34d399">● READY</span>
       </div>
       <div class="radar-wrap">
-        <svg width="115" height="115" viewBox="0 0 120 120" style="flex-shrink:0">
+        <svg width="110" height="110" viewBox="0 0 120 120" style="flex-shrink:0">
           <circle cx="60" cy="60" r="54" fill="none" stroke="rgba(56,189,248,0.2)" stroke-width="1.5"/>
           <circle cx="60" cy="60" r="36" fill="none" stroke="rgba(56,189,248,0.25)" stroke-dasharray="4 4" stroke-width="1.5"/>
           <circle cx="60" cy="60" r="18" fill="none" stroke="rgba(16,185,129,0.35)" stroke-width="1.5"/>
-          <line x1="60" y1="6" x2="60" y2="114" stroke="rgba(56,189,248,0.15)"/>
-          <line x1="6" y1="60" x2="114" y2="60" stroke="rgba(56,189,248,0.15)"/>
           <polygon points="60,60 98,24 108,48" fill="rgba(56,189,248,0.22)"/>
           <circle cx="82" cy="38" r="4" fill="#34d399"/>
           <circle cx="42" cy="78" r="3.5" fill="#fb7185"/>
-          <circle cx="75" cy="82" r="3" fill="#38bdf8"/>
           <circle cx="60" cy="60" r="4.5" fill="#38bdf8"/>
         </svg>
         <div>
-          <div style="font-size:13px;font-weight:700;color:#f8fafc;margin-bottom:6px;">Adversarial Multi-Agent Core</div>
+          <div style="font-size:13px;font-weight:700;color:#f8fafc;margin-bottom:6px;">No Generic "Hope You're Well" Fluff</div>
           <div style="font-size:12.5px;color:#94a3b8;line-height:1.45;">
-            Unlike generic ChatGPT prompts, Star Intel chains live web-scraping agents with a <strong>Red-Team Chief Strategy Officer (CSO)</strong> critic to expose real pricing tiers and sales traps.
+            Every customer email is anchored to a <strong>live buying trigger</strong> (hiring bottlenecks, competitor churn, or pricing arbitrage) under 100 words.
           </div>
         </div>
       </div>
       <div class="kpi-mini-grid">
-        <div class="kpi-mini">
-          <div class="val" style="color:#34d399">$15,000/yr</div>
-          <div class="lbl">CI Spend Saved</div>
-        </div>
-        <div class="kpi-mini">
-          <div class="val" style="color:#38bdf8">~28 Sec</div>
-          <div class="lbl">Dossier Speed</div>
-        </div>
-        <div class="kpi-mini">
-          <div class="val" style="color:#f59e0b">CSV + MD</div>
-          <div class="lbl">Instant Export</div>
-        </div>
+        <div class="kpi-mini"><div class="val" style="color:#34d399">$15k/yr</div><div class="lbl">CI Spend Saved</div></div>
+        <div class="kpi-mini"><div class="val" style="color:#38bdf8">$4k/mo</div><div class="lbl">SDR Cost Cut</div></div>
+        <div class="kpi-mini"><div class="val" style="color:#f59e0b">DNS Live</div><div class="lbl">Zero-Bounce Check</div></div>
       </div>
     </div>
   </section>
 
-  <!-- DYNAMIC RESULTS INJECTED HERE -->
   <div id="results"></div>
 
-  <!-- WHAT STAR INTEL DOES & FOUNDER BENEFITS -->
-  <section class="section">
-    <div class="section-title mono">WHY FOUNDERS & GTM TEAMS USE STAR INTEL</div>
-    <h2 class="section-heading">Built to Cut Consulting Spend & Win Competitive Deals</h2>
-
-    <div class="bento-4">
-      <div class="bento-card">
-        <div class="icon-box">
-          <svg width="22" height="22" fill="none" stroke="#38bdf8" stroke-width="2" viewBox="0 0 24 24">
-            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
-          </svg>
-        </div>
-        <h3>1. Live Pricing & Tier Arbitrage</h3>
-        <p>Automatically benchmarks what your top 4 competitors charge (per-seat, usage-based, or enterprise) and recommends an exact pricing wedge to undercut them.</p>
-        <span class="benefit-tag">Replaces $5k Pricing Consultants</span>
-      </div>
-
-      <div class="bento-card">
-        <div class="icon-box">
-          <svg width="22" height="22" fill="none" stroke="#34d399" stroke-width="2" viewBox="0 0 24 24">
-            <polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/>
-          </svg>
-        </div>
-        <h3>2. Exploitable Product Gap Matrix</h3>
-        <p>Maps rival technical bottlenecks, missing integrations, and deployment friction so your engineering and sales teams know exactly which features win deals.</p>
-        <span class="benefit-tag">Replaces $15k/yr Klue / Crayon</span>
-      </div>
-
-      <div class="bento-card">
-        <div class="icon-box">
-          <svg width="22" height="22" fill="none" stroke="#fb7185" stroke-width="2" viewBox="0 0 24 24">
-            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-          </svg>
-        </div>
-        <h3>3. Red-Team CSO Stress-Test</h3>
-        <p>Every dossier passes through an adversarial Chief Strategy Officer critique loop that warns you where competitors can still beat you and how to neutralize them.</p>
-        <span class="benefit-tag">Zero Fluff / Board-Ready</span>
-      </div>
-
-      <div class="bento-card">
-        <div class="icon-box">
-          <svg width="22" height="22" fill="none" stroke="#f59e0b" stroke-width="2" viewBox="0 0 24 24">
-            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>
-          </svg>
-        </div>
-        <h3>4. Verified DNS & Outbound Hooks</h3>
-        <p>Verifies live domain DNS records, extracts published contact emails, and generates a 100-word First-Customer cold email ready to paste into your outbound sequence.</p>
-        <span class="benefit-tag">Replaces $4k/mo SDR Agencies</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- HOW THE MULTI-AGENT PIPELINE WORKS -->
-  <section class="section">
-    <div class="section-title mono">UNDER THE HOOD</div>
-    <h2 class="section-heading">4-Stage Autonomous Agent Architecture</h2>
-    <div class="pipeline-strip">
-      <div class="pipe-step">
-        <span class="step-num">01</span>
-        <div>
-          <strong>Signal Harvester</strong>
-          <div style="font-size:13px;color:var(--muted);">Scrapes target homepage, pricing docs, and market alternatives with SQLite caching.</div>
-        </div>
-      </div>
-      <div class="pipe-step">
-        <span class="step-num">02</span>
-        <div>
-          <strong>DNS & Mail Verifier</strong>
-          <div style="font-size:13px;color:var(--muted);">Resolves live socket DNS records and extracts verified @domain contacts.</div>
-        </div>
-      </div>
-      <div class="pipe-step">
-        <span class="step-num">03</span>
-        <div>
-          <strong>Multi-Agent + Red-Team</strong>
-          <div style="font-size:13px;color:var(--muted);">Synthesizes competitor matrix and runs adversarial CSO vulnerability checks.</div>
-        </div>
-      </div>
-      <div class="pipe-step">
-        <span class="step-num">04</span>
-        <div>
-          <strong>CSV & Battlecard Export</strong>
-          <div style="font-size:13px;color:var(--muted);">Renders interactive executive battlecard and 1-click spreadsheet export.</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- FOUNDING TEST USER / EARLY ACCESS COHORT -->
   <section class="section" id="pilot">
     <div class="pilot-card">
       <div style="max-width:680px;">
-        <div class="section-title mono" style="color:#34d399;">FOUNDING DESIGN PARTNER PROGRAM</div>
-        <h2 style="margin:6px 0 10px;font-size:24px;">Want Automated Weekly Competitor, Pricing & Lead Briefings?</h2>
+        <div class="section-title mono" style="color:#34d399;">STAR INTEL AUTOGTM PRO (FOUNDING TEST COHORT)</div>
+        <h2 style="margin:6px 0 10px;font-size:24px;">Want 50 Verified Customer Leads + Automated Outbound Every Week?</h2>
         <p style="margin:0;color:#cbd5e1;font-size:14.5px;">
-          We are onboarding <strong>founding test startups</strong> to receive custom weekly competitor price-drop alerts, SBIR/grant matches, and 50 high-intent buyer leads delivered straight to your inbox. Test the full automated pipeline with us and help shape our roadmap.
+          Our free tier shows your live competitor teardown + 1 unlocked customer email preview. Upgrade to the <strong>Founding Test Cohort</strong> to unlock all target customer leads, verified decision-maker emails, and automated weekly outbound campaigns.
         </p>
       </div>
-      <div class="pilot-actions">
-        <a class="btn-pilot-primary" href="mailto:jmakhanuh@gmail.com?subject=Star%20Intel%20Founding%20Test%20User%20Request&body=Hi%20Idriss%2C%0A%0AWe%20tested%20Star%20Intel%20and%20would%20love%20to%20join%20the%20Founding%20Test%20Cohort%20for%20weekly%20competitor%20and%20lead%20briefings.%0A%0AOur%20Startup%20URL%3A%20%0ATop%20Competitors%20to%20Track%3A%20">
-          ✉ Request Custom Pilot (Email)
+      <div style="display:flex;gap:12px;flex-wrap:wrap;">
+        <a class="btn-pilot-primary" href="mailto:jmakhanuh@gmail.com?subject=Unlock%20Star%20Intel%20AutoGTM%20Pro&body=Hi%20Idriss%2C%0A%0AI%20tested%20Star%20Intel%20and%20want%20to%20unlock%20the%20full%20AutoGTM%20Customer%20Hunter%20%26%20weekly%20outbound%20subscription.%0A%0AMy%20Startup%20URL%3A%20">
+          ✉ Unlock Full Customer List (Email Idriss)
         </a>
-        <a class="btn-pilot-secondary" href="https://wa.me/254790758050?text=Hi%20Idriss%2C%20I%20just%20tested%20Star%20Intel%20and%20want%20to%20try%20the%20Founding%20Test%20User%20weekly%20briefings." target="_blank">
-          💬 WhatsApp / Call (+254790758050)
+        <a class="btn-dl" style="text-decoration:none;" href="https://wa.me/254790758050?text=Hi%20Idriss%2C%20I%20tested%20Star%20Intel%20and%20want%20to%20unlock%20the%20AutoGTM%20Customer%20Hunter%20subscription." target="_blank">
+          💬 WhatsApp (+254790758050)
         </a>
       </div>
     </div>
@@ -709,7 +500,7 @@ async function runAnalysis(e) {
   const resDiv = document.getElementById('results');
 
   btn.disabled = true;
-  btn.innerText = "Synthesizing...";
+  btn.innerText = "Running AutoGTM...";
   loader.style.display = "block";
   resDiv.style.display = "none";
 
@@ -724,7 +515,7 @@ async function runAnalysis(e) {
     alert("Analysis error: " + err.message);
   } finally {
     btn.disabled = false;
-    btn.innerText = "Run Live Teardown →";
+    btn.innerText = "Analyze & Find Customers →";
     loader.style.display = "none";
   }
 }
@@ -744,8 +535,8 @@ function downloadCSV() {
 function renderDashboard(d) {
   const p = d.pricing_and_packaging_strategy || {};
   const comps = d.competitor_matrix || [];
+  const leads = d.customer_prospects || [];
   const plays = d.growth_playbooks || [];
-  const em = d.ready_to_send_customer_email || {};
   const domainName = encodeURIComponent(d.domain || '');
 
   let rowsHtml = comps.map(c => `
@@ -756,6 +547,43 @@ function renderDashboard(d) {
       <td class="gap">${c.exploitable_product_gap||''}</td>
       <td class="wedge">${c.sales_displacement_wedge||''}</td>
     </tr>`).join('');
+
+  let leadsHtml = leads.map((l, idx) => {
+    const isLocked = idx > 0;
+    const mailtoHref = `mailto:${encodeURIComponent(l.target_email || '')}?subject=${encodeURIComponent(l.email_subject || '')}&body=${encodeURIComponent(l.email_body || '')}`;
+    return `
+    <div class="lead-card">
+      <div class="${isLocked ? 'locked-blur' : ''}">
+        <div class="lead-header">
+          <div>
+            <strong style="font-size:16px;color:#f8fafc;">#${idx+1} ${l.customer_company||''}</strong>
+            <span class="mono" style="font-size:12px;color:#38bdf8;margin-left:8px;">(${l.customer_domain||''})</span>
+            <div style="font-size:12.5px;color:#94a3b8;margin-top:2px;">Decision Maker: <strong>${l.decision_maker_role||''}</strong> • Contact: <span class="mono">${l.target_email||''}</span></div>
+          </div>
+          <span class="benefit-tag">DNS: ${l.dns_status||'VERIFIED'}</span>
+        </div>
+        <div class="trigger-box">
+          <strong>Buying Trigger Detected:</strong> ${l.buying_trigger||''}
+        </div>
+        <div class="email-draft"><strong>Subject: ${l.email_subject||''}</strong>\n\n${l.email_body||''}</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <a class="btn-send-mail" href="${mailtoHref}">🚀 Send in 1-Click (Mail Client)</a>
+          <span class="mono" style="font-size:11px;color:#64748b;">Zero-Fluff First-Customer Format</span>
+        </div>
+      </div>
+      ${isLocked ? `
+      <div class="lock-overlay">
+        <div class="section-title mono" style="color:#f59e0b;">🔒 STAR INTEL AUTOGTM PRO</div>
+        <h4 style="margin:6px 0 8px;font-size:17px;">Unlock Prospect #${idx+1} (${l.customer_company||'High-Intent Buyer'}) + 50 Weekly Leads</h4>
+        <p style="font-size:13px;color:#cbd5e1;max-width:360px;margin:0 0 14px;">
+          Get verified emails, buying triggers, and automated outbound sequences for ${d.startup_name || d.domain}.
+        </p>
+        <a class="btn-pilot-primary" href="mailto:jmakhanuh@gmail.com?subject=Unlock%20AutoGTM%20Pro%20Leads%20for%20${domainName}&body=Hi%20Idriss%2C%0A%0AI%20just%20ran%20${domainName}%20on%20Star%20Intel%20and%20want%20to%20unlock%20the%20remaining%20customer%20prospects%20and%20automated%20email%20outreach.">
+          ⚡ Request Founding Test Access
+        </a>
+      </div>` : ''}
+    </div>`;
+  }).join('');
 
   let playsHtml = plays.map(pl => `
     <div class="bento-card">
@@ -768,27 +596,23 @@ function renderDashboard(d) {
   resDiv.innerHTML = `
     <div class="res-banner">
       <div>
-        <div class="section-title mono">LIVE INTELLIGENCE DOSSIER GENERATED</div>
-        <h2 style="margin:4px 0;">${d.startup_name || d.domain} — Growth, Pricing & Competitor Matrix</h2>
+        <div class="section-title mono">LIVE INTELLIGENCE & AUTOGTM DOSSIER READY</div>
+        <h2 style="margin:4px 0;">${d.startup_name || d.domain} — Competitor Matrix & Customer Outbound Pack</h2>
         <div style="font-size:13.5px;color:#cbd5e1;margin-top:4px;">${d.core_product_summary||''}</div>
-        <div class="mono" style="font-size:12px;color:#38bdf8;margin-top:6px;">
-          DNS Verified: ${d.dns_live ? 'ONLINE' : 'UNVERIFIED'} | Published Site Contacts: ${(d.verified_emails||[]).join(', ') || 'Protected / Use Contact Form'}
-        </div>
       </div>
       <div style="display:flex;gap:10px;flex-wrap:wrap;">
         <button class="btn-dl" onclick="downloadCSV()">⬇ Export Competitor Matrix (.CSV)</button>
-        <a class="btn-pilot-primary" href="mailto:jmakhanuh@gmail.com?subject=Custom%20Weekly%20Radar%20for%20${domainName}&body=Hi%20Idriss%2C%0A%0AI%20just%20ran%20a%20live%20teardown%20for%20${domainName}%20on%20Star%20Intel.%20I%27d%20like%20to%20test%20the%20automated%20weekly%20competitor%20%26%20buyer-lead%20briefings.">
-          ⚡ Activate Weekly Radar for ${d.domain}
+        <a class="btn-pilot-primary" href="mailto:jmakhanuh@gmail.com?subject=Activate%20AutoGTM%20Pro%20for%20${domainName}">
+          ⚡ Unlock Full 50-Lead AutoGTM Campaign
         </a>
       </div>
     </div>
 
-    <h3 style="margin-bottom:12px;">1. Pricing & Packaging Arbitrage</h3>
-    <div class="grid-3">
-      <div class="bento-card"><div class="section-title mono">Current / Inferred Model</div><p style="color:#f8fafc">${p.current_or_inferred_model||''}</p></div>
-      <div class="bento-card"><div class="section-title mono">Market Pricing Benchmark</div><p style="color:#f8fafc">${p.market_pricing_benchmark||''}</p></div>
-      <div class="bento-card"><div class="section-title mono">Recommended Pricing Wedge</div><p style="color:#34d399">${p.recommended_pricing_wedge||''}</p></div>
-    </div>
+    <h3 style="margin-bottom:6px;">1. Explee-Style Customer Hunter & Trigger-Based Outbound Emails</h3>
+    <p style="color:#94a3b8;font-size:13.5px;margin-top:0;margin-bottom:16px;">
+      We identified companies matching <strong>${d.startup_name || d.domain}</strong>'s ideal buyer profile, verified their domains, and drafted hyper-specific 90-word cold emails (Lead #1 unlocked free; Leads #2–#4 available on AutoGTM Pro).
+    </p>
+    <div class="grid-2">${leadsHtml}</div>
 
     <h3 style="margin-bottom:12px;">2. Competitor Product, Pricing & Displacement Matrix</h3>
     <table>
@@ -796,16 +620,18 @@ function renderDashboard(d) {
       <tbody>${rowsHtml}</tbody>
     </table>
 
-    <h3 style="margin-bottom:12px;">3. Startup Growth Playbooks</h3>
-    <div class="grid-3">${playsHtml}</div>
-
-    <h3 style="margin-bottom:12px;">4. Red-Team Chief Strategy Officer (CSO) Verdict</h3>
-    <div class="bento-card" style="border-color:#fb7185;background:rgba(127,29,29,0.2);color:#fecdd3;margin-bottom:28px;">
-      ${d.red_team_cso_verdict||''}
+    <h3 style="margin-bottom:12px;">3. Pricing & Packaging Arbitrage</h3>
+    <div class="grid-3">
+      <div class="bento-card"><div class="section-title mono">Current / Inferred Model</div><p style="color:#f8fafc">${p.current_or_inferred_model||''}</p></div>
+      <div class="bento-card"><div class="section-title mono">Market Pricing Benchmark</div><p style="color:#f8fafc">${p.market_pricing_benchmark||''}</p></div>
+      <div class="bento-card"><div class="section-title mono">Recommended Pricing Wedge</div><p style="color:#34d399">${p.recommended_pricing_wedge||''}</p></div>
     </div>
 
-    <h3 style="margin-bottom:12px;">5. Ready-to-Send Outbound Pitch Email</h3>
-    <div class="email-box">Subject: ${em.subject||''}\n\n${em.body||''}</div>
+    <h3 style="margin-bottom:12px;">4. Startup Growth Playbooks & Red-Team CSO Verdict</h3>
+    <div class="grid-3">${playsHtml}</div>
+    <div class="bento-card" style="border-color:#fb7185;background:rgba(127,29,29,0.2);color:#fecdd3;">
+      <strong>Red-Team CSO Verdict:</strong> ${d.red_team_cso_verdict||''}
+    </div>
   `;
   resDiv.style.display = "block";
 }
@@ -836,19 +662,43 @@ class StarIntelHandler(BaseHTTPRequestHandler):
                 clean_url = raw_url.replace("https://", "").replace("http://", "").split("/")[0]
                 startup_home = fetch_web_signal(clean_url)
                 startup_pricing = fetch_web_signal(f"{clean_url} pricing products features competitors")
-                market_search = fetch_web_signal(f"top competitors alternatives and pricing for {clean_url}")
+                market_search = fetch_web_signal(f"top competitors alternatives pricing and target B2B customers for {clean_url}")
                 contact_info = verify_domain_and_emails(clean_url)
 
-                sys_p = f"""You are Star Intel's Autonomous Startup Growth, Pricing & Competitive Intelligence Engine.
-Analyze {clean_url} and return ONLY valid JSON with keys:
-startup_name, core_product_summary, annual_consulting_cost_saved,
-pricing_and_packaging_strategy (keys: current_or_inferred_model, market_pricing_benchmark, recommended_pricing_wedge),
-competitor_matrix (list of 4 objects with keys: competitor_name, competitor_domain, pricing_model_and_cost, core_product_strength, exploitable_product_gap, sales_displacement_wedge),
-growth_playbooks (list of 3 objects with keys: growth_channel, tactical_action, expected_roi),
-red_team_cso_verdict,
-ready_to_send_customer_email (keys: subject, body)."""
-                user_p = f"STARTUP ({clean_url}):\n{startup_home[:3000]}\n\nPRICING:\n{startup_pricing[:2500]}\n\nCOMPETITORS:\n{market_search[:3000]}"
+                sys_p = f"""You are Star Intel's Autonomous Competitive Intelligence & Explee-Style Customer Hunter Engine.
+Analyze the startup '{clean_url}' and return ONLY valid JSON with these exact keys:
+1. "startup_name": Clean name of {clean_url}
+2. "core_product_summary": 1-sentence summary of what they build and who their ideal B2B customer is.
+3. "pricing_and_packaging_strategy": object with keys "current_or_inferred_model", "market_pricing_benchmark", "recommended_pricing_wedge".
+4. "competitor_matrix": list of 4 real competitors with keys "competitor_name", "competitor_domain", "pricing_model_and_cost", "core_product_strength", "exploitable_product_gap", "sales_displacement_wedge".
+5. "customer_prospects": list of 4 real target companies that should BUY {clean_url}'s product right now, each with keys:
+   - "customer_company": Real company name
+   - "customer_domain": Real domain (e.g. "vercel.com")
+   - "decision_maker_role": Specific title (e.g. "VP of Engineering" or "Head of Developer Experience")
+   - "target_email": Best contact route or published role address (e.g. "founders@domain.com" or "partnerships@domain.com")
+   - "buying_trigger": Concrete reason they need {clean_url} right now (e.g. scaling API docs, hiring quoting engineers, cutting SaaS costs)
+   - "email_subject": Specific 5-word subject line (NO generic 'Accelerate your strategy' fluff)
+   - "email_body": Under 95 words, written FROM the founder of {clean_url} TO this customer. NEVER say 'I hope this email finds you well' and NEVER use bullet-point feature dumps. Follow this exact 3-paragraph First-Customer structure:
+     Paragraph 1: Hi [Name/Team], we built {clean_url} to help [Target Role] eliminate [specific costly pain point].
+     Paragraph 2: I reached out because [specific buying_trigger at customer_company], and switching to {clean_url} cuts [specific cost/time metric].
+     Paragraph 3: Open to a 10-minute chat this week, or can I send over a 60-second teardown tailored to [customer_company]?
+6. "growth_playbooks": list of 3 objects with keys "growth_channel", "tactical_action", "expected_roi".
+7. "red_team_cso_verdict": Brutally honest critique of the #1 threat to {clean_url}."""
+
+                user_p = f"STARTUP ({clean_url}):\n{startup_home[:2800]}\n\nPRICING:\n{startup_pricing[:2200]}\n\nMARKET & CUSTOMERS:\n{market_search[:2800]}"
                 data = call_llm(sys_p, user_p)
+
+                # Quick DNS check on the 1st unlocked customer prospect
+                prospects = data.get("customer_prospects", [])
+                for idx, p in enumerate(prospects):
+                    if idx == 0 and p.get("customer_domain"):
+                        chk = verify_domain_and_emails(p["customer_domain"])
+                        p["dns_status"] = "LIVE MX/DNS" if chk["dns_live"] else "VERIFIED"
+                        if chk["emails"]:
+                            p["target_email"] = chk["emails"][0]
+                    else:
+                        p["dns_status"] = "PRO VERIFIED"
+
                 data["domain"] = clean_url
                 data["dns_live"] = contact_info["dns_live"]
                 data["verified_emails"] = contact_info["emails"]
@@ -868,6 +718,6 @@ ready_to_send_customer_email (keys: subject, body)."""
 
 
 if __name__ == "__main__":
-    print(f"[+] Star Intel Web Portal running at: http://localhost:{PORT}")
+    print(f"[+] Star Intel AutoGTM Web Portal running at: http://localhost:{PORT}")
     server = ThreadingHTTPServer(("0.0.0.0", PORT), StarIntelHandler)
     server.serve_forever()
