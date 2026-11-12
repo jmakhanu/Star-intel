@@ -678,7 +678,7 @@ function renderDashboard(d) {
   const domainName = encodeURIComponent(d.domain || '');
 
   let leadsHtml = leads.map((l, idx) => {
-    const isLocked = idx > 0;
+    const isLocked = false;
     const mailtoHref = `mailto:${encodeURIComponent(l.target_email || '')}?subject=${encodeURIComponent(l.email_subject || '')}&body=${encodeURIComponent(l.email_body || '')}`;
     const fullEmailText = `Subject: ${l.email_subject || ''}\n\n${l.email_body || ''}`;
     return `
@@ -849,7 +849,7 @@ Analyze '{clean_url}' ({custom_desc or 'live domain'}) and return ONLY valid JSO
                         if chk["emails"]:
                             p["target_email"] = chk["emails"][0]
                     else:
-                        p["dns_status"] = "PRO VERIFIED"
+                        p["dns_status"] = "DNS VERIFIED"
 
                 data["domain"] = clean_url
                 data["mode_used"] = mode_used
