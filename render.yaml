@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: star-intel
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: python3 app.py
