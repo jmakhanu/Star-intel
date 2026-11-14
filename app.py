@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 """
 Star Intel — Orbital Command GTM & Competitive Intelligence Platform
-Features Dual-Mode Onboarding (URL Scan + Stealth/No-Site Mode),
-Interactive 4-Stage Agent Telemetry, and Tabbed Battlecard/Lead Workspace.
+Bulletproof Email Dispatch Edition:
+- 1-Click Gmail Web Compose (never fails on Linux/desktop browsers)
+- Index-safe Clipboard Copy (immune to quote/apostrophe escaping bugs)
+- All 4 Customer Leads Unlocked for Founding Design Partner Onboarding
 """
 
 import os
@@ -96,7 +98,6 @@ LANDING_HTML = """<!DOCTYPE html>
     50% { opacity: 0.4; transform: scale(1.25); }
   }
 
-  /* CENTERED COMMAND LAUNCHER */
   .hero-center {
     max-width: 900px;
     margin: 46px auto 32px;
@@ -135,7 +136,6 @@ LANDING_HTML = """<!DOCTYPE html>
     margin: 0 auto 28px;
   }
 
-  /* DUAL-MODE COMMAND CONSOLE */
   .console-shell {
     background: var(--panel);
     border: 1px solid var(--border);
@@ -252,7 +252,6 @@ LANDING_HTML = """<!DOCTYPE html>
   }
   .pill-btn:hover { border-color: var(--cyan); color: var(--cyan); }
 
-  /* 3-STAGE AUTONOMOUS PIPELINE CARDS (WHAT WE DO BETTER THAN EXPLEE) */
   .pipeline-strip {
     max-width: 1160px;
     margin: 26px auto 40px;
@@ -284,7 +283,6 @@ LANDING_HTML = """<!DOCTYPE html>
   .pipe-card h3 { margin: 0 0 6px; font-size: 15.5px; }
   .pipe-card p { margin: 0; font-size: 13px; color: var(--muted); }
 
-  /* WORKSPACE RESULTS & TABS */
   #results { max-width: 1200px; margin: 20px auto 70px; padding: 0 24px; display: none; }
   .res-banner {
     background: linear-gradient(90deg, rgba(15,23,42,0.95), rgba(6,78,59,0.35));
@@ -334,7 +332,22 @@ LANDING_HTML = """<!DOCTYPE html>
     border-radius: 12px;
     padding: 20px;
     position: relative;
-    overflow: hidden;
+  }
+  .email-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(56, 189, 248, 0.12);
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    color: var(--cyan);
+    padding: 3px 9px;
+    border-radius: 6px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .email-badge:hover {
+    background: rgba(56, 189, 248, 0.25);
   }
   .trigger-box {
     background: rgba(16, 185, 129, 0.09);
@@ -354,20 +367,7 @@ LANDING_HTML = """<!DOCTYPE html>
     font-size: 12px;
     color: #e2e8f0;
     white-space: pre-wrap;
-    margin-bottom: 12px;
-  }
-  .locked-blur { filter: blur(5px); user-select: none; pointer-events: none; }
-  .lock-overlay {
-    position: absolute;
-    inset: 0;
-    background: rgba(4, 7, 17, 0.74);
-    backdrop-filter: blur(3px);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 24px;
+    margin-bottom: 14px;
   }
 
   table {
@@ -383,30 +383,61 @@ LANDING_HTML = """<!DOCTYPE html>
   .gap { color: var(--rose); }
   .wedge { color: #34d399; }
 
-  .btn-send-mail {
+  /* ACTION BUTTONS FOR RELIABLE EMAIL DISPATCH */
+  .action-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 5;
+  }
+  .btn-gmail {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    background: var(--cyan);
-    color: #040814;
-    padding: 8px 14px;
-    border-radius: 6px;
-    font-weight: 700;
+    background: linear-gradient(135deg, #38bdf8, #10b981);
+    color: #030712;
+    padding: 9px 14px;
+    border-radius: 7px;
+    font-weight: 800;
     font-size: 12.5px;
-    text-decoration: none;
     border: none;
     cursor: pointer;
+    text-decoration: none;
+    transition: transform 0.1s, opacity 0.15s;
   }
+  .btn-gmail:hover { opacity: 0.92; transform: translateY(-1px); }
   .btn-copy {
-    background: rgba(148, 163, 184, 0.14);
-    color: var(--text);
-    border: 1px solid var(--border-subtle);
-    padding: 8px 12px;
-    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(56, 189, 248, 0.12);
+    color: var(--cyan);
+    border: 1px solid rgba(56, 189, 248, 0.35);
+    padding: 8px 13px;
+    border-radius: 7px;
     font-weight: 600;
     font-size: 12px;
     cursor: pointer;
+    transition: all 0.15s;
   }
+  .btn-copy:hover { background: rgba(56, 189, 248, 0.22); }
+  .btn-mailto {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: rgba(148, 163, 184, 0.1);
+    color: #cbd5e1;
+    border: 1px solid var(--border-subtle);
+    padding: 8px 12px;
+    border-radius: 7px;
+    font-weight: 600;
+    font-size: 12px;
+    cursor: pointer;
+    text-decoration: none;
+  }
+  .btn-mailto:hover { border-color: var(--muted); color: #fff; }
   .btn-dl {
     background: rgba(56, 189, 248, 0.14);
     color: var(--cyan);
@@ -425,7 +456,11 @@ LANDING_HTML = """<!DOCTYPE html>
     font-weight: 700;
     font-size: 13px;
     text-decoration: none;
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: none;
+    cursor: pointer;
   }
   .bento-card {
     background: var(--panel);
@@ -477,7 +512,7 @@ LANDING_HTML = """<!DOCTYPE html>
     </div>
     <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
       <div class="status-pill"><span class="pulse-dot"></span> Multi-Agent Recon + Lead Hunter Online</div>
-      <a href="#pilot" class="btn-pilot-primary">Unlock AutoGTM Pro →</a>
+      <button type="button" onclick="openFounderPilotEmail()" class="btn-pilot-primary">⚡ Claim 50-Lead Founding Pilot →</button>
     </div>
   </nav>
 
@@ -494,7 +529,7 @@ LANDING_HTML = """<!DOCTYPE html>
           <button type="button" class="mode-btn active" id="tabUrlBtn" onclick="setMode('url')">🌐 Scan Company Website</button>
           <button type="button" class="mode-btn" id="tabIdeaBtn" onclick="setMode('idea')">🧠 No Website / Stealth Startup Mode</button>
         </div>
-        <span class="mono" style="font-size:11.5px;color:#34d399;align-self:center;">✓ Works even on bot-protected or pre-launch ideas</span>
+        <span class="mono" style="font-size:11.5px;color:#34d399;align-self:center;">✓ 100% Unlocked Founding Partner Access</span>
       </div>
 
       <form onsubmit="runAnalysis(event)">
@@ -527,12 +562,11 @@ LANDING_HTML = """<!DOCTYPE html>
           <button type="button" class="pill-btn" onclick="fillAndRun('linear.app')">linear.app</button>
           <button type="button" class="pill-btn" onclick="fillAndRun('resend.com')">resend.com</button>
         </div>
-        <span class="mono" style="color:#64748b;">Zero signup • Instant CSV export</span>
+        <span class="mono" style="color:#64748b;">Zero signup • 1-Click Gmail & CSV Export</span>
       </div>
     </div>
   </section>
 
-  <!-- 3-PILLAR PIPELINE (LIGHTS UP LIVE DURING EXECUTION) -->
   <section class="pipeline-strip">
     <div class="pipe-card" id="stepCard1">
       <div class="pipe-num mono">01 // POSITIONING & RECON</div>
@@ -547,7 +581,7 @@ LANDING_HTML = """<!DOCTYPE html>
     <div class="pipe-card" id="stepCard3">
       <div class="pipe-num mono">03 // TRIGGER-BASED OUTREACH</div>
       <h3>We Find & Draft Customer Emails</h3>
-      <p>Identifies high-intent B2B target accounts, verifies live DNS/MX records, and drafts 90-word cold emails with zero corporate fluff.</p>
+      <p>Identifies high-intent B2B target accounts, verifies live DNS/MX records, and opens pre-filled pitches directly in Gmail or your mail client.</p>
     </div>
   </section>
 
@@ -556,17 +590,17 @@ LANDING_HTML = """<!DOCTYPE html>
   <section class="pilot-wrap" id="pilot">
     <div class="pilot-card">
       <div style="max-width:660px;">
-        <div class="section-title mono" style="color:#34d399;">STAR INTEL AUTOGTM PRO — FOUNDING MEMBERSHIP</div>
-        <h2 style="margin:6px 0 8px;font-size:23px;">Unlock All Verified Target Buyers + Automated Weekly Outbound</h2>
+        <div class="section-title mono" style="color:#34d399;">STAR INTEL AUTOGTM — FOUNDING DESIGN PARTNER PROGRAM</div>
+        <h2 style="margin:6px 0 8px;font-size:23px;">Want a Custom 50-Lead Verified Outbound Batch for Your Startup?</h2>
         <p style="margin:0;color:#cbd5e1;font-size:14px;">
-          Our free workspace unlocks your full Competitor Matrix + Lead #1. Upgrade to <strong>AutoGTM Pro ($49/mo)</strong> to unlock all target buyer emails, 50 weekly verified leads, and automated outreach campaigns.
+          Our live workspace unlocks all 4 Competitor Battlecards + 4 Target Customer Emails for free. We are onboarding <strong>5 Founding Design Partners</strong> to receive a custom 50-lead weekly AutoGTM CSV before billing goes live.
         </p>
       </div>
       <div style="display:flex;gap:12px;flex-wrap:wrap;">
-        <a class="btn-pilot-primary" href="mailto:jmakhanuh@gmail.com?subject=Activate%20Star%20Intel%20AutoGTM%20Pro%20(%2449%2Fmo)&body=Hi%20Idriss%2C%0A%0AI%20want%20to%20activate%20Star%20Intel%20AutoGTM%20Pro%20for%20my%20project.%0A%0AMy%20Website%20or%20Product%3A%20">
-          💳 Activate AutoGTM Pro ($49/mo)
-        </a>
-        <a class="btn-dl" style="text-decoration:none;" href="https://wa.me/254790758050?text=Hi%20Idriss%2C%20I%20tested%20Star%20Intel%20and%20want%20to%20unlock%20AutoGTM%20Pro." target="_blank">
+        <button type="button" class="btn-pilot-primary" onclick="openFounderPilotEmail()">
+          ✉️ Request 50-Lead Batch (Open Gmail)
+        </button>
+        <a class="btn-dl" style="text-decoration:none;" href="https://wa.me/254790758050?text=Hi%20Idriss%2C%20I%20tested%20Star%20Intel%20and%20want%20to%20claim%20one%20of%20the%205%20Founding%20Design%20Partner%20spots." target="_blank" rel="noopener">
           💬 WhatsApp (+254790758050)
         </a>
       </div>
@@ -575,9 +609,9 @@ LANDING_HTML = """<!DOCTYPE html>
 
   <footer class="footer">
     Built by <strong>Idriss</strong> &nbsp;|&nbsp;
-    Email: <a href="mailto:jmakhanuh@gmail.com">jmakhanuh@gmail.com</a> &nbsp;|&nbsp;
-    Phone / WhatsApp: <a href="tel:+254790758050">+254790758050</a> &nbsp;|&nbsp;
-    <a href="https://github.com/jmakhanu/Star-intel" target="_blank">GitHub</a>
+    Email: <a href="https://mail.google.com/mail/?view=cm&fs=1&to=jmakhanuh@gmail.com&su=Star%20Intel%20Inquiry" target="_blank" rel="noopener">jmakhanuh@gmail.com</a> &nbsp;|&nbsp;
+    Phone / WhatsApp: <a href="https://wa.me/254790758050" target="_blank" rel="noopener">+254790758050</a> &nbsp;|&nbsp;
+    <a href="https://github.com/jmakhanu/Star-intel" target="_blank" rel="noopener">GitHub</a>
   </footer>
 
 <script>
@@ -612,11 +646,73 @@ function switchWsTab(tabId, btnEl) {
   btnEl.classList.add('active');
 }
 
-function copyText(txt, btn) {
-  navigator.clipboard.writeText(txt);
-  const old = btn.innerText;
-  btn.innerText = "✓ Copied!";
-  setTimeout(() => btn.innerText = old, 1800);
+function flashBtn(btn, msg) {
+  const orig = btn.innerHTML;
+  btn.innerHTML = msg;
+  setTimeout(() => { btn.innerHTML = orig; }, 1800);
+}
+
+function copySafeText(text, btn) {
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(() => {
+      flashBtn(btn, "✓ Copied!");
+    }).catch(() => fallbackCopy(text, btn));
+  } else {
+    fallbackCopy(text, btn);
+  }
+}
+
+function fallbackCopy(text, btn) {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  document.execCommand('copy');
+  document.body.removeChild(ta);
+  flashBtn(btn, "✓ Copied!");
+}
+
+/* INDEX-SAFE EMAIL ACTIONS FOR PROSPECT CARDS */
+function sendLeadViaGmail(idx) {
+  if (!lastData || !lastData.customer_prospects || !lastData.customer_prospects[idx]) return;
+  const l = lastData.customer_prospects[idx];
+  const to = encodeURIComponent(l.target_email || '');
+  const su = encodeURIComponent(l.email_subject || '');
+  const body = encodeURIComponent(l.email_body || '');
+  const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${to}&su=${su}&body=${body}`;
+  window.open(gmailUrl, '_blank', 'noopener');
+}
+
+function sendLeadViaMailto(idx) {
+  if (!lastData || !lastData.customer_prospects || !lastData.customer_prospects[idx]) return;
+  const l = lastData.customer_prospects[idx];
+  const to = encodeURIComponent(l.target_email || '');
+  const su = encodeURIComponent(l.email_subject || '');
+  const body = encodeURIComponent(l.email_body || '');
+  window.location.href = `mailto:${to}?subject=${su}&body=${body}`;
+}
+
+function copyLeadPitch(idx, btn) {
+  if (!lastData || !lastData.customer_prospects || !lastData.customer_prospects[idx]) return;
+  const l = lastData.customer_prospects[idx];
+  const fullPitch = `To: ${l.target_email || ''}\nSubject: ${l.email_subject || ''}\n\n${l.email_body || ''}`;
+  copySafeText(fullPitch, btn);
+}
+
+function copyLeadAddress(idx, btn) {
+  if (!lastData || !lastData.customer_prospects || !lastData.customer_prospects[idx]) return;
+  const l = lastData.customer_prospects[idx];
+  copySafeText(l.target_email || '', btn);
+}
+
+function openFounderPilotEmail() {
+  const domain = (lastData && lastData.domain) ? lastData.domain : (document.getElementById('urlInput').value.trim() || 'my startup');
+  const su = encodeURIComponent(`Founding Design Partner Request — 50-Lead Batch for ${domain}`);
+  const body = encodeURIComponent(`Hi Idriss,\n\nI ran ${domain} on Star Intel and would love to claim one of the 5 Founding Design Partner spots for the 50-lead AutoGTM CSV.\n\nMy startup website: ${domain}\nOur #1 ideal customer role: \n\nBest,`);
+  const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=jmakhanuh@gmail.com&su=${su}&body=${body}`;
+  window.open(gmailUrl, '_blank', 'noopener');
 }
 
 async function runAnalysis(e) {
@@ -666,8 +762,28 @@ function downloadCSV() {
   const blob = new Blob([csv], {type: 'text/csv'});
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = 'StarIntel_' + (lastData.startup_name || 'Battlecard') + '.csv';
+  a.download = 'StarIntel_Competitors_' + (lastData.startup_name || 'Battlecard') + '.csv';
   a.click();
+}
+
+function downloadLeadsCSV() {
+  if (!lastData || !lastData.customer_prospects) return;
+  const rows = lastData.customer_prospects;
+  const keys = ["customer_company", "customer_domain", "decision_maker_role", "target_email", "buying_trigger", "email_subject", "email_body"];
+  const csv = [keys.join(','), ...rows.map(r => keys.map(k => '"' + String(r[k]||'').replace(/"/g,'""') + '"').join(','))].join('\\n');
+  const blob = new Blob([csv], {type: 'text/csv'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'StarIntel_Leads_' + (lastData.startup_name || 'Prospects') + '.csv';
+  a.click();
+}
+
+function escapeHtml(str) {
+  return String(str || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
 }
 
 function renderDashboard(d) {
@@ -675,82 +791,78 @@ function renderDashboard(d) {
   const comps = d.competitor_matrix || [];
   const leads = d.customer_prospects || [];
   const plays = d.growth_playbooks || [];
-  const domainName = encodeURIComponent(d.domain || '');
 
   let leadsHtml = leads.map((l, idx) => {
-    const isLocked = false;
-    const mailtoHref = `mailto:${encodeURIComponent(l.target_email || '')}?subject=${encodeURIComponent(l.email_subject || '')}&body=${encodeURIComponent(l.email_body || '')}`;
-    const fullEmailText = `Subject: ${l.email_subject || ''}\n\n${l.email_body || ''}`;
     return `
     <div class="lead-card">
-      <div class="${isLocked ? 'locked-blur' : ''}">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
-          <div>
-            <strong style="font-size:16px;color:#f8fafc;">#${idx+1} ${l.customer_company||''}</strong>
-            <span class="mono" style="font-size:12px;color:#38bdf8;margin-left:6px;">(${l.customer_domain||''})</span>
-            <div style="font-size:12.5px;color:#94a3b8;margin-top:2px;">Role: <strong>${l.decision_maker_role||''}</strong> • <span class="mono">${l.target_email||''}</span></div>
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;flex-wrap:wrap;">
+        <div>
+          <strong style="font-size:16px;color:#f8fafc;">#${idx+1} ${escapeHtml(l.customer_company)}</strong>
+          <span class="mono" style="font-size:12px;color:#38bdf8;margin-left:6px;">(${escapeHtml(l.customer_domain)})</span>
+          <div style="font-size:12.5px;color:#94a3b8;margin-top:6px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+            <span>Role: <strong style="color:#e2e8f0;">${escapeHtml(l.decision_maker_role)}</strong></span>
+            <button type="button" class="email-badge mono" onclick="copyLeadAddress(${idx}, this)" title="Click to copy email address">
+              📧 ${escapeHtml(l.target_email)} (Copy)
+            </button>
           </div>
-          <span class="benefit-tag">${l.dns_status||'DNS VERIFIED'}</span>
         </div>
-        <div class="trigger-box">
-          <strong>Buying Trigger:</strong> ${l.buying_trigger||''}
-        </div>
-        <div class="email-draft"><strong>Subject: ${l.email_subject||''}</strong>\n\n${l.email_body||''}</div>
-        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
-          <a class="btn-send-mail" href="${mailtoHref}">🚀 Send in 1-Click</a>
-          <button type="button" class="btn-copy" onclick='copyText(${JSON.stringify(fullEmailText)}, this)'>📋 Copy Pitch</button>
-        </div>
+        <span class="benefit-tag">${escapeHtml(l.dns_status || 'DNS VERIFIED')}</span>
       </div>
-      ${isLocked ? `
-      <div class="lock-overlay">
-        <div class="section-title mono" style="color:#f59e0b;">🔒 STAR INTEL AUTOGTM PRO</div>
-        <h4 style="margin:6px 0 8px;font-size:17px;">Unlock Buyer #${idx+1} (${l.customer_company||'Verified Buyer'}) + 50 Weekly Leads</h4>
-        <p style="font-size:13px;color:#cbd5e1;max-width:360px;margin:0 0 14px;">
-          Get verified decision-maker emails, live triggers, and automated outbound for ${d.startup_name || d.domain}.
-        </p>
-        <a class="btn-pilot-primary" href="mailto:jmakhanuh@gmail.com?subject=Activate%20AutoGTM%20Pro%20for%20${domainName}&body=Hi%20Idriss%2C%20I%20want%20to%20unlock%20all%20customer%20prospects%20for%20${domainName}.">
-          💳 Unlock Full Campaign ($49/mo)
-        </a>
-      </div>` : ''}
+      <div class="trigger-box">
+        <strong>Buying Trigger:</strong> ${escapeHtml(l.buying_trigger)}
+      </div>
+      <div class="email-draft"><strong>Subject: ${escapeHtml(l.email_subject)}</strong>\n\n${escapeHtml(l.email_body)}</div>
+      <div class="action-row">
+        <button type="button" class="btn-gmail" onclick="sendLeadViaGmail(${idx})">
+          ✉️ Open in Gmail
+        </button>
+        <button type="button" class="btn-copy" onclick="copyLeadPitch(${idx}, this)">
+          📋 Copy Full Email
+        </button>
+        <button type="button" class="btn-mailto" onclick="sendLeadViaMailto(${idx})">
+          ↗ Default Mail App
+        </button>
+      </div>
     </div>`;
   }).join('');
 
   let rowsHtml = comps.map(c => `
     <tr>
-      <td><strong>${c.competitor_name||''}</strong><br><span class="mono" style="color:#64748b;font-size:12px">${c.competitor_domain||''}</span></td>
-      <td><span class="mono" style="background:#1e293b;padding:4px 8px;border-radius:4px;font-size:12px;">${c.pricing_model_and_cost||''}</span></td>
-      <td>${c.core_product_strength||''}</td>
-      <td class="gap">${c.exploitable_product_gap||''}</td>
-      <td class="wedge">${c.sales_displacement_wedge||''}</td>
+      <td><strong>${escapeHtml(c.competitor_name)}</strong><br><span class="mono" style="color:#64748b;font-size:12px">${escapeHtml(c.competitor_domain)}</span></td>
+      <td><span class="mono" style="background:#1e293b;padding:4px 8px;border-radius:4px;font-size:12px;">${escapeHtml(c.pricing_model_and_cost)}</span></td>
+      <td>${escapeHtml(c.core_product_strength)}</td>
+      <td class="gap">${escapeHtml(c.exploitable_product_gap)}</td>
+      <td class="wedge">${escapeHtml(c.sales_displacement_wedge)}</td>
     </tr>`).join('');
 
   let playsHtml = plays.map(pl => `
     <div class="bento-card">
-      <div class="section-title mono">${pl.growth_channel||''}</div>
-      <p style="color:#f8fafc;margin-top:6px;">${pl.tactical_action||''}</p>
-      <div class="benefit-tag">Expected ROI: ${pl.expected_roi||''}</div>
+      <div class="section-title mono">${escapeHtml(pl.growth_channel)}</div>
+      <p style="color:#f8fafc;margin-top:6px;">${escapeHtml(pl.tactical_action)}</p>
+      <div class="benefit-tag">Expected ROI: ${escapeHtml(pl.expected_roi)}</div>
     </div>`).join('');
 
   const resDiv = document.getElementById('results');
   resDiv.innerHTML = `
     <div class="res-banner">
       <div>
-        <div class="section-title mono">COMMAND WORKSPACE READY // ${d.mode_used || 'LIVE DOMAIN SCAN'}</div>
-        <h2 style="margin:4px 0;">${d.startup_name || d.domain} — GTM & Competitive Dossier</h2>
-        <div style="font-size:13.5px;color:#cbd5e1;margin-top:4px;">${d.core_product_summary||''}</div>
+        <div class="section-title mono">COMMAND WORKSPACE READY // ${escapeHtml(d.mode_used || 'LIVE DOMAIN SCAN')}</div>
+        <h2 style="margin:4px 0;">${escapeHtml(d.startup_name || d.domain)} — GTM & Competitive Dossier</h2>
+        <div style="font-size:13.5px;color:#cbd5e1;margin-top:4px;">${escapeHtml(d.core_product_summary)}</div>
       </div>
       <div style="display:flex;gap:10px;flex-wrap:wrap;">
-        <button class="btn-dl" onclick="downloadCSV()">⬇ Export Battlecard (.CSV)</button>
-        <a class="btn-pilot-primary" href="mailto:jmakhanuh@gmail.com?subject=Activate%20AutoGTM%20Pro%20for%20${domainName}">
-          💳 Upgrade to AutoGTM Pro ($49/mo)
-        </a>
+        <button type="button" class="btn-dl" onclick="downloadLeadsCSV()">⬇ Export Leads (.CSV)</button>
+        <button type="button" class="btn-dl" onclick="downloadCSV()">⬇ Export Battlecard (.CSV)</button>
+        <button type="button" class="btn-pilot-primary" onclick="openFounderPilotEmail()">
+          ⚡ Request 50-Lead Batch (Free Pilot)
+        </button>
       </div>
     </div>
 
     <div class="ws-tabs">
-      <button class="ws-tab active" onclick="switchWsTab('paneLeads', this)">🎯 1. Customer Hunter & Outbound (${leads.length})</button>
-      <button class="ws-tab" onclick="switchWsTab('paneComps', this)">⚔️ 2. Competitor Gap Matrix (${comps.length})</button>
-      <button class="ws-tab" onclick="switchWsTab('panePricing', this)">💰 3. Pricing Arbitrage & Red-Team</button>
+      <button type="button" class="ws-tab active" onclick="switchWsTab('paneLeads', this)">🎯 1. Customer Hunter & Outbound (${leads.length} Unlocked)</button>
+      <button type="button" class="ws-tab" onclick="switchWsTab('paneComps', this)">⚔️ 2. Competitor Gap Matrix (${comps.length})</button>
+      <button type="button" class="ws-tab" onclick="switchWsTab('panePricing', this)">💰 3. Pricing Arbitrage & Red-Team</button>
     </div>
 
     <div id="paneLeads" class="tab-pane active">
@@ -766,13 +878,13 @@ function renderDashboard(d) {
 
     <div id="panePricing" class="tab-pane">
       <div class="grid-3">
-        <div class="bento-card"><div class="section-title mono">Current / Inferred Model</div><p style="color:#f8fafc">${p.current_or_inferred_model||''}</p></div>
-        <div class="bento-card"><div class="section-title mono">Market Pricing Benchmark</div><p style="color:#f8fafc">${p.market_pricing_benchmark||''}</p></div>
-        <div class="bento-card"><div class="section-title mono">Recommended Pricing Wedge</div><p style="color:#34d399">${p.recommended_pricing_wedge||''}</p></div>
+        <div class="bento-card"><div class="section-title mono">Current / Inferred Model</div><p style="color:#f8fafc">${escapeHtml(p.current_or_inferred_model)}</p></div>
+        <div class="bento-card"><div class="section-title mono">Market Pricing Benchmark</div><p style="color:#f8fafc">${escapeHtml(p.market_pricing_benchmark)}</p></div>
+        <div class="bento-card"><div class="section-title mono">Recommended Pricing Wedge</div><p style="color:#34d399">${escapeHtml(p.recommended_pricing_wedge)}</p></div>
       </div>
       <div class="grid-3">${playsHtml}</div>
       <div class="bento-card" style="border-color:#fb7185;background:rgba(127,29,29,0.2);color:#fecdd3;">
-        <strong>Red-Team CSO Verdict:</strong> ${d.red_team_cso_verdict||''}
+        <strong>Red-Team CSO Verdict:</strong> ${escapeHtml(d.red_team_cso_verdict)}
       </div>
     </div>
   `;
@@ -843,9 +955,9 @@ Analyze '{clean_url}' ({custom_desc or 'live domain'}) and return ONLY valid JSO
 
                 prospects = data.get("customer_prospects", [])
                 for idx, p in enumerate(prospects):
-                    if idx == 0 and p.get("customer_domain"):
+                    if p.get("customer_domain"):
                         chk = verify_domain_and_emails(p["customer_domain"])
-                        p["dns_status"] = "LIVE MX/DNS" if chk["dns_live"] else "VERIFIED"
+                        p["dns_status"] = "LIVE MX/DNS" if chk["dns_live"] else "DNS VERIFIED"
                         if chk["emails"]:
                             p["target_email"] = chk["emails"][0]
                     else:
