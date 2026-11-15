@@ -724,7 +724,7 @@ LANDING_HTML = """<!DOCTYPE html>
       <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
         <div class="status-pill"><span class="pulse-dot"></span> Provenance-Verified Recon Online</div>
         <a href="https://www.paypal.com/ncp/payment/XKUVEJSB74V88" target="_blank" rel="noopener" class="btn-pilot-primary">
-          💳 Unlock AutoGTM Pro (<span class="price-strike" style="color:#9CA3AF;">$49</span> $19/mo) →
+          💳 Unlock AutoGTM Pro (<span class="price-strike" style="color:#9CA3AF;">$49</span> $29/mo) →
         </a>
       </div>
     </nav>
@@ -814,17 +814,17 @@ LANDING_HTML = """<!DOCTYPE html>
   <section class="pilot-wrap" id="pilot">
     <div class="pilot-card">
       <div style="max-width:650px;">
-        <div class="benefit-tag mono" style="margin-bottom:8px;">FIRST 10 FOUNDING MEMBERS • 60% EARLY-BIRD LOCK-IN</div>
+        <div class="benefit-tag mono" style="margin-bottom:8px;">FIRST 10 FOUNDING MEMBERS • 40% EARLY-BIRD LOCK-IN</div>
         <h2 style="margin:4px 0 8px;font-size:23px;color:var(--obsidian);">
-          Get Your Weekly 50-Lead AutoGTM Pack — <span class="price-strike">$49/mo</span> <span style="color:var(--emerald);">$19/mo USD</span>
+          Get Your Weekly 50-Lead AutoGTM Pack — <span class="price-strike">$49/mo</span> <span style="color:var(--emerald);">$29/mo USD</span>
         </h2>
         <p style="margin:0;color:var(--text-secondary);font-size:14.5px;">
-          Our live studio unlocks all 4 Competitor Battlecards + 4 Target Customer Emails for free. Upgrade to <strong>AutoGTM Pro ($19/mo via PayPal or Debit/Credit Card)</strong> to receive 50 verified decision-maker leads & custom outbound sequences every week.
+          Our live studio unlocks all 4 Competitor Battlecards + 4 Target Customer Emails for free. Upgrade to <strong>AutoGTM Pro ($29/mo via PayPal or Debit/Credit Card)</strong> to receive 50 verified decision-maker leads & custom outbound sequences every week.
         </p>
       </div>
       <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
         <a class="cmd-btn" href="https://www.paypal.com/ncp/payment/XKUVEJSB74V88" target="_blank" rel="noopener">
-          💳 Checkout $19 USD (PayPal / Card) →
+          💳 Checkout $29 USD (PayPal / Card) →
         </a>
         <button type="button" class="btn-dl" onclick="openFounderPilotEmail()">
           ✉️ Ask a Question (Gmail)
@@ -1117,7 +1117,7 @@ function renderDashboard(d) {
         <button type="button" class="btn-dl" onclick="downloadLeadsCSV()">⬇ Export Leads (.CSV)</button>
         <button type="button" class="btn-dl" onclick="downloadCSV()">⬇ Export Battlecard (.CSV)</button>
         <a class="cmd-btn" href="${PAYPAL_URL}" target="_blank" rel="noopener">
-          💳 Unlock 50-Lead Pack ($19 USD) →
+          💳 Unlock 50-Lead Pack ($29 USD) →
         </a>
       </div>
     </div>
