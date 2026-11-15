@@ -1063,8 +1063,8 @@ function renderDashboard(d) {
             <span class="mono" style="font-size:12px;color:var(--muted);margin-left:6px;">· ${escapeHtml(l.customer_domain)}</span>
             <div style="font-size:12.5px;color:var(--text-secondary);margin-top:4px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
               <span>${escapeHtml(l.decision_maker_role)}</span>
-              <button type="button" class="email-badge mono" onclick="copyLeadAddress(${idx}, this)" title="Click to copy email address">
-                ✉ ${escapeHtml(l.target_email)}
+              <button type="button" class="email-badge mono" onclick="sendLeadViaGmail(${idx})" title="Click to open pre-filled draft in Gmail">
+                ✉️ ${escapeHtml(l.target_email)} (Draft in Gmail ↗)
               </button>
             </div>
           </div>
@@ -1081,13 +1081,13 @@ function renderDashboard(d) {
       <div class="email-draft" id="draftBody_${idx}" contenteditable="true" spellcheck="false">${escapeHtml(l.email_body)}</div>
       <div class="action-row">
         <button type="button" class="btn-gmail" onclick="sendLeadViaGmail(${idx})">
-          ✉️ Send via Gmail
-        </button>
-        <button type="button" class="btn-copy" onclick="copyLeadPitch(${idx}, this)">
-          📋 Copy Email
+          ✉️ Open Draft in Gmail ↗
         </button>
         <button type="button" class="btn-mailto" onclick="sendLeadViaMailto(${idx})">
-          ↗ Mail App
+          ↗ Default Mail App
+        </button>
+        <button type="button" class="btn-mailto" onclick="copyLeadPitch(${idx}, this)">
+          📋 Copy Text
         </button>
       </div>
     </div>`;
