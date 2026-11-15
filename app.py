@@ -999,9 +999,17 @@ LANDING_HTML = """<!DOCTYPE html>
   </footer>
 
 <script>
-const PAYPAL_URL = "https://www.paypal.com/ncp/payment/XKUVEJSB74V88";
+
+function getSavedEmail() {
+  return localStorage.getItem("star_intel_email") || "";
+}
 let currentMode = 'url';
 let lastData = null;
+let pendingActionAfterAuth = null;
+
+const PAYPAL_URL = "https://www.paypal.com/ncp/payment/XKUVEJSB74V88";
+
+
 
 if (window.location.search.includes("checkout=success")) {
   document.getElementById("checkoutBanner").style.display = "block";
