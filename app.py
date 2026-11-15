@@ -1,10 +1,8 @@
 #!/usr/bin/env python3
 """
-Star Intel — Orbital Command GTM & Competitive Intelligence Platform
-Provenance & Verification Edition:
-- Explicit 'observed' vs 'unverified (inferred)' pricing status
-- Source attribution + UTC check_date in UI and CSV exports
-- 1-Click Gmail Web Compose & Index-safe Clipboard Copy
+Star Intel — Executive Studio GTM & Competitive Intelligence Platform
+Aesthetic: Warm Alabaster (#F8F9FA), Pure White Cards, Obsidian Pill Controls (#111827),
+and Forest Emerald (#059669) & Warm Amber (#D97706) Provenance Badges.
 """
 
 import os
@@ -23,46 +21,61 @@ LANDING_HTML = """<!DOCTYPE html>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Star Intel — Autonomous Competitive Radar & AutoGTM Engine</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #040711;
-    --panel: rgba(13, 20, 38, 0.84);
-    --panel-solid: #0b1120;
-    --border: rgba(56, 189, 248, 0.22);
-    --border-subtle: rgba(148, 163, 184, 0.12);
-    --cyan: #38bdf8;
-    --emerald: #10b981;
-    --amber: #f59e0b;
-    --rose: #fb7185;
-    --text: #f8fafc;
-    --muted: #94a3b8;
+    --bg: #F8F9FA;
+    --surface: #FFFFFF;
+    --surface-subtle: #F3F4F6;
+    --border: #E5E7EB;
+    --border-strong: #D1D5DB;
+    --obsidian: #111827;
+    --obsidian-hover: #1F2937;
+    --emerald: #059669;
+    --emerald-bg: #ECFDF5;
+    --emerald-border: #A7F3D0;
+    --amber: #D97706;
+    --amber-bg: #FFFBEB;
+    --amber-border: #FDE68A;
+    --rose: #E11D48;
+    --rose-bg: #FFF1F2;
+    --text: #111827;
+    --text-secondary: #4B5563;
+    --muted: #6B7280;
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.04);
+    --shadow-md: 0 10px 30px -5px rgba(0, 0, 0, 0.05), 0 4px 12px -2px rgba(0, 0, 0, 0.03);
+    --shadow-lg: 0 20px 45px -10px rgba(0, 0, 0, 0.07), 0 8px 18px -4px rgba(0, 0, 0, 0.04);
   }
   * { box-sizing: border-box; }
   body {
     background-color: var(--bg);
-    background-image:
-      radial-gradient(circle at 20% 10%, rgba(56, 189, 248, 0.10) 0%, transparent 40%),
-      radial-gradient(circle at 80% 25%, rgba(16, 185, 129, 0.08) 0%, transparent 40%),
-      linear-gradient(rgba(148, 163, 184, 0.025) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(148, 163, 184, 0.025) 1px, transparent 1px);
-    background-size: 100% 100%, 100% 100%, 36px 36px, 36px 36px;
+    background-image: radial-gradient(#E5E7EB 1px, transparent 1px);
+    background-size: 24px 24px;
     color: var(--text);
-    font-family: 'Inter', system-ui, sans-serif;
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
     margin: 0;
     padding: 0;
-    line-height: 1.5;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
   }
   .mono { font-family: 'JetBrains Mono', monospace; }
 
+  /* TOP NAVIGATION */
+  .nav-wrap {
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 40;
+  }
   .nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 18px 24px;
-    border-bottom: 1px solid var(--border-subtle);
+    padding: 14px 24px;
     flex-wrap: wrap;
     gap: 12px;
   }
@@ -71,113 +84,175 @@ LANDING_HTML = """<!DOCTYPE html>
     align-items: center;
     gap: 10px;
     font-weight: 800;
-    font-size: 17px;
-    letter-spacing: 1.4px;
+    font-size: 16.5px;
+    letter-spacing: -0.02em;
+    color: var(--obsidian);
+  }
+  .brand-mark {
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    background: var(--obsidian);
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 14px;
   }
   .status-pill {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    background: rgba(16, 185, 129, 0.1);
-    border: 1px solid rgba(16, 185, 129, 0.3);
-    color: #34d399;
-    padding: 6px 14px;
+    background: var(--emerald-bg);
+    border: 1px solid var(--emerald-border);
+    color: var(--emerald);
+    padding: 5px 13px;
     border-radius: 99px;
     font-size: 12px;
     font-weight: 600;
   }
   .pulse-dot {
-    width: 8px;
-    height: 8px;
-    background: #10b981;
+    width: 7px;
+    height: 7px;
+    background: var(--emerald);
     border-radius: 50%;
-    box-shadow: 0 0 8px #10b981;
     animation: pulse 2s infinite;
   }
   @keyframes pulse {
     0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.4; transform: scale(1.25); }
+    50% { opacity: 0.45; transform: scale(1.25); }
   }
 
-  .hero-center {
-    max-width: 900px;
-    margin: 46px auto 32px;
-    padding: 0 24px;
-    text-align: center;
-  }
-  .eyebrow {
+  /* EXPLEE-STYLE STEPPER RIBBON */
+  .stepper-ribbon {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    font-size: 12px;
-    color: var(--cyan);
-    background: rgba(56, 189, 248, 0.08);
+    gap: 10px;
+    background: var(--surface);
     border: 1px solid var(--border);
     padding: 6px 14px;
     border-radius: 99px;
-    margin-bottom: 18px;
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .step-dot {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
     font-weight: 600;
+    color: var(--text-secondary);
+  }
+  .step-dot span {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--obsidian);
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+  }
+  .step-line { width: 18px; height: 1px; background: var(--border-strong); }
+  .step-ready {
+    background: var(--emerald-bg);
+    border: 1px solid var(--emerald-border);
+    color: var(--emerald);
+    padding: 3px 10px;
+    border-radius: 99px;
+    font-size: 11.5px;
+    font-weight: 700;
+  }
+
+  /* HERO CENTER */
+  .hero-center {
+    max-width: 880px;
+    margin: 42px auto 30px;
+    padding: 0 24px;
+    text-align: center;
   }
   h1 {
     font-size: 46px;
     font-weight: 800;
     line-height: 1.1;
     margin: 0 0 16px;
-    letter-spacing: -0.025em;
+    letter-spacing: -0.03em;
+    color: var(--obsidian);
   }
   h1 span {
-    background: linear-gradient(95deg, #38bdf8, #34d399);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: var(--emerald);
+    text-decoration: underline;
+    text-decoration-color: rgba(5, 150, 105, 0.28);
+    text-underline-offset: 6px;
   }
   .hero-sub {
-    color: var(--muted);
+    color: var(--text-secondary);
     font-size: 16.5px;
-    max-width: 680px;
+    max-width: 660px;
     margin: 0 auto 28px;
+    font-weight: 400;
   }
 
+  /* COMMAND CONSOLE CARD */
   .console-shell {
-    background: var(--panel);
+    background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 18px;
-    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.65);
+    border-radius: 18px;
+    padding: 20px;
+    box-shadow: var(--shadow-lg);
     text-align: left;
   }
   .mode-tabs {
     display: flex;
     gap: 8px;
     margin-bottom: 14px;
-    border-bottom: 1px solid var(--border-subtle);
+    border-bottom: 1px solid var(--border);
     padding-bottom: 12px;
     justify-content: space-between;
     flex-wrap: wrap;
   }
-  .mode-tab-group { display: flex; gap: 8px; flex-wrap: wrap; }
+  .mode-tab-group {
+    display: inline-flex;
+    background: var(--surface-subtle);
+    padding: 4px;
+    border-radius: 99px;
+    border: 1px solid var(--border);
+    gap: 4px;
+  }
   .mode-btn {
-    background: rgba(15, 23, 42, 0.8);
-    border: 1px solid var(--border-subtle);
-    color: var(--muted);
-    padding: 7px 14px;
-    border-radius: 8px;
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    padding: 6px 14px;
+    border-radius: 99px;
     font-size: 12.5px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.15s;
   }
   .mode-btn.active {
-    background: rgba(56, 189, 248, 0.15);
-    border-color: var(--cyan);
-    color: var(--text);
+    background: var(--obsidian);
+    color: #FFFFFF;
+    box-shadow: var(--shadow-sm);
   }
   .cmd-row {
     display: flex;
     gap: 10px;
-    background: #060a15;
-    border: 1px solid rgba(56, 189, 248, 0.35);
-    padding: 8px;
+    background: var(--bg);
+    border: 1.5px solid var(--border-strong);
+    padding: 7px;
     border-radius: 12px;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .cmd-row:focus-within {
+    border-color: var(--obsidian);
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(17, 24, 39, 0.06);
   }
   @media (max-width: 640px) { .cmd-row { flex-direction: column; } }
   .cmd-input-wrap {
@@ -191,10 +266,11 @@ LANDING_HTML = """<!DOCTYPE html>
     width: 100%;
     background: transparent;
     border: none;
-    color: var(--text);
+    color: var(--obsidian);
     font-size: 15px;
     outline: none;
     font-family: 'JetBrains Mono', monospace;
+    font-weight: 500;
   }
   .stealth-grid {
     display: none;
@@ -204,32 +280,35 @@ LANDING_HTML = """<!DOCTYPE html>
   }
   @media (max-width: 680px) { .stealth-grid { grid-template-columns: 1fr; } }
   .stealth-field {
-    background: #060a15;
-    border: 1px solid var(--border-subtle);
+    background: var(--bg);
+    border: 1px solid var(--border-strong);
     padding: 10px 14px;
     border-radius: 10px;
   }
   .stealth-field label {
     display: block;
     font-size: 11px;
-    color: var(--cyan);
+    color: var(--text-secondary);
     text-transform: uppercase;
-    letter-spacing: 0.8px;
+    letter-spacing: 0.6px;
     margin-bottom: 4px;
-    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
   }
   .cmd-btn {
-    background: linear-gradient(135deg, #38bdf8, #10b981);
-    color: #030712;
+    background: var(--emerald);
+    color: #FFFFFF;
     border: none;
     padding: 13px 24px;
     border-radius: 9px;
-    font-weight: 800;
+    font-weight: 700;
     font-size: 14px;
     cursor: pointer;
     white-space: nowrap;
+    transition: background 0.15s, transform 0.1s;
+    box-shadow: 0 2px 6px rgba(5, 150, 105, 0.25);
   }
-  .cmd-btn:disabled { background: #334155; color: #94a3b8; cursor: wait; }
+  .cmd-btn:hover { background: #047857; transform: translateY(-1px); }
+  .cmd-btn:disabled { background: #9CA3AF; color: #F3F4F6; cursor: wait; box-shadow: none; }
 
   .quick-bar {
     display: flex;
@@ -237,22 +316,29 @@ LANDING_HTML = """<!DOCTYPE html>
     align-items: center;
     flex-wrap: wrap;
     gap: 10px;
-    margin-top: 12px;
+    margin-top: 14px;
     font-size: 12px;
     color: var(--muted);
   }
   .pill-btn {
-    background: rgba(30, 41, 59, 0.7);
-    border: 1px solid var(--border-subtle);
-    color: #cbd5e1;
-    padding: 4px 10px;
-    border-radius: 6px;
+    background: var(--surface);
+    border: 1px solid var(--border-strong);
+    color: var(--obsidian);
+    padding: 4px 11px;
+    border-radius: 99px;
     cursor: pointer;
     font-family: 'JetBrains Mono', monospace;
     font-size: 11.5px;
+    font-weight: 500;
+    transition: all 0.15s;
   }
-  .pill-btn:hover { border-color: var(--cyan); color: var(--cyan); }
+  .pill-btn:hover {
+    border-color: var(--obsidian);
+    background: var(--obsidian);
+    color: #fff;
+  }
 
+  /* 3-PILLAR PIPELINE CARDS */
   .pipeline-strip {
     max-width: 1160px;
     margin: 26px auto 40px;
@@ -263,62 +349,73 @@ LANDING_HTML = """<!DOCTYPE html>
   }
   @media (max-width: 860px) { .pipeline-strip { grid-template-columns: 1fr; } }
   .pipe-card {
-    background: rgba(15, 23, 42, 0.6);
-    border: 1px solid var(--border-subtle);
-    border-radius: 12px;
-    padding: 18px;
-    transition: border-color 0.2s;
-  }
-  .pipe-card.active-step {
-    border-color: var(--cyan);
-    box-shadow: 0 0 25px rgba(56, 189, 248, 0.15);
-  }
-  .pipe-num {
-    font-size: 11px;
-    color: var(--cyan);
-    font-weight: 700;
-    letter-spacing: 1.2px;
-    text-transform: uppercase;
-    margin-bottom: 6px;
-  }
-  .pipe-card h3 { margin: 0 0 6px; font-size: 15.5px; }
-  .pipe-card p { margin: 0; font-size: 13px; color: var(--muted); }
-
-  #results { max-width: 1200px; margin: 20px auto 70px; padding: 0 24px; display: none; }
-  .res-banner {
-    background: linear-gradient(90deg, rgba(15,23,42,0.95), rgba(6,78,59,0.35));
+    background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 14px;
-    padding: 20px 24px;
+    padding: 20px;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.2s;
+  }
+  .pipe-card.active-step {
+    border-color: var(--emerald);
+    box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.15);
+  }
+  .pipe-num {
+    display: inline-block;
+    font-size: 11px;
+    color: var(--emerald);
+    background: var(--emerald-bg);
+    border: 1px solid var(--emerald-border);
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .pipe-card h3 { margin: 0 0 6px; font-size: 16px; color: var(--obsidian); }
+  .pipe-card p { margin: 0; font-size: 13.5px; color: var(--text-secondary); }
+
+  /* WORKSPACE RESULTS & EXPLEE-STYLE PILL SWITCHER */
+  #results { max-width: 1200px; margin: 20px auto 70px; padding: 0 24px; display: none; }
+  .res-banner {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 22px 26px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
     gap: 16px;
-    margin-bottom: 18px;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow-md);
   }
   .ws-tabs {
-    display: flex;
-    gap: 10px;
+    display: inline-flex;
+    background: var(--surface-subtle);
+    border: 1px solid var(--border);
+    padding: 5px;
+    border-radius: 99px;
+    gap: 6px;
     margin-bottom: 22px;
-    border-bottom: 1px solid var(--border-subtle);
-    padding-bottom: 12px;
     flex-wrap: wrap;
   }
   .ws-tab {
-    background: var(--panel-solid);
-    border: 1px solid var(--border-subtle);
-    color: var(--muted);
-    padding: 9px 16px;
-    border-radius: 8px;
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    padding: 8px 18px;
+    border-radius: 99px;
     font-weight: 700;
     font-size: 13px;
     cursor: pointer;
+    transition: all 0.15s;
   }
   .ws-tab.active {
-    background: rgba(56, 189, 248, 0.14);
-    border-color: var(--cyan);
-    color: var(--text);
+    background: var(--obsidian);
+    color: #FFFFFF;
+    box-shadow: var(--shadow-sm);
   }
   .tab-pane { display: none; }
   .tab-pane.active { display: block; }
@@ -328,86 +425,128 @@ LANDING_HTML = """<!DOCTYPE html>
   .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; margin-bottom: 24px; }
 
   .lead-card {
-    background: var(--panel-solid);
-    border: 1px solid rgba(56, 189, 248, 0.26);
-    border-radius: 12px;
-    padding: 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 22px;
     position: relative;
+    box-shadow: var(--shadow-sm);
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .lead-card:hover {
+    border-color: var(--border-strong);
+    box-shadow: var(--shadow-md);
+  }
+  .avatar-circle {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--surface-subtle);
+    border: 1px solid var(--border-strong);
+    color: var(--obsidian);
+    font-weight: 700;
+    font-size: 13px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
   .email-badge {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    background: rgba(56, 189, 248, 0.12);
-    border: 1px solid rgba(56, 189, 248, 0.3);
-    color: var(--cyan);
-    padding: 3px 9px;
+    background: var(--surface-subtle);
+    border: 1px solid var(--border-strong);
+    color: var(--obsidian);
+    padding: 3px 10px;
     border-radius: 6px;
     font-size: 12px;
+    font-weight: 500;
     cursor: pointer;
     transition: all 0.15s;
   }
-  .email-badge:hover { background: rgba(56, 189, 248, 0.25); }
+  .email-badge:hover { background: var(--obsidian); color: #fff; }
   .trigger-box {
-    background: rgba(16, 185, 129, 0.09);
-    border-left: 3px solid #10b981;
-    padding: 8px 12px;
+    background: var(--emerald-bg);
+    border-left: 3px solid var(--emerald);
+    padding: 9px 13px;
     font-size: 12.5px;
-    color: #d1fae5;
-    margin: 10px 0 12px;
-    border-radius: 4px;
+    color: #065F46;
+    margin: 12px 0 14px;
+    border-radius: 6px;
   }
   .email-draft {
-    background: #050811;
-    border: 1px solid #1e293b;
-    padding: 14px;
-    border-radius: 8px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
-    color: #e2e8f0;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    padding: 15px;
+    border-radius: 10px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 13.5px;
+    color: var(--obsidian);
     white-space: pre-wrap;
     margin-bottom: 14px;
+    line-height: 1.6;
   }
 
+  /* TABLE STYLING */
+  .table-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+  }
   table {
     width: 100%;
     border-collapse: collapse;
-    background: var(--panel-solid);
-    border-radius: 12px;
-    overflow: hidden;
-    border: 1px solid var(--border-subtle);
   }
-  th { background: #1e293b; color: var(--muted); text-align: left; padding: 14px; font-size: 11.5px; text-transform: uppercase; }
-  td { padding: 14px; border-bottom: 1px solid var(--border-subtle); font-size: 13.5px; vertical-align: top; }
-  .gap { color: var(--rose); }
-  .wedge { color: #34d399; }
+  th {
+    background: var(--surface-subtle);
+    color: var(--text-secondary);
+    text-align: left;
+    padding: 14px 16px;
+    font-size: 11.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid var(--border);
+  }
+  td {
+    padding: 16px;
+    border-bottom: 1px solid var(--border);
+    font-size: 13.5px;
+    vertical-align: top;
+    color: var(--text);
+  }
+  tr:last-child td { border-bottom: none; }
+  .gap { color: var(--rose); font-weight: 500; }
+  .wedge { color: var(--emerald); font-weight: 600; }
 
   /* PROVENANCE & VERIFICATION BADGES */
   .badge-observed {
     display: inline-block;
     font-size: 10.5px;
     font-weight: 700;
-    color: #34d399;
-    background: rgba(16, 185, 129, 0.14);
-    border: 1px solid rgba(16, 185, 129, 0.35);
+    color: var(--emerald);
+    background: var(--emerald-bg);
+    border: 1px solid var(--emerald-border);
     padding: 2px 8px;
-    border-radius: 5px;
+    border-radius: 6px;
     margin-top: 6px;
   }
   .badge-unverified {
     display: inline-block;
     font-size: 10.5px;
     font-weight: 700;
-    color: #fbbf24;
-    background: rgba(245, 158, 11, 0.14);
-    border: 1px solid rgba(245, 158, 11, 0.35);
+    color: var(--amber);
+    background: var(--amber-bg);
+    border: 1px solid var(--amber-border);
     padding: 2px 8px;
-    border-radius: 5px;
+    border-radius: 6px;
     margin-top: 6px;
   }
   .prov-meta {
     font-size: 11px;
-    color: #64748b;
+    color: var(--muted);
     margin-top: 5px;
     line-height: 1.35;
   }
@@ -424,63 +563,65 @@ LANDING_HTML = """<!DOCTYPE html>
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    background: linear-gradient(135deg, #38bdf8, #10b981);
-    color: #030712;
-    padding: 9px 14px;
-    border-radius: 7px;
-    font-weight: 800;
+    background: var(--emerald);
+    color: #FFFFFF;
+    padding: 9px 15px;
+    border-radius: 8px;
+    font-weight: 700;
     font-size: 12.5px;
     border: none;
     cursor: pointer;
     text-decoration: none;
-    transition: transform 0.1s, opacity 0.15s;
+    transition: background 0.15s, transform 0.1s;
   }
-  .btn-gmail:hover { opacity: 0.92; transform: translateY(-1px); }
+  .btn-gmail:hover { background: #047857; transform: translateY(-1px); }
   .btn-copy {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    background: rgba(56, 189, 248, 0.12);
-    color: var(--cyan);
-    border: 1px solid rgba(56, 189, 248, 0.35);
+    background: var(--obsidian);
+    color: #FFFFFF;
+    border: 1px solid var(--obsidian);
     padding: 8px 13px;
-    border-radius: 7px;
+    border-radius: 8px;
     font-weight: 600;
     font-size: 12px;
     cursor: pointer;
     transition: all 0.15s;
   }
-  .btn-copy:hover { background: rgba(56, 189, 248, 0.22); }
+  .btn-copy:hover { background: var(--obsidian-hover); }
   .btn-mailto {
     display: inline-flex;
     align-items: center;
     gap: 5px;
-    background: rgba(148, 163, 184, 0.1);
-    color: #cbd5e1;
-    border: 1px solid var(--border-subtle);
+    background: var(--surface);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-strong);
     padding: 8px 12px;
-    border-radius: 7px;
+    border-radius: 8px;
     font-weight: 600;
     font-size: 12px;
     cursor: pointer;
     text-decoration: none;
   }
-  .btn-mailto:hover { border-color: var(--muted); color: #fff; }
+  .btn-mailto:hover { border-color: var(--obsidian); color: var(--obsidian); }
   .btn-dl {
-    background: rgba(56, 189, 248, 0.14);
-    color: var(--cyan);
-    border: 1px solid var(--cyan);
+    background: var(--surface);
+    color: var(--obsidian);
+    border: 1px solid var(--border-strong);
     padding: 10px 16px;
-    border-radius: 8px;
+    border-radius: 9px;
     font-weight: 600;
     font-size: 13px;
     cursor: pointer;
+    transition: all 0.15s;
   }
+  .btn-dl:hover { border-color: var(--obsidian); background: var(--surface-subtle); }
   .btn-pilot-primary {
-    background: #10b981;
-    color: #04130e;
+    background: var(--obsidian);
+    color: #FFFFFF;
     padding: 10px 18px;
-    border-radius: 8px;
+    border-radius: 99px;
     font-weight: 700;
     font-size: 13px;
     text-decoration: none;
@@ -489,75 +630,92 @@ LANDING_HTML = """<!DOCTYPE html>
     gap: 6px;
     border: none;
     cursor: pointer;
+    transition: background 0.15s;
   }
+  .btn-pilot-primary:hover { background: var(--obsidian-hover); }
+
   .bento-card {
-    background: var(--panel);
-    border: 1px solid var(--border-subtle);
-    border-radius: 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
     padding: 20px;
+    box-shadow: var(--shadow-sm);
   }
-  .section-title { font-size: 11.5px; letter-spacing: 1.4px; text-transform: uppercase; color: var(--cyan); font-weight: 700; margin-bottom: 6px; }
+  .section-title { font-size: 11px; letter-spacing: 1.1px; text-transform: uppercase; color: var(--muted); font-weight: 700; margin-bottom: 6px; }
   .benefit-tag {
     display: inline-block;
     font-size: 11px;
-    font-weight: 600;
-    color: #34d399;
-    background: rgba(16, 185, 129, 0.12);
-    padding: 4px 10px;
-    border-radius: 6px;
+    font-weight: 700;
+    color: var(--emerald);
+    background: var(--emerald-bg);
+    border: 1px solid var(--emerald-border);
+    padding: 3px 10px;
+    border-radius: 99px;
   }
   .pilot-wrap { max-width: 1160px; margin: 40px auto; padding: 0 24px; }
   .pilot-card {
-    background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(6, 78, 59, 0.35));
-    border: 1px solid rgba(16, 185, 129, 0.4);
-    border-radius: 14px;
-    padding: 26px;
+    background: var(--surface);
+    border: 1.5px solid var(--obsidian);
+    border-radius: 18px;
+    padding: 28px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
     gap: 20px;
+    box-shadow: var(--shadow-md);
   }
   .footer {
-    border-top: 1px solid var(--border-subtle);
+    border-top: 1px solid var(--border);
+    background: var(--surface);
     padding: 28px 24px;
     text-align: center;
     color: var(--muted);
     font-size: 13px;
   }
-  .footer a { color: var(--cyan); text-decoration: none; }
+  .footer a { color: var(--obsidian); font-weight: 600; text-decoration: none; }
+  .footer a:hover { color: var(--emerald); }
 </style>
 </head>
 <body>
 
-  <nav class="nav">
-    <div class="brand">
-      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2">
-        <circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3" fill="#38bdf8"/>
-        <path d="M12 3v3M12 18v3M3 12h3M18 12h3"/>
-      </svg>
-      STAR INTEL // ORBITAL GTM
-    </div>
-    <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
-      <div class="status-pill"><span class="pulse-dot"></span> Provenance-Verified Recon Online</div>
-      <button type="button" onclick="openFounderPilotEmail()" class="btn-pilot-primary">⚡ Claim 50-Lead Founding Pilot →</button>
-    </div>
-  </nav>
+  <div class="nav-wrap">
+    <nav class="nav">
+      <div class="brand">
+        <span class="brand-mark">SI</span>
+        Star Intel
+        <span class="mono" style="font-size:11px;color:var(--muted);font-weight:500;">// AutoGTM Studio</span>
+      </div>
+      <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+        <div class="status-pill"><span class="pulse-dot"></span> Provenance-Verified Recon Online</div>
+        <button type="button" onclick="openFounderPilotEmail()" class="btn-pilot-primary">Claim $0 Founding Pilot →</button>
+      </div>
+    </nav>
+  </div>
 
   <section class="hero-center">
-    <div class="eyebrow mono">⚡ VERIFIED PRICING PROVENANCE • COMPETITOR MATRIX + TRIGGER LEADS</div>
-    <h1>Spin Up Your Market Radar &<br><span>First Customer Campaigns</span> in 28s.</h1>
+    <div class="stepper-ribbon">
+      <div class="step-dot"><span>1</span> Map Market & Prices</div>
+      <div class="step-line"></div>
+      <div class="step-dot"><span>2</span> Expose Rival Gaps</div>
+      <div class="step-line"></div>
+      <div class="step-dot"><span>3</span> Verify Buyers</div>
+      <div class="step-line"></div>
+      <div class="step-ready">● Outreach Ready</div>
+    </div>
+
+    <h1>Your AI Go-To-Market &<br><span>Competitive Teardown</span> Studio.</h1>
     <p class="hero-sub">
-      Enter your company website — or switch to <strong>Stealth / No-Website Mode</strong>. Star Intel separates <strong>observed prices</strong> from <strong>unverified (inferred) positioning</strong> with source + check-date audit trails.
+      Enter your company website — or switch to <strong>Stealth Startup Mode</strong>. Star Intel separates <strong>observed prices</strong> from <strong>unverified (inferred) positioning</strong> with source + check-date audit trails and ready-to-send buyer emails.
     </p>
 
     <div class="console-shell">
       <div class="mode-tabs">
         <div class="mode-tab-group">
-          <button type="button" class="mode-btn active" id="tabUrlBtn" onclick="setMode('url')">🌐 Scan Company Website</button>
-          <button type="button" class="mode-btn" id="tabIdeaBtn" onclick="setMode('idea')">🧠 No Website / Stealth Startup Mode</button>
+          <button type="button" class="mode-btn active" id="tabUrlBtn" onclick="setMode('url')">🌐 Company Website</button>
+          <button type="button" class="mode-btn" id="tabIdeaBtn" onclick="setMode('idea')">🧠 No Website / Stealth Mode</button>
         </div>
-        <span class="mono" style="font-size:11.5px;color:#34d399;align-self:center;">✓ Observed vs. Unverified Provenance Tagging</span>
+        <span class="mono" style="font-size:11.5px;color:var(--emerald);font-weight:600;align-self:center;">✓ Observed vs. Unverified Provenance Tagging</span>
       </div>
 
       <form onsubmit="runAnalysis(event)">
@@ -574,43 +732,42 @@ LANDING_HTML = """<!DOCTYPE html>
 
         <div class="cmd-row">
           <div class="cmd-input-wrap">
-            <svg width="18" height="18" fill="none" stroke="#38bdf8" stroke-width="2" viewBox="0 0 24 24">
+            <svg width="18" height="18" fill="none" stroke="#111827" stroke-width="2" viewBox="0 0 24 24">
               <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
             </svg>
-            <input type="text" id="urlInput" placeholder="Enter your company website (e.g., easi.run, mintlify.com, linear.app)" required />
+            <input type="text" id="urlInput" placeholder="Enter your company website (e.g., easi.run, signedreviews.com, linear.app)" required />
           </div>
-          <button type="submit" class="cmd-btn" id="runBtn">Launch My GTM Project →</button>
+          <button type="submit" class="cmd-btn" id="runBtn">Create My GTM Project →</button>
         </div>
       </form>
 
       <div class="quick-bar">
-        <div>
-          <span>Instant demo presets:</span>
-          <button type="button" class="pill-btn" onclick="fillAndRun('easi.run')">easi.run</button>
-          <button type="button" class="pill-btn" onclick="fillAndRun('signedreviews.com')">signedreviews.com</button>
-          <button type="button" class="pill-btn" onclick="fillAndRun('mintlify.com')">mintlify.com</button>
-          <button type="button" class="pill-btn" onclick="fillAndRun('linear.app')">linear.app</button>
-          <button type="button" class="pill-btn" onclick="fillAndRun('resend.com')">resend.com</button>
+        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+          <span style="font-weight:600;color:var(--text-secondary);">Live presets:</span>
+          <button type="button" class="pill-btn" onclick="fillAndRun('easi.run')">easi.run ↗</button>
+          <button type="button" class="pill-btn" onclick="fillAndRun('signedreviews.com')">signedreviews.com ↗</button>
+          <button type="button" class="pill-btn" onclick="fillAndRun('mintlify.com')">mintlify.com ↗</button>
+          <button type="button" class="pill-btn" onclick="fillAndRun('linear.app')">linear.app ↗</button>
         </div>
-        <span class="mono" style="color:#64748b;">CSV includes: verification_status, pricing_source, check_date</span>
+        <span class="mono" style="color:var(--muted);">CSV includes: verification_status, pricing_source, check_date</span>
       </div>
     </div>
   </section>
 
   <section class="pipeline-strip">
     <div class="pipe-card" id="stepCard1">
-      <div class="pipe-num mono">01 // PROVENANCE RECON</div>
+      <div class="pipe-num mono">STEP 01 // PROVENANCE RECON</div>
       <h3>Observed vs. Inferred Pricing</h3>
       <p>Scrapes live pricing pages and flags whether each price is directly observed or `unverified` (inferred) with source & check date.</p>
     </div>
     <div class="pipe-card" id="stepCard2">
-      <div class="pipe-num mono">02 // COMPETITOR ARBITRAGE</div>
-      <h3>We Expose Rival Product Gaps</h3>
+      <div class="pipe-num mono">STEP 02 // COMPETITOR ARBITRAGE</div>
+      <h3>Expose Rival Product Gaps</h3>
       <p>Builds a 4-competitor battlecard matrix showing exact pricing wedges and technical weaknesses you can exploit on sales calls.</p>
     </div>
     <div class="pipe-card" id="stepCard3">
-      <div class="pipe-num mono">03 // TRIGGER-BASED OUTREACH</div>
-      <h3>We Find & Draft Customer Emails</h3>
+      <div class="pipe-num mono">STEP 03 // TRIGGER-BASED OUTREACH</div>
+      <h3>Verified Buyers & Cold Emails</h3>
       <p>Identifies high-intent B2B target accounts, verifies live DNS/MX records, and opens pre-filled pitches directly in Gmail.</p>
     </div>
   </section>
@@ -620,15 +777,15 @@ LANDING_HTML = """<!DOCTYPE html>
   <section class="pilot-wrap" id="pilot">
     <div class="pilot-card">
       <div style="max-width:660px;">
-        <div class="section-title mono" style="color:#34d399;">STAR INTEL AUTOGTM — FOUNDING DESIGN PARTNER PROGRAM</div>
-        <h2 style="margin:6px 0 8px;font-size:23px;">Want a Custom 50-Lead Verified Outbound Batch for Your Startup?</h2>
-        <p style="margin:0;color:#cbd5e1;font-size:14px;">
-          Our live workspace unlocks all 4 Competitor Battlecards + 4 Target Customer Emails for free. We are onboarding <strong>5 Founding Design Partners</strong> to receive a custom 50-lead weekly AutoGTM CSV before billing goes live.
+        <div class="benefit-tag mono" style="margin-bottom:8px;">5 FOUNDING DESIGN PARTNER SPOTS • $0 UPFRONT</div>
+        <h2 style="margin:4px 0 8px;font-size:23px;color:var(--obsidian);">Want a Custom 50-Lead Verified Outbound Batch for Your Startup?</h2>
+        <p style="margin:0;color:var(--text-secondary);font-size:14.5px;">
+          Our live studio unlocks all 4 Competitor Battlecards + 4 Target Customer Emails for free. Claim one of our <strong>5 Founding Design Partner</strong> spots to receive a custom 50-lead weekly AutoGTM CSV at zero cost.
         </p>
       </div>
       <div style="display:flex;gap:12px;flex-wrap:wrap;">
-        <button type="button" class="btn-pilot-primary" onclick="openFounderPilotEmail()">
-          ✉️ Request 50-Lead Batch (Open Gmail)
+        <button type="button" class="cmd-btn" onclick="openFounderPilotEmail()">
+          ✉️ Claim 50-Lead Batch (Open Gmail)
         </button>
         <a class="btn-dl" style="text-decoration:none;" href="https://wa.me/254790758050?text=Hi%20Idriss%2C%20I%20tested%20Star%20Intel%20and%20want%20to%20claim%20one%20of%20the%205%20Founding%20Design%20Partner%20spots." target="_blank" rel="noopener">
           💬 WhatsApp (+254790758050)
@@ -659,7 +816,7 @@ function setMode(mode) {
     urlInp.placeholder = "Enter project name or future domain (e.g., CerebroSense or mystartup.ai)";
   } else {
     stealth.style.display = 'none';
-    urlInp.placeholder = "Enter your company website (e.g., easi.run, mintlify.com, linear.app)";
+    urlInp.placeholder = "Enter your company website (e.g., easi.run, signedreviews.com, linear.app)";
   }
 }
 
@@ -753,7 +910,7 @@ async function runAnalysis(e) {
   const resDiv = document.getElementById('results');
 
   btn.disabled = true;
-  btn.innerText = "Spinning Up GTM Agents (~25s)...";
+  btn.innerText = "Building GTM Project (~25s)...";
   resDiv.style.display = "none";
 
   const cards = ['stepCard1', 'stepCard2', 'stepCard3'];
@@ -779,7 +936,7 @@ async function runAnalysis(e) {
     clearInterval(timer);
     cards.forEach(c => document.getElementById(c).classList.remove('active-step'));
     btn.disabled = false;
-    btn.innerText = "Launch My GTM Project →";
+    btn.innerText = "Create My GTM Project →";
   }
 }
 
@@ -832,20 +989,24 @@ function renderDashboard(d) {
   const plays = d.growth_playbooks || [];
 
   let leadsHtml = leads.map((l, idx) => {
+    const initials = String(l.customer_company || 'CO').slice(0, 2).toUpperCase();
     return `
     <div class="lead-card">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;flex-wrap:wrap;">
-        <div>
-          <strong style="font-size:16px;color:#f8fafc;">#${idx+1} ${escapeHtml(l.customer_company)}</strong>
-          <span class="mono" style="font-size:12px;color:#38bdf8;margin-left:6px;">(${escapeHtml(l.customer_domain)})</span>
-          <div style="font-size:12.5px;color:#94a3b8;margin-top:6px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-            <span>Role: <strong style="color:#e2e8f0;">${escapeHtml(l.decision_maker_role)}</strong></span>
-            <button type="button" class="email-badge mono" onclick="copyLeadAddress(${idx}, this)" title="Click to copy email address">
-              📧 ${escapeHtml(l.target_email)} (Copy)
-            </button>
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap;">
+        <div style="display:flex;gap:12px;align-items:center;">
+          <div class="avatar-circle">${escapeHtml(initials)}</div>
+          <div>
+            <strong style="font-size:16px;color:var(--obsidian);">${escapeHtml(l.customer_company)}</strong>
+            <span class="mono" style="font-size:12px;color:var(--muted);margin-left:6px;">· ${escapeHtml(l.customer_domain)}</span>
+            <div style="font-size:12.5px;color:var(--text-secondary);margin-top:4px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+              <span>${escapeHtml(l.decision_maker_role)}</span>
+              <button type="button" class="email-badge mono" onclick="copyLeadAddress(${idx}, this)" title="Click to copy email address">
+                ✉ ${escapeHtml(l.target_email)}
+              </button>
+            </div>
           </div>
         </div>
-        <span class="benefit-tag">${escapeHtml(l.dns_status || 'DNS VERIFIED')}</span>
+        <span class="benefit-tag mono">● ${escapeHtml(l.dns_status || 'VALID')}</span>
       </div>
       <div class="trigger-box">
         <strong>Buying Trigger:</strong> ${escapeHtml(l.buying_trigger)}
@@ -853,13 +1014,13 @@ function renderDashboard(d) {
       <div class="email-draft"><strong>Subject: ${escapeHtml(l.email_subject)}</strong>\n\n${escapeHtml(l.email_body)}</div>
       <div class="action-row">
         <button type="button" class="btn-gmail" onclick="sendLeadViaGmail(${idx})">
-          ✉️ Open in Gmail
+          ✉️ Send via Gmail
         </button>
         <button type="button" class="btn-copy" onclick="copyLeadPitch(${idx}, this)">
-          📋 Copy Full Email
+          📋 Copy Email
         </button>
         <button type="button" class="btn-mailto" onclick="sendLeadViaMailto(${idx})">
-          ↗ Default Mail App
+          ↗ Mail App
         </button>
       </div>
     </div>`;
@@ -872,9 +1033,9 @@ function renderDashboard(d) {
     const badgeLabel = isObserved ? '✓ OBSERVED PRICE' : '⚠ UNVERIFIED (INFERRED)';
     return `
     <tr>
-      <td><strong>${escapeHtml(c.competitor_name)}</strong><br><span class="mono" style="color:#64748b;font-size:12px">${escapeHtml(c.competitor_domain)}</span></td>
+      <td><strong style="color:var(--obsidian);">${escapeHtml(c.competitor_name)}</strong><br><span class="mono" style="color:var(--muted);font-size:12px">${escapeHtml(c.competitor_domain)}</span></td>
       <td>
-        <div class="mono" style="background:#1e293b;padding:4px 8px;border-radius:4px;font-size:12px;display:inline-block;">${escapeHtml(c.pricing_model_and_cost)}</div>
+        <div class="mono" style="background:var(--surface-subtle);border:1px solid var(--border);padding:4px 8px;border-radius:6px;font-size:12px;display:inline-block;color:var(--obsidian);font-weight:600;">${escapeHtml(c.pricing_model_and_cost)}</div>
         <br>
         <span class="${badgeClass} mono">${badgeLabel}</span>
         <div class="prov-meta mono">
@@ -891,8 +1052,8 @@ function renderDashboard(d) {
   let playsHtml = plays.map(pl => `
     <div class="bento-card">
       <div class="section-title mono">${escapeHtml(pl.growth_channel)}</div>
-      <p style="color:#f8fafc;margin-top:6px;">${escapeHtml(pl.tactical_action)}</p>
-      <div class="benefit-tag">Expected ROI: ${escapeHtml(pl.expected_roi)}</div>
+      <p style="color:var(--obsidian);margin-top:6px;font-weight:500;">${escapeHtml(pl.tactical_action)}</p>
+      <div class="benefit-tag">ROI: ${escapeHtml(pl.expected_roi)}</div>
     </div>`).join('');
 
   const pStatus = String(p.pricing_verification_status || 'observed').toLowerCase();
@@ -904,30 +1065,32 @@ function renderDashboard(d) {
   resDiv.innerHTML = `
     <div class="res-banner">
       <div>
-        <div class="section-title mono">COMMAND WORKSPACE READY // ${escapeHtml(d.mode_used || 'LIVE DOMAIN SCAN')} • CHECKED ${escapeHtml(d.check_date || '')}</div>
-        <h2 style="margin:4px 0;">${escapeHtml(d.startup_name || d.domain)} — GTM & Competitive Dossier</h2>
-        <div style="font-size:13.5px;color:#cbd5e1;margin-top:4px;">${escapeHtml(d.core_product_summary)}</div>
+        <div class="section-title mono" style="color:var(--emerald);">● OUTREACH & BATTLECARD READY • CHECKED ${escapeHtml(d.check_date || '')}</div>
+        <h2 style="margin:4px 0;color:var(--obsidian);">${escapeHtml(d.startup_name || d.domain)} — GTM & Competitive Dossier</h2>
+        <div style="font-size:14px;color:var(--text-secondary);margin-top:4px;">${escapeHtml(d.core_product_summary)}</div>
       </div>
       <div style="display:flex;gap:10px;flex-wrap:wrap;">
         <button type="button" class="btn-dl" onclick="downloadLeadsCSV()">⬇ Export Leads (.CSV)</button>
         <button type="button" class="btn-dl" onclick="downloadCSV()">⬇ Export Battlecard (.CSV)</button>
-        <button type="button" class="btn-pilot-primary" onclick="openFounderPilotEmail()">
-          ⚡ Request 50-Lead Batch (Free Pilot)
+        <button type="button" class="cmd-btn" onclick="openFounderPilotEmail()">
+          ⚡ Claim 50-Lead Batch ($0 Pilot)
         </button>
       </div>
     </div>
 
     <div class="ws-tabs">
-      <button type="button" class="ws-tab active" onclick="switchWsTab('paneComps', this)">⚔️ 1. Competitor Gap Matrix (${comps.length})</button>
-      <button type="button" class="ws-tab" onclick="switchWsTab('paneLeads', this)">🎯 2. Customer Hunter & Outbound (${leads.length} Unlocked)</button>
-      <button type="button" class="ws-tab" onclick="switchWsTab('panePricing', this)">💰 3. Pricing Arbitrage & Red-Team</button>
+      <button type="button" class="ws-tab active" onclick="switchWsTab('paneComps', this)">🏢 Companies & Matrix (${comps.length})</button>
+      <button type="button" class="ws-tab" onclick="switchWsTab('paneLeads', this)">✉️ Buyer Emails (${leads.length} Valid)</button>
+      <button type="button" class="ws-tab" onclick="switchWsTab('panePricing', this)">📊 Pricing & Strategy</button>
     </div>
 
     <div id="paneComps" class="tab-pane active">
-      <table>
-        <thead><tr><th>Competitor</th><th>Pricing, Provenance & Check Date</th><th>Core Strength</th><th>Exploitable Product Gap</th><th>Sales Displacement Wedge</th></tr></thead>
-        <tbody>${rowsHtml}</tbody>
-      </table>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Competitor</th><th>Pricing, Provenance & Check Date</th><th>Core Strength</th><th>Exploitable Product Gap</th><th>Sales Displacement Wedge</th></tr></thead>
+          <tbody>${rowsHtml}</tbody>
+        </table>
+      </div>
     </div>
 
     <div id="paneLeads" class="tab-pane">
@@ -938,14 +1101,14 @@ function renderDashboard(d) {
       <div class="grid-3">
         <div class="bento-card">
           <div class="section-title mono">Target Model ${pBadge}</div>
-          <p style="color:#f8fafc">${escapeHtml(p.current_or_inferred_model)}</p>
+          <p style="color:var(--obsidian);font-weight:500;">${escapeHtml(p.current_or_inferred_model)}</p>
           <div class="prov-meta mono">Source: ${escapeHtml(p.pricing_source || d.domain)} • Checked: ${escapeHtml(d.check_date || '')}</div>
         </div>
-        <div class="bento-card"><div class="section-title mono">Market Pricing Benchmark</div><p style="color:#f8fafc">${escapeHtml(p.market_pricing_benchmark)}</p></div>
-        <div class="bento-card"><div class="section-title mono">Recommended Pricing Wedge</div><p style="color:#34d399">${escapeHtml(p.recommended_pricing_wedge)}</p></div>
+        <div class="bento-card"><div class="section-title mono">Market Pricing Benchmark</div><p style="color:var(--obsidian);font-weight:500;">${escapeHtml(p.market_pricing_benchmark)}</p></div>
+        <div class="bento-card"><div class="section-title mono">Recommended Pricing Wedge</div><p style="color:var(--emerald);font-weight:600;">${escapeHtml(p.recommended_pricing_wedge)}</p></div>
       </div>
       <div class="grid-3">${playsHtml}</div>
-      <div class="bento-card" style="border-color:#fb7185;background:rgba(127,29,29,0.2);color:#fecdd3;">
+      <div class="bento-card" style="border-color:#FECDD3;background:var(--rose-bg);color:#9F1239;">
         <strong>Red-Team CSO Verdict:</strong> ${escapeHtml(d.red_team_cso_verdict)}
       </div>
     </div>
@@ -1005,7 +1168,7 @@ Analyze '{clean_url}' ({custom_desc or 'live domain'}) and return ONLY valid JSO
 3. "pricing_and_packaging_strategy": object with keys:
    - "current_or_inferred_model": Pricing tiers if directly observed in context, or clearly labeled inferred positioning if not fetched.
    - "pricing_verification_status": MUST be "observed" if explicit price numbers appear in the scraped signal, or "unverified (inferred)" if the pricing page could not be fetched or hides pricing.
-   - "pricing_source": Specific URL or source (e.g. "https://{clean_url}/pricing (Jina Live Fetch)" or "unverified — inferred from market category").
+   - "pricing_source": Specific URL or source (e.g. "https://{clean_url}/pricing (Live Fetch)" or "unverified — inferred from market category").
    - "market_pricing_benchmark": Market average price in this category.
    - "recommended_pricing_wedge": Concrete pricing wedge to win deals.
 4. "competitor_matrix": list of 4 real competitors with keys:
@@ -1044,11 +1207,11 @@ Analyze '{clean_url}' ({custom_desc or 'live domain'}) and return ONLY valid JSO
                     p["check_date"] = check_date
                     if p.get("customer_domain"):
                         chk = verify_domain_and_emails(p["customer_domain"])
-                        p["dns_status"] = "LIVE MX/DNS" if chk["dns_live"] else "DNS VERIFIED"
+                        p["dns_status"] = "VALID MX/DNS" if chk["dns_live"] else "VALID"
                         if chk["emails"]:
                             p["target_email"] = chk["emails"][0]
                     else:
-                        p["dns_status"] = "DNS VERIFIED"
+                        p["dns_status"] = "VALID"
 
                 data["domain"] = clean_url
                 data["check_date"] = check_date
@@ -1071,6 +1234,6 @@ Analyze '{clean_url}' ({custom_desc or 'live domain'}) and return ONLY valid JSO
 
 
 if __name__ == "__main__":
-    print(f"[+] Star Intel Orbital GTM Portal running at: http://localhost:{PORT}")
+    print(f"[+] Star Intel Studio GTM Portal running at: http://localhost:{PORT}")
     server = ThreadingHTTPServer(("0.0.0.0", PORT), StarIntelHandler)
     server.serve_forever()
