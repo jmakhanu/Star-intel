@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
 """
 Star Intel — Executive Studio GTM & Competitive Intelligence Platform
-Aesthetic: Warm Alabaster (#F8F9FA), Pure White Cards, Obsidian Pill Controls (#111827),
-and Forest Emerald (#059669) & Warm Amber (#D97706) Provenance Badges.
+Live USD Checkout Edition:
+- Direct PayPal + International Card Checkout (XKUVEJSB74V88)
+- Post-checkout auto-return celebration banner (?checkout=success)
+- Observed vs. Unverified pricing provenance + check_date in UI & CSV
+- 1-Click Gmail Web Compose & Index-safe Clipboard Copy
 """
 
 import os
@@ -13,6 +16,7 @@ from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
 from star_intel_growth import init_db, fetch_web_signal, verify_domain_and_emails, call_llm
 
 PORT = int(os.getenv("PORT", 8080))
+PAYPAL_CHECKOUT_URL = "https://www.paypal.com/ncp/payment/XKUVEJSB74V88"
 
 LANDING_HTML = """<!DOCTYPE html>
 <html lang="en">
@@ -59,6 +63,22 @@ LANDING_HTML = """<!DOCTYPE html>
     -webkit-font-smoothing: antialiased;
   }
   .mono { font-family: 'JetBrains Mono', monospace; }
+
+  /* POST-CHECKOUT SUCCESS BANNER */
+  #checkoutBanner {
+    display: none;
+    background: var(--obsidian);
+    color: #FFFFFF;
+    padding: 16px 24px;
+    text-align: center;
+    border-bottom: 2px solid var(--emerald);
+  }
+  #checkoutBanner a {
+    color: #34D399;
+    font-weight: 700;
+    text-decoration: underline;
+    margin-left: 8px;
+  }
 
   /* TOP NAVIGATION */
   .nav-wrap {
@@ -124,7 +144,7 @@ LANDING_HTML = """<!DOCTYPE html>
     50% { opacity: 0.45; transform: scale(1.25); }
   }
 
-  /* EXPLEE-STYLE STEPPER RIBBON */
+  /* STEPPER RIBBON */
   .stepper-ribbon {
     display: inline-flex;
     align-items: center;
@@ -306,6 +326,10 @@ LANDING_HTML = """<!DOCTYPE html>
     white-space: nowrap;
     transition: background 0.15s, transform 0.1s;
     box-shadow: 0 2px 6px rgba(5, 150, 105, 0.25);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
   }
   .cmd-btn:hover { background: #047857; transform: translateY(-1px); }
   .cmd-btn:disabled { background: #9CA3AF; color: #F3F4F6; cursor: wait; box-shadow: none; }
@@ -376,7 +400,7 @@ LANDING_HTML = """<!DOCTYPE html>
   .pipe-card h3 { margin: 0 0 6px; font-size: 16px; color: var(--obsidian); }
   .pipe-card p { margin: 0; font-size: 13.5px; color: var(--text-secondary); }
 
-  /* WORKSPACE RESULTS & EXPLEE-STYLE PILL SWITCHER */
+  /* WORKSPACE RESULTS & PILL SWITCHER */
   #results { max-width: 1200px; margin: 20px auto 70px; padding: 0 24px; display: none; }
   .res-banner {
     background: var(--surface);
@@ -665,6 +689,12 @@ LANDING_HTML = """<!DOCTYPE html>
     gap: 20px;
     box-shadow: var(--shadow-md);
   }
+  .price-strike {
+    text-decoration: line-through;
+    color: var(--muted);
+    font-weight: 500;
+    margin-right: 4px;
+  }
   .footer {
     border-top: 1px solid var(--border);
     background: var(--surface);
@@ -679,6 +709,11 @@ LANDING_HTML = """<!DOCTYPE html>
 </head>
 <body>
 
+  <div id="checkoutBanner">
+    🎉 <strong>Welcome to Star Intel AutoGTM Pro (Founding Member)!</strong> Your payment is confirmed.
+    <a href="https://mail.google.com/mail/?view=cm&fs=1&to=jmakhanuh@gmail.com&su=AutoGTM%20Pro%2050-Lead%20Onboarding&body=Hi%20Idriss%2C%20I%20just%20completed%20my%20Founding%20Member%20checkout.%20Here%20is%20my%20domain%20and%20target%20buyer%20role%3A%20" target="_blank" rel="noopener">Click here to confirm your domain for your first 50-lead CSV →</a>
+  </div>
+
   <div class="nav-wrap">
     <nav class="nav">
       <div class="brand">
@@ -688,7 +723,9 @@ LANDING_HTML = """<!DOCTYPE html>
       </div>
       <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
         <div class="status-pill"><span class="pulse-dot"></span> Provenance-Verified Recon Online</div>
-        <button type="button" onclick="openFounderPilotEmail()" class="btn-pilot-primary">Claim $0 Founding Pilot →</button>
+        <a href="https://www.paypal.com/ncp/payment/XKUVEJSB74V88" target="_blank" rel="noopener" class="btn-pilot-primary">
+          💳 Unlock AutoGTM Pro (<span class="price-strike" style="color:#9CA3AF;">$49</span> $19/mo) →
+        </a>
       </div>
     </nav>
   </div>
@@ -776,20 +813,22 @@ LANDING_HTML = """<!DOCTYPE html>
 
   <section class="pilot-wrap" id="pilot">
     <div class="pilot-card">
-      <div style="max-width:660px;">
-        <div class="benefit-tag mono" style="margin-bottom:8px;">5 FOUNDING DESIGN PARTNER SPOTS • $0 UPFRONT</div>
-        <h2 style="margin:4px 0 8px;font-size:23px;color:var(--obsidian);">Want a Custom 50-Lead Verified Outbound Batch for Your Startup?</h2>
+      <div style="max-width:650px;">
+        <div class="benefit-tag mono" style="margin-bottom:8px;">FIRST 10 FOUNDING MEMBERS • 60% EARLY-BIRD LOCK-IN</div>
+        <h2 style="margin:4px 0 8px;font-size:23px;color:var(--obsidian);">
+          Get Your Weekly 50-Lead AutoGTM Pack — <span class="price-strike">$49/mo</span> <span style="color:var(--emerald);">$19/mo USD</span>
+        </h2>
         <p style="margin:0;color:var(--text-secondary);font-size:14.5px;">
-          Our live studio unlocks all 4 Competitor Battlecards + 4 Target Customer Emails for free. Claim one of our <strong>5 Founding Design Partner</strong> spots to receive a custom 50-lead weekly AutoGTM CSV at zero cost.
+          Our live studio unlocks all 4 Competitor Battlecards + 4 Target Customer Emails for free. Upgrade to <strong>AutoGTM Pro ($19/mo via PayPal or Debit/Credit Card)</strong> to receive 50 verified decision-maker leads & custom outbound sequences every week.
         </p>
       </div>
-      <div style="display:flex;gap:12px;flex-wrap:wrap;">
-        <button type="button" class="cmd-btn" onclick="openFounderPilotEmail()">
-          ✉️ Claim 50-Lead Batch (Open Gmail)
-        </button>
-        <a class="btn-dl" style="text-decoration:none;" href="https://wa.me/254790758050?text=Hi%20Idriss%2C%20I%20tested%20Star%20Intel%20and%20want%20to%20claim%20one%20of%20the%205%20Founding%20Design%20Partner%20spots." target="_blank" rel="noopener">
-          💬 WhatsApp (+254790758050)
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+        <a class="cmd-btn" href="https://www.paypal.com/ncp/payment/XKUVEJSB74V88" target="_blank" rel="noopener">
+          💳 Checkout $19 USD (PayPal / Card) →
         </a>
+        <button type="button" class="btn-dl" onclick="openFounderPilotEmail()">
+          ✉️ Ask a Question (Gmail)
+        </button>
       </div>
     </div>
   </section>
@@ -802,8 +841,13 @@ LANDING_HTML = """<!DOCTYPE html>
   </footer>
 
 <script>
+const PAYPAL_URL = "https://www.paypal.com/ncp/payment/XKUVEJSB74V88";
 let currentMode = 'url';
 let lastData = null;
+
+if (window.location.search.includes("checkout=success")) {
+  document.getElementById("checkoutBanner").style.display = "block";
+}
 
 function setMode(mode) {
   currentMode = mode;
@@ -895,8 +939,8 @@ function copyLeadAddress(idx, btn) {
 
 function openFounderPilotEmail() {
   const domain = (lastData && lastData.domain) ? lastData.domain : (document.getElementById('urlInput').value.trim() || 'my startup');
-  const su = encodeURIComponent(`Founding Design Partner Request — 50-Lead Batch for ${domain}`);
-  const body = encodeURIComponent(`Hi Idriss,\n\nI ran ${domain} on Star Intel and would love to claim one of the 5 Founding Design Partner spots for the 50-lead AutoGTM CSV.\n\nMy startup website: ${domain}\nOur #1 ideal customer role: \n\nBest,`);
+  const su = encodeURIComponent(`Star Intel AutoGTM Pro — 50-Lead Batch for ${domain}`);
+  const body = encodeURIComponent(`Hi Idriss,\n\nI ran ${domain} on Star Intel and have a quick question about the 50-lead AutoGTM CSV:\n\nMy startup website: ${domain}\nOur #1 ideal customer role: \n\nBest,`);
   const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=jmakhanuh@gmail.com&su=${su}&body=${body}`;
   window.open(gmailUrl, '_blank', 'noopener');
 }
@@ -1072,9 +1116,9 @@ function renderDashboard(d) {
       <div style="display:flex;gap:10px;flex-wrap:wrap;">
         <button type="button" class="btn-dl" onclick="downloadLeadsCSV()">⬇ Export Leads (.CSV)</button>
         <button type="button" class="btn-dl" onclick="downloadCSV()">⬇ Export Battlecard (.CSV)</button>
-        <button type="button" class="cmd-btn" onclick="openFounderPilotEmail()">
-          ⚡ Claim 50-Lead Batch ($0 Pilot)
-        </button>
+        <a class="cmd-btn" href="${PAYPAL_URL}" target="_blank" rel="noopener">
+          💳 Unlock 50-Lead Pack ($19 USD) →
+        </a>
       </div>
     </div>
 
