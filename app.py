@@ -15,6 +15,53 @@ from datetime import datetime, timezone
 from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
 from star_intel_growth import init_db, fetch_web_signal, verify_domain_and_emails, call_llm
 
+import sqlite3
+
+DB_FILE = "star_intel_telemetry.db"
+ADMIN_KEY = os.getenv("ADMIN_KEY", "makhanu2026")
+
+def ensure_telemetry_tables():
+    conn = sqlite3.connect(DB_FILE)
+    c = conn.cursor()
+    c.execute('''CREATE TABLE IF NOT EXISTS founder_users (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        email TEXT UNIQUE,
+        startup_domain TEXT,
+        plan TEXT DEFAULT 'Free Studio',
+        created_at TEXT,
+        last_active TEXT
+    )''')
+    c.execute('''CREATE TABLE IF NOT EXISTS scan_logs (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        domain TEXT,
+        user_email TEXT,
+        mode TEXT,
+        ip_addr TEXT,
+        created_at TEXT
+    )''')
+    conn.commit()
+    conn.close()
+
+def log_scan_event(domain, user_email, mode, ip_addr):
+    try:
+        ensure_telemetry_tables()
+        now = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
+        conn = sqlite3.connect(DB_FILE)
+        c = conn.cursor()
+        c.execute("INSERT INTO scan_logs (domain, user_email, mode, ip_addr, created_at) VALUES (?, ?, ?, ?, ?)",
+                  (domain, user_email or "anonymous", mode, ip_addr, now))
+        if user_email and "@" in user_email:
+            c.execute('''INSERT INTO founder_users (email, startup_domain, created_at, last_active)
+                         VALUES (?, ?, ?, ?)
+                         ON CONFLICT(email) DO UPDATE SET
+                         startup_domain=excluded.startup_domain,
+                         last_active=excluded.last_active''',
+                      (user_email.lower().strip(), domain, now, now))
+        conn.commit()
+        conn.close()
+    except Exception as e:
+        print("Telemetry log error:", e)
+
 PORT = int(os.getenv("PORT", 8080))
 PAYPAL_CHECKOUT_URL = "https://www.paypal.com/ncp/payment/XKUVEJSB74V88"
 
@@ -712,6 +759,50 @@ LANDING_HTML = """<!DOCTYPE html>
   }
   .footer a { color: var(--obsidian); font-weight: 600; text-decoration: none; }
   .footer a:hover { color: var(--emerald); }
+  .auth-modal-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(17, 24, 39, 0.55);
+    backdrop-filter: blur(4px);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .auth-modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    max-width: 440px;
+    width: 100%;
+    padding: 26px;
+    box-shadow: var(--shadow-lg);
+    text-align: left;
+  }
+  .auth-input {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1.5px solid var(--border-strong);
+    border-radius: 9px;
+    font-size: 14px;
+    font-family: 'JetBrains Mono', monospace;
+    margin: 8px 0 14px;
+    outline: none;
+  }
+  .auth-input:focus { border-color: var(--obsidian); }
+  .user-pill {
+    background: var(--surface-subtle);
+    border: 1px solid var(--border-strong);
+    color: var(--obsidian);
+    padding: 7px 13px;
+    border-radius: 99px;
+    font-size: 12.5px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .user-pill:hover { border-color: var(--obsidian); }
+
 </style>
 </head>
 <body>
@@ -728,8 +819,9 @@ LANDING_HTML = """<!DOCTYPE html>
         Star Intel
         <span class="mono" style="font-size:11px;color:var(--muted);font-weight:500;">// AutoGTM Studio</span>
       </div>
-      <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
         <div class="status-pill"><span class="pulse-dot"></span> Provenance-Verified Recon Online</div>
+        <button type="button" id="navUserBtn" class="user-pill" onclick="openAuthModal('save')">👤 Sign In / Save Workspace</button>
         <a href="https://www.paypal.com/ncp/payment/XKUVEJSB74V88" target="_blank" rel="noopener" class="btn-pilot-primary">
           💳 Unlock AutoGTM Pro (<span class="price-strike" style="color:#9CA3AF;">$49</span> $29/mo) →
         </a>
@@ -839,6 +931,27 @@ LANDING_HTML = """<!DOCTYPE html>
       </div>
     </div>
   </section>
+
+    <!-- PROGRESSIVE WORKSPACE SIGN-IN MODAL -->
+  <div id="authModalBackdrop" class="auth-modal-backdrop">
+    <div class="auth-modal">
+      <div class="benefit-tag mono" style="margin-bottom:8px;">STAR INTEL STUDIO ACCOUNT</div>
+      <h3 style="margin:0 0 6px;font-size:20px;color:var(--obsidian);" id="authModalTitle">Save Your GTM Workspace</h3>
+      <p style="margin:0 0 14px;font-size:13.5px;color:var(--text-secondary);" id="authModalDesc">
+        Enter your founder email to unlock unlimited CSV battlecard exports, save your domain runs, and track competitor price changes.
+      </p>
+      <form onsubmit="submitAuthModal(event)">
+        <label style="font-size:11.5px;font-weight:700;color:var(--text-secondary);text-transform:uppercase;">Work / Founder Email</label>
+        <input type="email" id="authEmailInput" class="auth-input" placeholder="founder@yourstartup.com" required />
+        <label style="font-size:11.5px;font-weight:700;color:var(--text-secondary);text-transform:uppercase;">Your Startup Domain</label>
+        <input type="text" id="authDomainInput" class="auth-input" placeholder="e.g., easi.run or signedreviews.com" required />
+        <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:6px;">
+          <button type="button" class="btn-mailto" onclick="closeAuthModal()">Cancel</button>
+          <button type="submit" class="cmd-btn" style="padding:10px 18px;">Continue & Unlock →</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
   <footer class="footer">
     Built by <strong>Idriss</strong> &nbsp;|&nbsp;
@@ -986,7 +1099,7 @@ async function runAnalysis(e) {
   }, 3500);
 
   try {
-    const qs = `?url=${encodeURIComponent(url)}&desc=${encodeURIComponent(desc)}&icp=${encodeURIComponent(icp)}`;
+    const qs = `?url=${encodeURIComponent(url)}&desc=${encodeURIComponent(desc)}&icp=${encodeURIComponent(icp)}&email=${encodeURIComponent(getSavedEmail())}`;
     const resp = await fetch('/api/analyze' + qs);
     const data = await resp.json();
     if (data.error) throw new Error(data.error);
@@ -1004,6 +1117,10 @@ async function runAnalysis(e) {
 }
 
 function downloadCSV() {
+  if (!getSavedEmail()) { openAuthModal('csv_comp'); return; }
+  rawDownloadCSV();
+}
+function rawDownloadCSV() {
   if (!lastData || !lastData.competitor_matrix) return;
   const rows = lastData.competitor_matrix;
   const keys = [
@@ -1026,6 +1143,10 @@ function downloadCSV() {
 }
 
 function downloadLeadsCSV() {
+  if (!getSavedEmail()) { openAuthModal('csv_leads'); return; }
+  rawDownloadLeadsCSV();
+}
+function rawDownloadLeadsCSV() {
   if (!lastData || !lastData.customer_prospects) return;
   const rows = lastData.customer_prospects;
   const keys = ["customer_company", "customer_domain", "decision_maker_role", "target_email", "dns_status", "check_date", "buying_trigger", "email_subject", "email_body"];
@@ -1198,11 +1319,64 @@ class StarIntelHandler(BaseHTTPRequestHandler):
             self.wfile.write(LANDING_HTML.encode("utf-8"))
             return
 
+        if parsed.path == "/api/signup":
+            qs = urllib.parse.parse_qs(parsed.query)
+            email = qs.get("email", [""])[0].strip()
+            domain = qs.get("domain", [""])[0].strip() or "direct-signup"
+            ip_addr = self.headers.get("X-Forwarded-For", self.client_address[0])
+            log_scan_event(domain, email, "WORKSPACE_SIGNUP", ip_addr)
+            self.send_json({"ok": True, "email": email}, 200)
+            return
+
+        if parsed.path == "/admin":
+            qs = urllib.parse.parse_qs(parsed.query)
+            if qs.get("key", [""])[0] != ADMIN_KEY:
+                self.send_response(403)
+                self.end_headers()
+                self.wfile.write(b"Forbidden: Invalid Admin Key")
+                return
+            ensure_telemetry_tables()
+            conn = sqlite3.connect(DB_FILE)
+            c = conn.cursor()
+            users = c.execute("SELECT email, startup_domain, plan, created_at, last_active FROM founder_users ORDER BY id DESC LIMIT 100").fetchall()
+            scans = c.execute("SELECT domain, user_email, mode, ip_addr, created_at FROM scan_logs ORDER BY id DESC LIMIT 150").fetchall()
+            conn.close()
+
+            u_rows = "".join([
+                f"<tr><td><strong>{u[0]}</strong></td><td>{u[1]}</td><td>{u[2]}</td><td>{u[3]}</td><td>{u[4]}</td>"
+                f"<td><a target='_blank' href='https://mail.google.com/mail/?view=cm&fs=1&to={urllib.parse.quote(u[0])}&su={urllib.parse.quote("Your Star Intel teardown for " + u[1])}' style='color:#059669;font-weight:700;'>✉️ Email Founder ↗</a></td></tr>"
+                for u in users
+            ]) or "<tr><td colspan='6'>No registered emails yet — share your link on X!</td></tr>"
+
+            s_rows = "".join([
+                f"<tr><td><strong>{s[0]}</strong></td><td>{s[1]}</td><td>{s[2]}</td><td>{s[3]}</td><td>{s[4]}</td></tr>"
+                for s in scans
+            ]) or "<tr><td colspan='5'>No scans recorded yet.</td></tr>"
+
+            admin_html = f'''<!DOCTYPE html><html><head><meta charset="utf-8"><title>Star Intel Founder CRM & Telemetry</title>
+            <style>body{{font-family:system-ui,sans-serif;background:#F8F9FA;color:#111827;padding:30px;max-width:1100px;margin:0 auto;}}
+            table{{width:100%;border-collapse:collapse;background:#fff;border:1px solid #E5E7EB;border-radius:10px;overflow:hidden;margin-bottom:30px;}}
+            th{{background:#F3F4F6;text-align:left;padding:12px;font-size:12px;text-transform:uppercase;color:#4B5563;}}
+            td{{padding:12px;border-bottom:1px solid #E5E7EB;font-size:13.5px;}}</style></head><body>
+            <h1>🛰️ Star Intel — Founder Signups & Live Scan Telemetry</h1>
+            <h3>1. Registered Founder Leads ({len(users)})</h3>
+            <table><thead><tr><th>Founder Email</th><th>Startup Domain</th><th>Tier</th><th>First Seen</th><th>Last Active</th><th>1-Click Follow-Up</th></tr></thead><tbody>{u_rows}</tbody></table>
+            <h3>2. Live Domain Scans ({len(scans)})</h3>
+            <table><thead><tr><th>Scanned Domain</th><th>User Email</th><th>Mode</th><th>Visitor IP</th><th>Timestamp</th></tr></thead><tbody>{s_rows}</tbody></table>
+            </body></html>'''
+            self.send_response(200)
+            self.send_header("Content-Type", "text/html; charset=utf-8")
+            self.end_headers()
+            self.wfile.write(admin_html.encode("utf-8"))
+            return
+
         if parsed.path == "/api/analyze":
             qs = urllib.parse.parse_qs(parsed.query)
             raw_url = qs.get("url", [""])[0].strip()
             custom_desc = qs.get("desc", [""])[0].strip()
             custom_icp = qs.get("icp", [""])[0].strip()
+            user_email = qs.get("email", [""])[0].strip()
+            ip_addr = self.headers.get("X-Forwarded-For", self.client_address[0])
 
             if not raw_url and not custom_desc:
                 self.send_json({"error": "Please provide a URL or product description"}, 400)
@@ -1280,6 +1454,7 @@ Analyze '{clean_url}' ({custom_desc or 'live domain'}) and return ONLY valid JSO
                     else:
                         p["dns_status"] = "VALID"
 
+                log_scan_event(clean_url, user_email, mode_used, ip_addr)
                 data["domain"] = clean_url
                 data["check_date"] = check_date
                 data["mode_used"] = mode_used
