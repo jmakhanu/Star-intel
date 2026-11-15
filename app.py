@@ -509,6 +509,13 @@ LANDING_HTML = """<!DOCTYPE html>
     white-space: pre-wrap;
     margin-bottom: 14px;
     line-height: 1.6;
+    outline: none;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .email-draft:focus {
+    background: #FFFFFF;
+    border-color: var(--emerald);
+    box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.12);
   }
 
   /* TABLE STYLING */
@@ -848,6 +855,13 @@ let lastData = null;
 if (window.location.search.includes("checkout=success")) {
   document.getElementById("checkoutBanner").style.display = "block";
 }
+window.addEventListener("DOMContentLoaded", () => {
+  const params = new URLSearchParams(window.location.search);
+  const autoDomain = params.get("run");
+  if (autoDomain) {
+    fillAndRun(autoDomain);
+  }
+});
 
 function setMode(mode) {
   currentMode = mode;
@@ -905,12 +919,17 @@ function fallbackCopy(text, btn) {
   flashBtn(btn, "✓ Copied!");
 }
 
+function getEditedBody(idx, fallback) {
+  const el = document.getElementById('draftBody_' + idx);
+  return el ? el.innerText.trim() : (fallback || '');
+}
+
 function sendLeadViaGmail(idx) {
   if (!lastData || !lastData.customer_prospects || !lastData.customer_prospects[idx]) return;
   const l = lastData.customer_prospects[idx];
   const to = encodeURIComponent(l.target_email || '');
   const su = encodeURIComponent(l.email_subject || '');
-  const body = encodeURIComponent(l.email_body || '');
+  const body = encodeURIComponent(getEditedBody(idx, l.email_body));
   const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${to}&su=${su}&body=${body}`;
   window.open(gmailUrl, '_blank', 'noopener');
 }
@@ -927,7 +946,7 @@ function sendLeadViaMailto(idx) {
 function copyLeadPitch(idx, btn) {
   if (!lastData || !lastData.customer_prospects || !lastData.customer_prospects[idx]) return;
   const l = lastData.customer_prospects[idx];
-  const fullPitch = `To: ${l.target_email || ''}\nSubject: ${l.email_subject || ''}\n\n${l.email_body || ''}`;
+  const fullPitch = `To: ${l.target_email || ''}\nSubject: ${l.email_subject || ''}\n\n${getEditedBody(idx, l.email_body)}`;
   copySafeText(fullPitch, btn);
 }
 
@@ -1055,7 +1074,11 @@ function renderDashboard(d) {
       <div class="trigger-box">
         <strong>Buying Trigger:</strong> ${escapeHtml(l.buying_trigger)}
       </div>
-      <div class="email-draft"><strong>Subject: ${escapeHtml(l.email_subject)}</strong>\n\n${escapeHtml(l.email_body)}</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+        <span class="mono" style="font-size:11px;color:var(--muted);">Subject: <strong style="color:var(--obsidian);">${escapeHtml(l.email_subject)}</strong></span>
+        <span class="mono" style="font-size:10.5px;color:var(--emerald);">✎ Click email below to edit</span>
+      </div>
+      <div class="email-draft" id="draftBody_${idx}" contenteditable="true" spellcheck="false">${escapeHtml(l.email_body)}</div>
       <div class="action-row">
         <button type="button" class="btn-gmail" onclick="sendLeadViaGmail(${idx})">
           ✉️ Send via Gmail
