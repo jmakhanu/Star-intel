@@ -999,15 +999,28 @@ LANDING_HTML = """<!DOCTYPE html>
   </footer>
 
 <script>
+const PAYPAL_URL = "https://www.paypal.com/ncp/payment/XKUVEJSB74V88";
+var currentMode = 'url';
+var lastData = null;
+var pendingActionAfterAuth = null;
+
+function getSavedEmail() {
+  try {
+    return window.localStorage.getItem("star_intel_email") || "";
+  } catch (e) {
+    return "";
+  }
+}
+
 
 function getSavedEmail() {
   return localStorage.getItem("star_intel_email") || "";
 }
-let currentMode = 'url';
-let lastData = null;
-let pendingActionAfterAuth = null;
+var currentMode = 'url';
+var lastData = null;
+var pendingActionAfterAuth = null;
 
-const PAYPAL_URL = "https://www.paypal.com/ncp/payment/XKUVEJSB74V88";
+var PAYPAL_URL = "https://www.paypal.com/ncp/payment/XKUVEJSB74V88";
 
 
 
@@ -1361,6 +1374,7 @@ class StarIntelHandler(BaseHTTPRequestHandler):
         if parsed.path in ("/", "/index.html", "/healthz"):
             self.send_response(200)
             self.send_header("Content-Type", "text/html; charset=utf-8")
+            self.send_header("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0")
             self.end_headers()
             self.wfile.write(LANDING_HTML.encode("utf-8"))
             return
@@ -1412,6 +1426,7 @@ class StarIntelHandler(BaseHTTPRequestHandler):
             </body></html>'''
             self.send_response(200)
             self.send_header("Content-Type", "text/html; charset=utf-8")
+            self.send_header("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0")
             self.end_headers()
             self.wfile.write(admin_html.encode("utf-8"))
             return
