@@ -1,0 +1,1449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Star Intel — Autonomous Competitive Radar & AutoGTM Engine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F8F9FA;
+    --surface: #FFFFFF;
+    --surface-subtle: #F3F4F6;
+    --border: #E5E7EB;
+    --border-strong: #D1D5DB;
+    --obsidian: #111827;
+    --obsidian-hover: #1F2937;
+    --emerald: #059669;
+    --emerald-bg: #ECFDF5;
+    --emerald-border: #A7F3D0;
+    --amber: #D97706;
+    --amber-bg: #FFFBEB;
+    --amber-border: #FDE68A;
+    --rose: #E11D48;
+    --rose-bg: #FFF1F2;
+    --text: #111827;
+    --text-secondary: #4B5563;
+    --muted: #6B7280;
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.04);
+    --shadow-md: 0 10px 30px -5px rgba(0, 0, 0, 0.05), 0 4px 12px -2px rgba(0, 0, 0, 0.03);
+    --shadow-lg: 0 20px 45px -10px rgba(0, 0, 0, 0.07), 0 8px 18px -4px rgba(0, 0, 0, 0.04);
+  }
+  * { box-sizing: border-box; }
+  body {
+    background-color: var(--bg);
+    background-image: radial-gradient(#E5E7EB 1px, transparent 1px);
+    background-size: 24px 24px;
+    color: var(--text);
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    margin: 0;
+    padding: 0;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  .mono { font-family: 'JetBrains Mono', monospace; }
+
+  #checkoutBanner {
+    display: none;
+    background: var(--obsidian);
+    color: #FFFFFF;
+    padding: 16px 24px;
+    text-align: center;
+    border-bottom: 2px solid var(--emerald);
+  }
+  #checkoutBanner a {
+    color: #34D399;
+    font-weight: 700;
+    text-decoration: underline;
+    margin-left: 8px;
+  }
+
+  .nav-wrap {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 40;
+  }
+  .nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1220px;
+    margin: 0 auto;
+    padding: 14px 24px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 800;
+    font-size: 16.5px;
+    letter-spacing: -0.02em;
+    color: var(--obsidian);
+  }
+  .brand-mark {
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    background: var(--obsidian);
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 14px;
+  }
+  .status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--emerald-bg);
+    border: 1px solid var(--emerald-border);
+    color: var(--emerald);
+    padding: 5px 13px;
+    border-radius: 99px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .pulse-dot {
+    width: 7px;
+    height: 7px;
+    background: var(--emerald);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.45; transform: scale(1.25); }
+  }
+  .user-pill {
+    background: var(--surface-subtle);
+    border: 1px solid var(--border-strong);
+    color: var(--obsidian);
+    padding: 7px 13px;
+    border-radius: 99px;
+    font-size: 12.5px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .user-pill:hover { border-color: var(--obsidian); }
+
+  /* SPLIT HERO LAYOUT */
+  .hero-split {
+    max-width: 1220px;
+    margin: 36px auto 32px;
+    padding: 0 24px;
+    display: grid;
+    grid-template-columns: 1.12fr 0.88fr;
+    gap: 36px;
+    align-items: center;
+  }
+  @media (max-width: 980px) {
+    .hero-split { grid-template-columns: 1fr; gap: 28px; }
+  }
+  .hero-left { text-align: left; }
+  .eyebrow-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface);
+    border: 1px solid var(--border-strong);
+    padding: 5px 12px;
+    border-radius: 99px;
+    font-size: 11.5px;
+    font-weight: 700;
+    color: var(--obsidian);
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 18px;
+  }
+  .eyebrow-badge span.tag {
+    background: var(--emerald-bg);
+    color: var(--emerald);
+    border: 1px solid var(--emerald-border);
+    padding: 2px 8px;
+    border-radius: 99px;
+    font-size: 10.5px;
+  }
+  h1 {
+    font-size: 44px;
+    font-weight: 800;
+    line-height: 1.08;
+    margin: 0 0 16px;
+    letter-spacing: -0.035em;
+    color: var(--obsidian);
+  }
+  .grad-accent {
+    background: linear-gradient(135deg, #059669 0%, #0D9488 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .hero-sub {
+    color: var(--text-secondary);
+    font-size: 15.5px;
+    max-width: 580px;
+    margin: 0 0 22px;
+    font-weight: 400;
+    line-height: 1.6;
+  }
+
+  .console-shell {
+    background: var(--surface);
+    border: 1px solid var(--border-strong);
+    border-radius: 16px;
+    padding: 18px;
+    box-shadow: var(--shadow-lg);
+    text-align: left;
+  }
+  .mode-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .mode-tab-group {
+    display: inline-flex;
+    background: var(--surface-subtle);
+    padding: 3px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    gap: 4px;
+  }
+  .mode-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    padding: 6px 13px;
+    border-radius: 7px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .mode-btn.active {
+    background: var(--obsidian);
+    color: #FFFFFF;
+    box-shadow: var(--shadow-sm);
+  }
+  .cmd-row {
+    display: flex;
+    gap: 8px;
+    background: var(--bg);
+    border: 1.5px solid var(--border-strong);
+    padding: 6px;
+    border-radius: 11px;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .cmd-row:focus-within {
+    border-color: var(--obsidian);
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(17, 24, 39, 0.06);
+  }
+  @media (max-width: 640px) { .cmd-row { flex-direction: column; } }
+  .cmd-input-wrap {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    padding-left: 10px;
+    gap: 8px;
+  }
+  .cmd-row input, .stealth-grid input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    color: var(--obsidian);
+    font-size: 14.5px;
+    outline: none;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 500;
+  }
+  .stealth-grid {
+    display: none;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  @media (max-width: 680px) { .stealth-grid { grid-template-columns: 1fr; } }
+  .stealth-field {
+    background: var(--bg);
+    border: 1px solid var(--border-strong);
+    padding: 9px 12px;
+    border-radius: 9px;
+  }
+  .stealth-field label {
+    display: block;
+    font-size: 10.5px;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-bottom: 3px;
+    font-weight: 700;
+  }
+  .cmd-btn {
+    background: var(--emerald);
+    color: #FFFFFF;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 13.5px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.15s;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .cmd-btn:hover { background: #047857; transform: translateY(-1px); }
+  .cmd-btn:disabled { background: #9CA3AF; color: #F3F4F6; cursor: wait; }
+
+  .quick-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--border);
+    font-size: 11.5px;
+    color: var(--muted);
+  }
+  .pill-btn {
+    background: var(--surface-subtle);
+    border: 1px solid var(--border-strong);
+    color: var(--obsidian);
+    padding: 4px 11px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11.5px;
+    font-weight: 600;
+    transition: all 0.15s;
+  }
+  .pill-btn:hover {
+    border-color: var(--obsidian);
+    background: var(--obsidian);
+    color: #fff;
+  }
+
+  /* RIGHT COLUMN: INTERACTIVE STUDIO PREVIEW WINDOW */
+  .studio-preview-window {
+    background: var(--surface);
+    border: 1px solid var(--border-strong);
+    border-radius: 16px;
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+    text-align: left;
+  }
+  .window-bar {
+    background: var(--surface-subtle);
+    border-bottom: 1px solid var(--border);
+    padding: 10px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .win-dots { display: flex; gap: 6px; }
+  .win-dots span { width: 9px; height: 9px; border-radius: 50%; }
+  .win-dots span:nth-child(1) { background: #FDA4AF; }
+  .win-dots span:nth-child(2) { background: #FCD34D; }
+  .win-dots span:nth-child(3) { background: #6EE7B7; }
+  .window-body {
+    padding: 18px;
+    background: linear-gradient(180deg, #FFFFFF 0%, #F9FAFB 100%);
+  }
+  .preview-row {
+    background: #FFFFFF;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 11px 14px;
+    margin-bottom: 9px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    box-shadow: var(--shadow-sm);
+    cursor: pointer;
+    transition: border-color 0.15s, transform 0.1s;
+  }
+  .preview-row:hover {
+    border-color: var(--obsidian);
+    transform: translateY(-1px);
+  }
+  .preview-lead-box {
+    background: #FFFFFF;
+    border: 1.5px solid var(--obsidian);
+    border-radius: 12px;
+    padding: 14px;
+    margin-top: 12px;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .pipeline-strip {
+    max-width: 1220px;
+    margin: 12px auto 36px;
+    padding: 0 24px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  @media (max-width: 860px) { .pipeline-strip { grid-template-columns: 1fr; } }
+  .pipe-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 18px;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.2s;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .pipe-card.active-step {
+    border-color: var(--emerald);
+    box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.15);
+  }
+  .pipe-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    background: var(--obsidian);
+    color: #fff;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .pipe-card h3 { margin: 0 0 4px; font-size: 14.5px; color: var(--obsidian); }
+  .pipe-card p { margin: 0; font-size: 12.5px; color: var(--text-secondary); line-height: 1.45; }
+
+  #results { max-width: 1220px; margin: 20px auto 70px; padding: 0 24px; display: none; }
+  .res-banner {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--obsidian);
+    border-radius: 14px;
+    padding: 20px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow-md);
+  }
+  .ws-tabs {
+    display: inline-flex;
+    background: var(--surface-subtle);
+    border: 1px solid var(--border);
+    padding: 4px;
+    border-radius: 10px;
+    gap: 4px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .ws-tab {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    padding: 8px 16px;
+    border-radius: 7px;
+    font-weight: 700;
+    font-size: 12.5px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .ws-tab.active {
+    background: var(--obsidian);
+    color: #FFFFFF;
+    box-shadow: var(--shadow-sm);
+  }
+  .tab-pane { display: none; }
+  .tab-pane.active { display: block; }
+
+  .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(460px, 1fr)); gap: 18px; margin-bottom: 24px; }
+  @media (max-width: 640px) { .grid-2 { grid-template-columns: 1fr; } }
+  .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; margin-bottom: 24px; }
+
+  .lead-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 22px;
+    position: relative;
+    box-shadow: var(--shadow-sm);
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .lead-card:hover {
+    border-color: var(--border-strong);
+    box-shadow: var(--shadow-md);
+  }
+  .avatar-circle {
+    width: 36px;
+    height: 36px;
+    border-radius: 9px;
+    background: var(--obsidian);
+    color: #FFFFFF;
+    font-weight: 700;
+    font-size: 13px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .email-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--surface-subtle);
+    border: 1px solid var(--border-strong);
+    color: var(--obsidian);
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .email-badge:hover { background: var(--obsidian); color: #fff; }
+  .trigger-box {
+    background: var(--emerald-bg);
+    border-left: 3px solid var(--emerald);
+    padding: 9px 13px;
+    font-size: 12.5px;
+    color: #065F46;
+    margin: 12px 0 14px;
+    border-radius: 6px;
+  }
+  .email-draft {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    padding: 15px;
+    border-radius: 10px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 13.5px;
+    color: var(--obsidian);
+    white-space: pre-wrap;
+    margin-bottom: 14px;
+    line-height: 1.6;
+    outline: none;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .email-draft:focus {
+    background: #FFFFFF;
+    border-color: var(--emerald);
+    box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.12);
+  }
+
+  .table-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+  }
+  table { width: 100%; border-collapse: collapse; }
+  th {
+    background: var(--surface-subtle);
+    color: var(--text-secondary);
+    text-align: left;
+    padding: 14px 16px;
+    font-size: 11.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid var(--border);
+  }
+  td {
+    padding: 16px;
+    border-bottom: 1px solid var(--border);
+    font-size: 13.5px;
+    vertical-align: top;
+    color: var(--text);
+  }
+  tr:last-child td { border-bottom: none; }
+  .gap { color: var(--rose); font-weight: 500; }
+  .wedge { color: var(--emerald); font-weight: 600; }
+
+  .badge-observed {
+    display: inline-block;
+    font-size: 10.5px;
+    font-weight: 700;
+    color: var(--emerald);
+    background: var(--emerald-bg);
+    border: 1px solid var(--emerald-border);
+    padding: 2px 8px;
+    border-radius: 6px;
+    margin-top: 6px;
+  }
+  .badge-unverified {
+    display: inline-block;
+    font-size: 10.5px;
+    font-weight: 700;
+    color: var(--amber);
+    background: var(--amber-bg);
+    border: 1px solid var(--amber-border);
+    padding: 2px 8px;
+    border-radius: 6px;
+    margin-top: 6px;
+  }
+  .prov-meta {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 5px;
+    line-height: 1.35;
+  }
+
+  .action-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 5;
+  }
+  .btn-gmail {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--emerald);
+    color: #FFFFFF;
+    padding: 9px 15px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 12.5px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.15s, transform 0.1s;
+  }
+  .btn-gmail:hover { background: #047857; transform: translateY(-1px); }
+  .btn-mailto {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: var(--surface);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-strong);
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 12px;
+    cursor: pointer;
+    text-decoration: none;
+  }
+  .btn-mailto:hover { border-color: var(--obsidian); color: var(--obsidian); }
+  .btn-dl {
+    background: var(--surface);
+    color: var(--obsidian);
+    border: 1px solid var(--border-strong);
+    padding: 10px 16px;
+    border-radius: 9px;
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-dl:hover { border-color: var(--obsidian); background: var(--surface-subtle); }
+  .btn-pilot-primary {
+    background: var(--obsidian);
+    color: #FFFFFF;
+    padding: 10px 18px;
+    border-radius: 99px;
+    font-weight: 700;
+    font-size: 13px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .btn-pilot-primary:hover { background: var(--obsidian-hover); }
+
+  .bento-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: var(--shadow-sm);
+  }
+  .section-title { font-size: 11px; letter-spacing: 1.1px; text-transform: uppercase; color: var(--muted); font-weight: 700; margin-bottom: 6px; }
+  .benefit-tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--emerald);
+    background: var(--emerald-bg);
+    border: 1px solid var(--emerald-border);
+    padding: 3px 10px;
+    border-radius: 99px;
+  }
+  .pilot-wrap { max-width: 1220px; margin: 40px auto; padding: 0 24px; }
+  .pilot-card {
+    background: var(--surface);
+    border: 1.5px solid var(--obsidian);
+    border-radius: 18px;
+    padding: 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    box-shadow: var(--shadow-md);
+  }
+  .price-strike {
+    text-decoration: line-through;
+    color: var(--muted);
+    font-weight: 500;
+    margin-right: 4px;
+  }
+  .auth-modal-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(17, 24, 39, 0.55);
+    backdrop-filter: blur(4px);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .auth-modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    max-width: 440px;
+    width: 100%;
+    padding: 26px;
+    box-shadow: var(--shadow-lg);
+    text-align: left;
+  }
+  .auth-input {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1.5px solid var(--border-strong);
+    border-radius: 9px;
+    font-size: 14px;
+    font-family: 'JetBrains Mono', monospace;
+    margin: 8px 0 14px;
+    outline: none;
+  }
+  .auth-input:focus { border-color: var(--obsidian); }
+  .footer {
+    border-top: 1px solid var(--border);
+    background: var(--surface);
+    padding: 28px 24px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+  }
+  .footer a { color: var(--obsidian); font-weight: 600; text-decoration: none; }
+  .footer a:hover { color: var(--emerald); }
+</style>
+</head>
+<body>
+
+  <div id="checkoutBanner">
+    🎉 <strong>Welcome to Star Intel AutoGTM Pro (Founding Member)!</strong> Your payment is confirmed.
+    <a href="https://mail.google.com/mail/?view=cm&fs=1&to=jmakhanuh@gmail.com&su=AutoGTM%20Pro%2050-Lead%20Onboarding&body=Hi%20Idriss%2C%20I%20just%20completed%20my%20Founding%20Member%20checkout.%20Here%20is%20my%20domain%20and%20target%20buyer%20role%3A%20" target="_blank" rel="noopener">Click here to confirm your domain for your first 50-lead CSV →</a>
+  </div>
+
+  <div class="nav-wrap">
+    <nav class="nav">
+      <div class="brand">
+        <span class="brand-mark">SI</span>
+        Star Intel
+        <span class="mono" style="font-size:11px;color:var(--muted);font-weight:500;">// AutoGTM Studio</span>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+        <div class="status-pill"><span class="pulse-dot"></span> Provenance-Verified Recon Online</div>
+        <button type="button" id="navUserBtn" class="user-pill" onclick="openAuthModal('login')">🔐 Sign In / Sign Up</button>
+        <button type="button" id="navLogoutBtn" class="user-pill" style="display:none;color:var(--rose);" onclick="logoutUser()">Log Out</button>
+        <button type="button" class="btn-pilot-primary" onclick="startCheckout()">
+          💳 Unlock AutoGTM Pro (<span class="price-strike" style="color:#9CA3AF;">$49</span> $29/mo) →
+        </button>
+      </div>
+    </nav>
+  </div>
+
+  <section class="hero-split">
+    <div class="hero-left">
+      <div class="eyebrow-badge">
+        <span class="tag mono">AUTOGTM STUDIO</span>
+        <span>Map Market Pricing • Expose Rival Gaps • Draft Buyer Emails</span>
+      </div>
+
+      <h1>Autonomous GTM &amp;<br><span class="grad-accent">Competitive Teardown</span> Studio.</h1>
+      <p class="hero-sub">
+        Enter any startup domain — or switch to <strong>Stealth Mode</strong>. Star Intel probes live <code>/pricing</code> endpoints in parallel, separates <strong>observed prices</strong> from <strong>inferred positioning</strong>, and drafts ready-to-send B2B buyer emails.
+      </p>
+
+      <div class="console-shell">
+        <div class="mode-tabs">
+          <div class="mode-tab-group">
+            <button type="button" class="mode-btn active" id="tabUrlBtn" onclick="setMode('url')">🌐 Company Domain</button>
+            <button type="button" class="mode-btn" id="tabIdeaBtn" onclick="setMode('idea')">🧠 Stealth Startup Brief</button>
+          </div>
+          <span class="mono" style="font-size:11px;color:var(--emerald);font-weight:700;">● Parallel DNS + Pricing Recon</span>
+        </div>
+
+        <form id="scanForm" onsubmit="return runAnalysis(event);">
+          <div id="stealthInputs" class="stealth-grid">
+            <div class="stealth-field">
+              <label>What do you build or sell?</label>
+              <input type="text" id="descInput" placeholder="e.g., AI stroke diagnostic helmet for ambulances" />
+            </div>
+            <div class="stealth-field">
+              <label>Who is your ideal B2B customer?</label>
+              <input type="text" id="icpInput" placeholder="e.g., Hospital Directors & Emergency Care Networks" />
+            </div>
+          </div>
+
+          <div class="cmd-row">
+            <div class="cmd-input-wrap">
+              <svg width="17" height="17" fill="none" stroke="#111827" stroke-width="2" viewBox="0 0 24 24">
+                <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+              </svg>
+              <input type="text" id="urlInput" placeholder="Enter startup domain (e.g., easi.run, signedreviews.com, linear.app)" required />
+            </div>
+            <button type="submit" class="cmd-btn" id="runBtn">Launch Teardown →</button>
+          </div>
+        </form>
+
+        <div class="quick-bar">
+          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+            <span style="font-weight:700;color:var(--obsidian);">Click a live preset to test:</span>
+            <button type="button" class="pill-btn" onclick="fillAndRun('easi.run')">easi.run ↗</button>
+            <button type="button" class="pill-btn" onclick="fillAndRun('signedreviews.com')">signedreviews.com ↗</button>
+            <button type="button" class="pill-btn" onclick="fillAndRun('mintlify.com')">mintlify.com ↗</button>
+            <button type="button" class="pill-btn" onclick="fillAndRun('linear.app')">linear.app ↗</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="studio-preview-window">
+      <div class="window-bar">
+        <div class="win-dots"><span></span><span></span><span></span></div>
+        <span class="mono" style="font-size:11px;color:var(--text-secondary);font-weight:600;">studio://interactive-preview (click any row to run)</span>
+        <span class="benefit-tag mono" style="font-size:10px;padding:2px 8px;">✓ LIVE</span>
+      </div>
+      <div class="window-body">
+        <div class="section-title mono" style="margin-bottom:8px;">CLICK ANY SAMPLE BELOW TO LAUNCH LIVE SCAN</div>
+
+        <div class="preview-row" onclick="fillAndRun('easi.run')" title="Click to run easi.run live">
+          <div>
+            <strong style="font-size:13px;color:var(--obsidian);">easi.run — Live Linux Chrome Agent Takeover</strong>
+            <span class="mono" style="font-size:11px;color:var(--emerald);display:block;">Click to run live teardown → https://easi.run/pricing</span>
+          </div>
+          <div style="text-align:right;">
+            <span class="badge-observed mono">✓ RUN LIVE ↗</span>
+          </div>
+        </div>
+
+        <div class="preview-row" onclick="fillAndRun('signedreviews.com')" title="Click to run signedreviews.com live">
+          <div>
+            <strong style="font-size:13px;color:var(--obsidian);">signedreviews.com — Stripe-Verified Reviews</strong>
+            <span class="mono" style="font-size:11px;color:var(--emerald);display:block;">Click to run live teardown → https://signedreviews.com/pricing</span>
+          </div>
+          <div style="text-align:right;">
+            <span class="badge-observed mono">✓ RUN LIVE ↗</span>
+          </div>
+        </div>
+
+        <div class="preview-lead-box">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <span class="avatar-circle" style="width:28px;height:28px;font-size:11px;">VP</span>
+              <div>
+                <strong style="font-size:12.5px;color:var(--obsidian);">Verified B2B Buyer + Cold Email</strong>
+                <div class="mono" style="font-size:10.5px;color:var(--emerald);">● VALID MX/DNS • 1-Click Gmail Draft</div>
+              </div>
+            </div>
+            <span class="mono" style="font-size:10.5px;background:var(--emerald-bg);color:var(--emerald);padding:3px 8px;border-radius:6px;font-weight:700;">✉️ Gmail Ready</span>
+          </div>
+          <div class="mono" style="font-size:11px;color:var(--text-secondary);background:var(--bg);padding:8px 10px;border-radius:7px;border:1px solid var(--border);">
+            Every scan generates 4 real competitor battlecards + 4 editable buyer emails that open directly in Gmail.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="pipeline-strip">
+    <div class="pipe-card" id="stepCard1">
+      <span class="pipe-icon">01</span>
+      <div>
+        <h3>Observed vs. Inferred Pricing</h3>
+        <p>Directly probes <code>/pricing</code> URLs and stamps every row with verification status, source link &amp; UTC check date.</p>
+      </div>
+    </div>
+    <div class="pipe-card" id="stepCard2">
+      <span class="pipe-icon">02</span>
+      <div>
+        <h3>4-Rival Displacement Matrix</h3>
+        <p>Exposes technical gaps and exact sales wedges so your outbound pitches land against incumbent tools.</p>
+      </div>
+    </div>
+    <div class="pipe-card" id="stepCard3">
+      <span class="pipe-icon">03</span>
+      <div>
+        <h3>1-Click Gmail Buyer Outreach</h3>
+        <p>Verifies target buyer DNS/MX records and opens live-editable founder emails straight in Gmail Web.</p>
+      </div>
+    </div>
+  </section>
+
+  <div id="results"></div>
+
+  <section class="pilot-wrap" id="pilot">
+    <div class="pilot-card">
+      <div style="max-width:650px;">
+        <div class="benefit-tag mono" style="margin-bottom:8px;">FIRST 10 FOUNDING MEMBERS • 40% EARLY-BIRD LOCK-IN</div>
+        <h2 style="margin:4px 0 8px;font-size:23px;color:var(--obsidian);">
+          Get Your Weekly 50-Lead AutoGTM Pack — <span class="price-strike">$49/mo</span> <span style="color:var(--emerald);">$29/mo USD</span>
+        </h2>
+        <p style="margin:0;color:var(--text-secondary);font-size:14.5px;">
+          Our live studio unlocks all 4 Competitor Battlecards + 4 Target Customer Emails for free. Upgrade to <strong>AutoGTM Pro ($29/mo via PayPal or Debit/Credit Card)</strong> to receive 50 verified decision-maker leads &amp; custom outbound sequences every week.
+        </p>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+        <button type="button" class="cmd-btn" onclick="startCheckout()">
+          💳 Checkout $29 USD (PayPal / Card) →
+        </button>
+        <button type="button" class="btn-dl" onclick="openFounderPilotEmail()">
+          ✉️ Ask a Question (Gmail)
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <div id="authModalBackdrop" class="auth-modal-backdrop">
+    <div class="auth-modal">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+        <div class="benefit-tag mono">STAR INTEL ACCOUNT</div>
+        <button type="button" onclick="closeAuthModal()" style="background:none;border:none;font-size:18px;cursor:pointer;color:var(--muted);">✕</button>
+      </div>
+
+      <h3 style="margin:0 0 6px;font-size:20px;color:var(--obsidian);" id="authModalTitle">Create Account or Sign In</h3>
+      <p style="margin:0 0 14px;font-size:13px;color:var(--text-secondary);" id="authModalDesc">
+        Sign in or create your free founder account to export verified CSVs and upgrade to AutoGTM Pro.
+      </p>
+
+      <div style="display:flex;gap:6px;background:var(--surface-subtle);padding:4px;border-radius:10px;border:1px solid var(--border);margin-bottom:16px;">
+        <button type="button" id="tabSignupMode" class="mode-btn active" style="flex:1;" onclick="switchAuthTab('signup')">Create Account (Sign Up)</button>
+        <button type="button" id="tabLoginMode" class="mode-btn" style="flex:1;" onclick="switchAuthTab('login')">Returning User (Sign In)</button>
+      </div>
+
+      <div id="authErrorBox" style="display:none;background:var(--rose-bg);border:1px solid #FECDD3;color:var(--rose);padding:8px 12px;border-radius:8px;font-size:12.5px;font-weight:600;margin-bottom:12px;"></div>
+
+      <form onsubmit="return submitAuthModal(event);">
+        <input type="hidden" id="authModeField" value="signup" />
+
+        <label style="font-size:11px;font-weight:700;color:var(--text-secondary);text-transform:uppercase;">Work / Founder Email *</label>
+        <input type="email" id="authEmailInput" class="auth-input" placeholder="founder@yourstartup.com" required />
+
+        <label style="font-size:11px;font-weight:700;color:var(--text-secondary);text-transform:uppercase;">Password *</label>
+        <input type="password" id="authPasswordInput" class="auth-input" placeholder="Minimum 6 characters" minlength="6" required />
+
+        <div id="signupDomainWrap">
+          <label style="font-size:11px;font-weight:700;color:var(--text-secondary);text-transform:uppercase;">Your Startup Domain *</label>
+          <input type="text" id="authDomainInput" class="auth-input" placeholder="e.g., easi.run or signedreviews.com" />
+        </div>
+
+        <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:8px;">
+          <button type="button" class="btn-mailto" onclick="closeAuthModal()">Cancel</button>
+          <button type="submit" id="authSubmitBtn" class="cmd-btn" style="padding:10px 18px;">Create Account &amp; Continue →</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <footer class="footer">
+    Built by <strong>Idriss</strong> &nbsp;|&nbsp;
+    Email: <a href="https://mail.google.com/mail/?view=cm&fs=1&to=jmakhanuh@gmail.com&su=Star%20Intel%20Inquiry" target="_blank" rel="noopener">jmakhanuh@gmail.com</a> &nbsp;|&nbsp;
+    Phone / WhatsApp: <a href="https://wa.me/254790758050" target="_blank" rel="noopener">+254790758050</a> &nbsp;|&nbsp;
+    <a href="https://github.com/jmakhanu/Star-intel" target="_blank" rel="noopener">GitHub</a>
+  </footer>
+
+<script>
+var PAYPAL_URL = "https://www.paypal.com/ncp/payment/XKUVEJSB74V88";
+var currentMode = "url";
+var lastData = null;
+var pendingActionAfterAuth = null;
+
+function getSavedEmail() {
+  try {
+    return window.localStorage.getItem("star_intel_email") || "";
+  } catch (e) {
+    return "";
+  }
+}
+
+function updateNavUserBadge() {
+  var email = getSavedEmail();
+  var btn = document.getElementById("navUserBtn");
+  var outBtn = document.getElementById("navLogoutBtn");
+  if (!btn) return;
+  if (email) {
+    btn.innerHTML = "✓ " + email;
+    btn.style.background = "var(--emerald-bg)";
+    btn.style.borderColor = "var(--emerald-border)";
+    btn.style.color = "var(--emerald)";
+    if (outBtn) outBtn.style.display = "inline-block";
+  } else {
+    btn.innerHTML = "🔐 Sign In / Sign Up";
+    btn.style.background = "var(--surface-subtle)";
+    btn.style.borderColor = "var(--border-strong)";
+    btn.style.color = "var(--obsidian)";
+    if (outBtn) outBtn.style.display = "none";
+  }
+}
+
+function logoutUser() {
+  try {
+    window.localStorage.removeItem("star_intel_email");
+    window.localStorage.removeItem("star_intel_domain");
+  } catch (e) {}
+  updateNavUserBadge();
+}
+
+function switchAuthTab(mode) {
+  document.getElementById("authModeField").value = mode;
+  document.getElementById("tabSignupMode").classList.toggle("active", mode === "signup");
+  document.getElementById("tabLoginMode").classList.toggle("active", mode === "login");
+  document.getElementById("authErrorBox").style.display = "none";
+  var domWrap = document.getElementById("signupDomainWrap");
+  var submitBtn = document.getElementById("authSubmitBtn");
+  if (mode === "login") {
+    domWrap.style.display = "none";
+    submitBtn.innerText = "Sign In & Continue →";
+  } else {
+    domWrap.style.display = "block";
+    submitBtn.innerText = "Create Account & Continue →";
+  }
+}
+
+function openAuthModal(reason) {
+  pendingActionAfterAuth = reason;
+  document.getElementById("authErrorBox").style.display = "none";
+  var emailInp = document.getElementById("authEmailInput");
+  var domInp = document.getElementById("authDomainInput");
+  emailInp.value = getSavedEmail();
+  domInp.value = (lastData && lastData.domain) ? lastData.domain : (document.getElementById("urlInput").value.trim() || "");
+
+  if (reason === "csv_comp" || reason === "csv_leads") {
+    document.getElementById("authModalTitle").innerText = "Sign In or Sign Up to Export CSV";
+    document.getElementById("authModalDesc").innerText = "Create a free account or sign in to download your verified CSV battlecard and buyer leads.";
+    switchAuthTab("signup");
+  } else if (reason === "checkout") {
+    document.getElementById("authModalTitle").innerText = "Sign Up / Sign In to Upgrade ($29/mo)";
+    document.getElementById("authModalDesc").innerText = "Please create your Star Intel account first so we can link your $29/mo AutoGTM Pro subscription and deliver your weekly 50-lead CSVs.";
+    switchAuthTab("signup");
+  } else {
+    document.getElementById("authModalTitle").innerText = "Star Intel Founder Account";
+    document.getElementById("authModalDesc").innerText = "Sign in to your existing workspace or create a new founder account.";
+    switchAuthTab("signup");
+  }
+  document.getElementById("authModalBackdrop").style.display = "flex";
+  emailInp.focus();
+}
+
+function closeAuthModal() {
+  document.getElementById("authModalBackdrop").style.display = "none";
+}
+
+function startCheckout() {
+  if (!getSavedEmail()) {
+    openAuthModal("checkout");
+    return;
+  }
+  window.open(PAYPAL_URL, "_blank", "noopener");
+}
+
+async function submitAuthModal(e) {
+  if (e && e.preventDefault) e.preventDefault();
+  var mode = document.getElementById("authModeField").value;
+  var email = document.getElementById("authEmailInput").value.trim();
+  var password = document.getElementById("authPasswordInput").value;
+  var domain = document.getElementById("authDomainInput").value.trim() || (lastData && lastData.domain) || "not-specified";
+  var errBox = document.getElementById("authErrorBox");
+  var submitBtn = document.getElementById("authSubmitBtn");
+
+  if (!email || !password) return false;
+  errBox.style.display = "none";
+  submitBtn.disabled = true;
+
+  try {
+    var qs = "?mode=" + encodeURIComponent(mode) + "&email=" + encodeURIComponent(email) + "&password=" + encodeURIComponent(password) + "&domain=" + encodeURIComponent(domain);
+    var resp = await fetch("/api/auth" + qs);
+    var res = await resp.json();
+    if (!resp.ok || res.error) {
+      errBox.innerText = res.error || "Authentication failed. Please check your credentials.";
+      errBox.style.display = "block";
+      submitBtn.disabled = false;
+      return false;
+    }
+    try {
+      window.localStorage.setItem("star_intel_email", res.email || email);
+      window.localStorage.setItem("star_intel_domain", res.domain || domain);
+    } catch (err) {}
+    updateNavUserBadge();
+    closeAuthModal();
+
+    if (pendingActionAfterAuth === "csv_comp") {
+      rawDownloadCSV();
+    } else if (pendingActionAfterAuth === "csv_leads") {
+      rawDownloadLeadsCSV();
+    } else if (pendingActionAfterAuth === "checkout") {
+      window.open(PAYPAL_URL, "_blank", "noopener");
+    }
+    pendingActionAfterAuth = null;
+  } catch (err) {
+    errBox.innerText = "Network error while signing in. Please try again.";
+    errBox.style.display = "block";
+  } finally {
+    submitBtn.disabled = false;
+  }
+  return false;
+}
+
+function setMode(mode) {
+  currentMode = mode;
+  document.getElementById("tabUrlBtn").classList.toggle("active", mode === "url");
+  document.getElementById("tabIdeaBtn").classList.toggle("active", mode === "idea");
+  var stealth = document.getElementById("stealthInputs");
+  var urlInp = document.getElementById("urlInput");
+  if (mode === "idea") {
+    stealth.style.display = "grid";
+    urlInp.placeholder = "Enter project name or future domain (e.g., CerebroSense or mystartup.ai)";
+  } else {
+    stealth.style.display = "none";
+    urlInp.placeholder = "Enter startup domain (e.g., easi.run, signedreviews.com, linear.app)";
+  }
+}
+
+function fillAndRun(domain) {
+  setMode("url");
+  var inp = document.getElementById("urlInput");
+  inp.value = domain;
+  runAnalysis(null);
+}
+
+function switchWsTab(tabId, btnEl) {
+  document.querySelectorAll(".tab-pane").forEach(function(el) { el.classList.remove("active"); });
+  document.querySelectorAll(".ws-tab").forEach(function(el) { el.classList.remove("active"); });
+  document.getElementById(tabId).classList.add("active");
+  btnEl.classList.add("active");
+}
+
+function flashBtn(btn, msg) {
+  var orig = btn.innerHTML;
+  btn.innerHTML = msg;
+  setTimeout(function() { btn.innerHTML = orig; }, 1800);
+}
+
+function copySafeText(text, btn) {
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(function() {
+      flashBtn(btn, "✓ Copied!");
+    }).catch(function() { fallbackCopy(text, btn); });
+  } else {
+    fallbackCopy(text, btn);
+  }
+}
+
+function fallbackCopy(text, btn) {
+  var ta = document.createElement("textarea");
+  ta.value = text;
+  ta.style.position = "fixed";
+  ta.style.opacity = "0";
+  document.body.appendChild(ta);
+  ta.select();
+  document.execCommand("copy");
+  document.body.removeChild(ta);
+  flashBtn(btn, "✓ Copied!");
+}
+
+function getEditedBody(idx, fallback) {
+  var el = document.getElementById("draftBody_" + idx);
+  return el ? el.innerText.trim() : (fallback || "");
+}
+
+function sendLeadViaGmail(idx) {
+  if (!lastData || !lastData.customer_prospects || !lastData.customer_prospects[idx]) return;
+  var l = lastData.customer_prospects[idx];
+  var to = encodeURIComponent(l.target_email || "");
+  var su = encodeURIComponent(l.email_subject || "");
+  var body = encodeURIComponent(getEditedBody(idx, l.email_body));
+  var gmailUrl = "https://mail.google.com/mail/?view=cm&fs=1&to=" + to + "&su=" + su + "&body=" + body;
+  window.open(gmailUrl, "_blank", "noopener");
+}
+
+function sendLeadViaMailto(idx) {
+  if (!lastData || !lastData.customer_prospects || !lastData.customer_prospects[idx]) return;
+  var l = lastData.customer_prospects[idx];
+  var to = encodeURIComponent(l.target_email || "");
+  var su = encodeURIComponent(l.email_subject || "");
+  var body = encodeURIComponent(getEditedBody(idx, l.email_body));
+  window.location.href = "mailto:" + to + "?subject=" + su + "&body=" + body;
+}
+
+function copyLeadPitch(idx, btn) {
+  if (!lastData || !lastData.customer_prospects || !lastData.customer_prospects[idx]) return;
+  var l = lastData.customer_prospects[idx];
+  var fullPitch = "To: " + (l.target_email || "") + "\nSubject: " + (l.email_subject || "") + "\n\n" + getEditedBody(idx, l.email_body);
+  copySafeText(fullPitch, btn);
+}
+
+function openFounderPilotEmail() {
+  var domain = (lastData && lastData.domain) ? lastData.domain : (document.getElementById("urlInput").value.trim() || "my startup");
+  var su = encodeURIComponent("Star Intel AutoGTM Pro — 50-Lead Batch for " + domain);
+  var body = encodeURIComponent("Hi Idriss,\n\nI ran " + domain + " on Star Intel and have a quick question about the 50-lead AutoGTM CSV:\n\nMy startup website: " + domain + "\nOur #1 ideal customer role: \n\nBest,");
+  var gmailUrl = "https://mail.google.com/mail/?view=cm&fs=1&to=jmakhanuh@gmail.com&su=" + su + "&body=" + body;
+  window.open(gmailUrl, "_blank", "noopener");
+}
+
+async function runAnalysis(e) {
+  if (e && e.preventDefault) e.preventDefault();
+  var url = document.getElementById("urlInput").value.trim();
+  var desc = document.getElementById("descInput").value.trim();
+  var icp = document.getElementById("icpInput").value.trim();
+  var btn = document.getElementById("runBtn");
+  var resDiv = document.getElementById("results");
+
+  if (!url && !desc) {
+    alert("Please enter a startup domain (e.g., easi.run) or a stealth description.");
+    return false;
+  }
+
+  btn.disabled = true;
+  btn.innerText = "Running Live Teardown (~18s)...";
+  resDiv.style.display = "none";
+
+  var cards = ["stepCard1", "stepCard2", "stepCard3"];
+  var stepIdx = 0;
+  cards.forEach(function(c) { document.getElementById(c).classList.remove("active-step"); });
+  document.getElementById(cards[0]).classList.add("active-step");
+  var timer = setInterval(function() {
+    stepIdx = (stepIdx + 1) % 3;
+    cards.forEach(function(c, i) { document.getElementById(c).classList.toggle("active-step", i === stepIdx); });
+  }, 3000);
+
+  try {
+    var userEmail = getSavedEmail();
+    var qs = "?url=" + encodeURIComponent(url) + "&desc=" + encodeURIComponent(desc) + "&icp=" + encodeURIComponent(icp) + "&email=" + encodeURIComponent(userEmail);
+    var resp = await fetch("/api/analyze" + qs);
+    var data = await resp.json();
+    if (data.error) throw new Error(data.error);
+    lastData = data;
+    renderDashboard(data);
+    resDiv.scrollIntoView({ behavior: "smooth" });
+  } catch (err) {
+    alert("Analysis error: " + err.message);
+  } finally {
+    clearInterval(timer);
+    cards.forEach(function(c) { document.getElementById(c).classList.remove("active-step"); });
+    btn.disabled = false;
+    btn.innerText = "Launch Teardown →";
+  }
+  return false;
+}
+
+function downloadCSV() {
+  if (!getSavedEmail()) { openAuthModal("csv_comp"); return; }
+  rawDownloadCSV();
+}
+
+function rawDownloadCSV() {
+  if (!lastData || !lastData.competitor_matrix) return;
+  var rows = lastData.competitor_matrix;
+  var keys = [
+    "competitor_name",
+    "competitor_domain",
+    "pricing_model_and_cost",
+    "verification_status",
+    "pricing_source",
+    "check_date",
+    "core_product_strength",
+    "exploitable_product_gap",
+    "sales_displacement_wedge"
+  ];
+  var csvLines = [keys.join(",")];
+  rows.forEach(function(r) {
+    var line = keys.map(function(k) {
+      return '"' + String(r[k] || "").replace(/"/g, '""') + '"';
+    }).join(",");
+    csvLines.push(line);
+  });
+  var blob = new Blob([csvLines.join("\n")], {type: "text/csv"});
+  var a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "StarIntel_Competitors_" + (lastData.startup_name || "Battlecard") + ".csv";
+  a.click();
+}
+
+function downloadLeadsCSV() {
+  if (!getSavedEmail()) { openAuthModal("csv_leads"); return; }
+  rawDownloadLeadsCSV();
+}
+
+function rawDownloadLeadsCSV() {
+  if (!lastData || !lastData.customer_prospects) return;
+  var rows = lastData.customer_prospects;
+  var keys = ["customer_company", "customer_domain", "decision_maker_role", "target_email", "dns_status", "check_date", "buying_trigger", "email_subject", "email_body"];
+  var csvLines = [keys.join(",")];
+  rows.forEach(function(r) {
+    var line = keys.map(function(k) {
+      return '"' + String(r[k] || "").replace(/"/g, '""') + '"';
+    }).join(",");
+    csvLines.push(line);
+  });
+  var blob = new Blob([csvLines.join("\n")], {type: "text/csv"});
+  var a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "StarIntel_Leads_" + (lastData.startup_name || "Prospects") + ".csv";
+  a.click();
+}
+
+function escapeHtml(str) {
+  return String(str || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+function renderDashboard(d) {
+  var p = d.pricing_and_packaging_strategy || {};
+  var comps = d.competitor_matrix || [];
+  var leads = d.customer_prospects || [];
+  var plays = d.growth_playbooks || [];
+
+  var leadsHtml = leads.map(function(l, idx) {
+    var initials = String(l.customer_company || "CO").slice(0, 2).toUpperCase();
+    return '<div class="lead-card">' +
+      '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap;">' +
+        '<div style="display:flex;gap:12px;align-items:center;">' +
+          '<div class="avatar-circle">' + escapeHtml(initials) + '</div>' +
+          '<div>' +
+            '<strong style="font-size:16px;color:var(--obsidian);">' + escapeHtml(l.customer_company) + '</strong>' +
+            '<span class="mono" style="font-size:12px;color:var(--muted);margin-left:6px;">· ' + escapeHtml(l.customer_domain) + '</span>' +
+            '<div style="font-size:12.5px;color:var(--text-secondary);margin-top:4px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;">' +
+              '<span>' + escapeHtml(l.decision_maker_role) + '</span>' +
+              '<button type="button" class="email-badge mono" onclick="sendLeadViaGmail(' + idx + ')" title="Click to open pre-filled draft in Gmail">' +
+                '✉️ ' + escapeHtml(l.target_email) + ' (Draft in Gmail ↗)' +
+              '</button>' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+        '<span class="benefit-tag mono">● ' + escapeHtml(l.dns_status || "VALID") + '</span>' +
+      '</div>' +
+      '<div class="trigger-box"><strong>Buying Trigger:</strong> ' + escapeHtml(l.buying_trigger) + '</div>' +
+      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">' +
+        '<span class="mono" style="font-size:11px;color:var(--muted);">Subject: <strong style="color:var(--obsidian);">' + escapeHtml(l.email_subject) + '</strong></span>' +
+        '<span class="mono" style="font-size:10.5px;color:var(--emerald);">✎ Click email below to edit</span>' +
+      '</div>' +
+      '<div class="email-draft" id="draftBody_' + idx + '" contenteditable="true" spellcheck="false">' + escapeHtml(l.email_body) + '</div>' +
+      '<div class="action-row">' +
+        '<button type="button" class="btn-gmail" onclick="sendLeadViaGmail(' + idx + ')">✉️ Open Draft in Gmail ↗</button>' +
+        '<button type="button" class="btn-mailto" onclick="sendLeadViaMailto(' + idx + ')">↗ Default Mail App</button>' +
+        '<button type="button" class="btn-mailto" onclick="copyLeadPitch(' + idx + ', this)">📋 Copy Text</button>' +
+      '</div>' +
+    '</div>';
+  }).join("");
+
+  var rowsHtml = comps.map(function(c) {
+    var vStatus = String(c.verification_status || "unverified").toLowerCase();
+    var isObserved = vStatus.indexOf("observed") !== -1 && vStatus.indexOf("unverified") === -1;
+    var badgeClass = isObserved ? "badge-observed" : "badge-unverified";
+    var badgeLabel = isObserved ? "✓ OBSERVED PRICE" : "⚠ UNVERIFIED (INFERRED)";
+    var srcUrl = String(c.pricing_source || "").indexOf("http") === 0 ? c.pricing_source : ("https://" + (c.competitor_domain || "example.com") + "/pricing");
+    return '<tr>' +
+      '<td><strong style="color:var(--obsidian);">' + escapeHtml(c.competitor_name) + '</strong><br><span class="mono" style="color:var(--muted);font-size:12px">' + escapeHtml(c.competitor_domain) + '</span></td>' +
+      '<td>' +
+        '<div class="mono" style="background:var(--surface-subtle);border:1px solid var(--border);padding:4px 8px;border-radius:6px;font-size:12px;display:inline-block;color:var(--obsidian);font-weight:600;">' + escapeHtml(c.pricing_model_and_cost) + '</div><br>' +
+        '<span class="' + badgeClass + ' mono">' + badgeLabel + '</span>' +
+        '<div class="prov-meta mono">URL: <a href="' + escapeHtml(srcUrl) + '" target="_blank" rel="noopener" style="color:var(--obsidian);text-decoration:underline;">' + escapeHtml(srcUrl) + '</a><br>Checked: ' + escapeHtml(c.check_date || d.check_date || "") + '</div>' +
+      '</td>' +
+      '<td>' + escapeHtml(c.core_product_strength) + '</td>' +
+      '<td class="gap">' + escapeHtml(c.exploitable_product_gap) + '</td>' +
+      '<td class="wedge">' + escapeHtml(c.sales_displacement_wedge) + '</td>' +
+    '</tr>';
+  }).join("");
+
+  var playsHtml = plays.map(function(pl) {
+    return '<div class="bento-card">' +
+      '<div class="section-title mono">' + escapeHtml(pl.growth_channel) + '</div>' +
+      '<p style="color:var(--obsidian);margin-top:6px;font-weight:500;">' + escapeHtml(pl.tactical_action) + '</p>' +
+      '<div class="benefit-tag">ROI: ' + escapeHtml(pl.expected_roi) + '</div>' +
+    '</div>';
+  }).join("");
+
+  var pStatus = String(p.pricing_verification_status || "observed").toLowerCase();
+  var pBadge = (pStatus.indexOf("observed") !== -1 && pStatus.indexOf("unverified") === -1)
+    ? '<span class="badge-observed mono">✓ OBSERVED</span>'
+    : '<span class="badge-unverified mono">⚠ UNVERIFIED (INFERRED)</span>';
+  var pUrl = String(p.pricing_source || "").indexOf("http") === 0 ? p.pricing_source : ("https://" + (d.domain || "example.com") + "/pricing");
+
+  var resDiv = document.getElementById("results");
+  resDiv.innerHTML =
+    '<div class="res-banner">' +
+      '<div>' +
+        '<div class="section-title mono" style="color:var(--emerald);">● OUTREACH & BATTLECARD READY • CHECKED ' + escapeHtml(d.check_date || "") + '</div>' +
+        '<h2 style="margin:4px 0;color:var(--obsidian);">' + escapeHtml(d.startup_name || d.domain) + ' — GTM & Competitive Dossier</h2>' +
+        '<div style="font-size:14px;color:var(--text-secondary);margin-top:4px;">' + escapeHtml(d.core_product_summary) + '</div>' +
+      '</div>' +
+      '<div style="display:flex;gap:10px;flex-wrap:wrap;">' +
+        '<button type="button" class="btn-dl" onclick="downloadLeadsCSV()">⬇ Export Leads (.CSV)</button>' +
+        '<button type="button" class="btn-dl" onclick="downloadCSV()">⬇ Export Battlecard (.CSV)</button>' +
+        '<button type="button" class="cmd-btn" onclick="startCheckout()">💳 Unlock 50-Lead Pack ($29 USD) →</button>' +
+      '</div>' +
+    '</div>' +
+    '<div class="ws-tabs">' +
+      '<button type="button" class="ws-tab active" onclick="switchWsTab(\'paneComps\', this)">🏢 Companies & Matrix (' + comps.length + ')</button>' +
+      '<button type="button" class="ws-tab" onclick="switchWsTab(\'paneLeads\', this)">✉️ Buyer Emails (' + leads.length + ' Valid)</button>' +
+      '<button type="button" class="ws-tab" onclick="switchWsTab(\'panePricing\', this)">📊 Pricing & Strategy</button>' +
+    '</div>' +
+    '<div id="paneComps" class="tab-pane active">' +
+      '<div class="table-wrap"><table><thead><tr><th>Competitor</th><th>Pricing, Provenance & Check Date</th><th>Core Strength</th><th>Exploitable Product Gap</th><th>Sales Displacement Wedge</th></tr></thead><tbody>' + rowsHtml + '</tbody></table></div>' +
+    '</div>' +
+    '<div id="paneLeads" class="tab-pane"><div class="grid-2">' + leadsHtml + '</div></div>' +
+    '<div id="panePricing" class="tab-pane">' +
+      '<div class="grid-3">' +
+        '<div class="bento-card"><div class="section-title mono">Target Model ' + pBadge + '</div><p style="color:var(--obsidian);font-weight:500;">' + escapeHtml(p.current_or_inferred_model) + '</p><div class="prov-meta mono">URL: <a href="' + escapeHtml(pUrl) + '" target="_blank" rel="noopener" style="color:var(--obsidian);text-decoration:underline;">' + escapeHtml(pUrl) + '</a> • Checked: ' + escapeHtml(d.check_date || "") + '</div></div>' +
+        '<div class="bento-card"><div class="section-title mono">Market Pricing Benchmark</div><p style="color:var(--obsidian);font-weight:500;">' + escapeHtml(p.market_pricing_benchmark) + '</p></div>' +
+        '<div class="bento-card"><div class="section-title mono">Recommended Pricing Wedge</div><p style="color:var(--emerald);font-weight:600;">' + escapeHtml(p.recommended_pricing_wedge) + '</p></div>' +
+      '</div>' +
+      '<div class="grid-3">' + playsHtml + '</div>' +
+      '<div class="bento-card" style="border-color:#FECDD3;background:var(--rose-bg);color:#9F1239;"><strong>Red-Team CSO Verdict:</strong> ' + escapeHtml(d.red_team_cso_verdict) + '</div>' +
+    '</div>';
+  resDiv.style.display = "block";
+}
+
+window.addEventListener("DOMContentLoaded", function() {
+  updateNavUserBadge();
+  if (window.location.search.indexOf("checkout=success") !== -1) {
+    document.getElementById("checkoutBanner").style.display = "block";
+  }
+  var params = new URLSearchParams(window.location.search);
+  var autoDomain = params.get("run");
+  if (autoDomain) {
+    fillAndRun(autoDomain);
+  }
+});
+</script>
+</body>
+</html>

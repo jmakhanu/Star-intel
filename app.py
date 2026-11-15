@@ -1446,7 +1446,8 @@ class StarIntelHandler(BaseHTTPRequestHandler):
             self.send_header("Content-Type", "text/html; charset=utf-8")
             self.send_header("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0")
             self.end_headers()
-            self.wfile.write(LANDING_HTML.encode("utf-8"))
+            with open(os.path.join(os.path.dirname(__file__) or ".", "ui_template.html"), "rb") as tf:
+                self.wfile.write(tf.read())
             return
 
         if parsed.path == "/api/signup":
