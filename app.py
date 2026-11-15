@@ -16,6 +16,44 @@ from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
 from star_intel_growth import init_db, fetch_web_signal, verify_domain_and_emails, call_llm
 
 import sqlite3
+from concurrent.futures import ThreadPoolExecutor
+
+def get_cached_analysis(cache_key):
+    try:
+        ensure_telemetry_tables()
+        conn = sqlite3.connect(DB_FILE)
+        c = conn.cursor()
+        c.execute('''CREATE TABLE IF NOT EXISTS analysis_cache (
+            cache_key TEXT PRIMARY KEY,
+            json_data TEXT,
+            created_ts INTEGER
+        )''')
+        row = c.execute("SELECT json_data, created_ts FROM analysis_cache WHERE cache_key = ?", (cache_key,)).fetchone()
+        conn.close()
+        if row and (int(datetime.now(timezone.utc).timestamp()) - int(row[1])) < 3600:
+            return json.loads(row[0])
+    except Exception:
+        pass
+    return None
+
+def set_cached_analysis(cache_key, data_dict):
+    try:
+        ensure_telemetry_tables()
+        conn = sqlite3.connect(DB_FILE)
+        c = conn.cursor()
+        c.execute('''CREATE TABLE IF NOT EXISTS analysis_cache (
+            cache_key TEXT PRIMARY KEY,
+            json_data TEXT,
+            created_ts INTEGER
+        )''')
+        now_ts = int(datetime.now(timezone.utc).timestamp())
+        c.execute("INSERT OR REPLACE INTO analysis_cache (cache_key, json_data, created_ts) VALUES (?, ?, ?)",
+                  (cache_key, json.dumps(data_dict), now_ts))
+        conn.commit()
+        conn.close()
+    except Exception:
+        pass
+
 
 DB_FILE = "star_intel_telemetry.db"
 ADMIN_KEY = os.getenv("ADMIN_KEY", "makhanu2026")
@@ -1387,20 +1425,38 @@ class StarIntelHandler(BaseHTTPRequestHandler):
                 clean_url = raw_url.replace("https://", "").replace("http://", "").split("/")[0] or "StealthStartup"
                 check_date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
 
-                if custom_desc:
-                    startup_home = f"USER PROVIDED PRODUCT BRIEF: {custom_desc}\nTARGET IDEAL CUSTOMER: {custom_icp}"
-                    startup_pricing = fetch_web_signal(f"{custom_desc} pricing competitors B2B SaaS")
-                    market_search = fetch_web_signal(f"top competitors and target B2B buyers for {custom_desc} {custom_icp}")
-                    mode_used = "STEALTH / CUSTOM BRIEFING MODE"
-                    pricing_page_fetched = False
-                else:
-                    startup_home = fetch_web_signal(clean_url)
-                    startup_pricing = fetch_web_signal(f"{clean_url} pricing products features competitors")
-                    market_search = fetch_web_signal(f"top competitors alternatives pricing and target B2B customers for {clean_url}")
-                    mode_used = "LIVE DOMAIN RECON"
-                    pricing_page_fetched = ("$" in startup_pricing or "pricing" in startup_pricing.lower() or "free" in startup_pricing.lower())
+                cache_key = f"{clean_url}|{custom_desc}|{custom_icp}".lower()
+                cached = get_cached_analysis(cache_key)
+                if cached and not qs.get("nocache"):
+                    log_scan_event(clean_url, user_email, "CACHED_INSTANT_RECON", ip_addr)
+                    self.send_json(cached, 200)
+                    return
 
-                contact_info = verify_domain_and_emails(clean_url) if "." in clean_url else {"dns_live": False, "emails": []}
+                with ThreadPoolExecutor(max_workers=4) as ex:
+                    if custom_desc:
+                        f_price = ex.submit(fetch_web_signal, f"{custom_desc} pricing competitors B2B SaaS")
+                        f_mkt = ex.submit(fetch_web_signal, f"top competitors and target B2B buyers for {custom_desc} {custom_icp}")
+                        f_dns = ex.submit(verify_domain_and_emails, clean_url) if "." in clean_url else None
+                        startup_home = f"USER PROVIDED PRODUCT BRIEF: {custom_desc}\nTARGET IDEAL CUSTOMER: {custom_icp}"
+                        startup_pricing = f_price.result()
+                        market_search = f_mkt.result()
+                        contact_info = f_dns.result() if f_dns else {"dns_live": False, "emails": []}
+                        mode_used = "STEALTH / CUSTOM BRIEFING MODE"
+                        pricing_page_fetched = False
+                    else:
+                        f_home = ex.submit(fetch_web_signal, clean_url)
+                        f_direct_price = ex.submit(fetch_web_signal, f"{clean_url}/pricing")
+                        f_price = ex.submit(fetch_web_signal, f"{clean_url} pricing tiers cost plans")
+                        f_mkt = ex.submit(fetch_web_signal, f"top competitors alternatives pricing and target B2B customers for {clean_url}")
+                        f_dns = ex.submit(verify_domain_and_emails, clean_url) if "." in clean_url else None
+
+                        startup_home = f_home.result()
+                        direct_pricing_raw = f_direct_price.result()
+                        startup_pricing = (direct_pricing_raw[:1600] + "\n" + f_price.result()[:1600]).strip()
+                        market_search = f_mkt.result()
+                        contact_info = f_dns.result() if f_dns else {"dns_live": False, "emails": []}
+                        mode_used = "PARALLEL LIVE RECON"
+                        pricing_page_fetched = any(tok in startup_pricing.lower() for tok in ["$", "€", "£", "/mo", "/month", "free tier", "enterprise"])
 
                 sys_p = f"""You are Star Intel's Autonomous Competitive Intelligence & Customer Hunter Engine.
 Analyze '{clean_url}' ({custom_desc or 'live domain'}) and return ONLY valid JSON with these exact keys:
@@ -1453,7 +1509,7 @@ Analyze '{clean_url}' ({custom_desc or 'live domain'}) and return ONLY valid JSO
                         p_strat["pricing_source"] = f"https://{clean_url}/pricing"
 
                 prospects = data.get("customer_prospects", [])
-                for p in prospects:
+                def _verify_prospect(p):
                     p["check_date"] = check_date
                     if p.get("customer_domain"):
                         chk = verify_domain_and_emails(p["customer_domain"])
@@ -1462,6 +1518,10 @@ Analyze '{clean_url}' ({custom_desc or 'live domain'}) and return ONLY valid JSO
                             p["target_email"] = chk["emails"][0]
                     else:
                         p["dns_status"] = "VALID"
+                    return p
+
+                with ThreadPoolExecutor(max_workers=4) as ex:
+                    list(ex.map(_verify_prospect, prospects))
 
                 log_scan_event(clean_url, user_email, mode_used, ip_addr)
                 data["domain"] = clean_url
@@ -1469,6 +1529,7 @@ Analyze '{clean_url}' ({custom_desc or 'live domain'}) and return ONLY valid JSO
                 data["mode_used"] = mode_used
                 data["dns_live"] = contact_info["dns_live"]
                 data["verified_emails"] = contact_info["emails"]
+                set_cached_analysis(cache_key, data)
                 self.send_json(data, 200)
             except Exception as e:
                 self.send_json({"error": str(e)}, 500)

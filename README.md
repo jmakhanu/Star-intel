@@ -1,20 +1,29 @@
-# ✦ Star Intel | Autonomous B2B Competitive Intelligence Engine
+# 🛰️ Star Intel — Autonomous Competitive Intelligence & AutoGTM Studio
 
-**Repository:** https://github.com/jmakhanu/Star-intel  
-**Live Web Portal:** https://jmakhanu.github.io/Star-intel/
+**Live Studio Web Portal:** [https://star-intel.onrender.com](https://star-intel.onrender.com)  
+**Instant Demo Runs:** [`easi.run`](https://star-intel.onrender.com/?run=easi.run) • [`signedreviews.com`](https://star-intel.onrender.com/?run=signedreviews.com) • [`linear.app`](https://star-intel.onrender.com/?run=linear.app)
 
-### 📄 View Live Sample Deliverables (Generated Automatically in 35 Seconds)
-* **[Aerospace & Defense Sample (Capella Space vs. ICEYE)](samples/Sample_Aerospace_Capella_vs_ICEYE.pdf)** — Full 5-section SAR satellite technical & commercial battlecard.
-* **[AgriTech & IoT Hardware Sample (Rethink Organic vs. Flybox UK)](samples/Sample_AgriTech_Rethink_vs_Flybox.pdf)** — Full 5-section decentralized BSF & sensor battlecard.
+Star Intel is an autonomous B2B Competitive Intelligence and Go-To-Market (AutoGTM) engine designed for early-stage SaaS founders and GTM engineers. Give it any company domain—or a 2-line Stealth Startup brief—and it executes a parallel multi-agent reconnaissance pipeline in under 20 seconds.
 
 ---
 
-Star Intel is an autonomous, multi-agent competitive intelligence pipeline built with **LangGraph** and **120B Cloud LLMs**. It infiltrates competitor documentation, pricing tiers, and technical specs, stress-tests findings through an adversarial Red Team loop, commits structured records to a local SQLite Data Moat, renders executive-ready PDF battlecards, and fires real-time Block Kit alerts into Slack.
+## ⚡ Core Capabilities & Provenance Architecture
 
-## Core Architecture
-1. **Dual-Context Ingestion:** Scrapes both the protected client's baseline capabilities and the target adversary's live pages.
-2. **Primary Analyst Node:** Extracts structured JSON pricing/vulnerability arrays alongside a comprehensive technical and commercial breakdown.
-3. **Adversarial Red Team Node:** Assumes the persona of the rival Chief Strategy Officer to critique weak assumptions and assign a 1–10 Threat Severity Score.
-4. **Lead Strategist Refinement Node:** Hardens the final dossier with field-ready sales trap questions and direct rebuttals.
-5. **Local SQLite Data Moat (vault/):** Tracks SHA-256 content hashes, vulnerability matrices, and historical Red Team critiques.
-6. **Automated Delivery (reports/ & Slack):** Generates timestamped, branded PDF dossiers and pushes instant threat summaries via Slack Webhooks.
+1. **Pricing Provenance & Audit Trails (`OBSERVED` vs. `UNVERIFIED`)**
+   - Directly probes live `/pricing` endpoints alongside public market indexes in parallel (`ThreadPoolExecutor`).
+   - Explicitly separates **`OBSERVED PRICE`** tiers from **`UNVERIFIED (INFERRED)`** positioning when rival pricing is gated behind enterprise sales calls.
+   - Retains the exact attempted `https://.../pricing` source URL and UTC `check_date` across both the Studio UI and exported `.CSV` battlecards.
+
+2. **4-Competitor Arbitrage & Displacement Matrix**
+   - Maps rival pricing tiers, core product strengths, exploitable technical gaps, and actionable sales displacement wedges.
+
+3. **DNS/MX-Verified B2B Buyer Hunter & Live Gmail Dispatch**
+   - Identifies 4 high-intent B2B target accounts anchored to real buying triggers.
+   - Verifies live domain DNS/MX records in parallel and drafts 3-paragraph founder-to-founder outbound emails (editable directly in the browser with 1-click **Gmail Web Draft** dispatch).
+
+---
+
+## 🛠️ Technical Stack
+- **Backend:** Zero-dependency concurrent Python (`ThreadingHTTPServer` + `ThreadPoolExecutor` parallel recon + SQLite telemetry & caching)
+- **Frontend:** Executive Studio Light UI (Vanilla ES6 + CSS Grid, zero-bundle latency)
+- **Deployment:** Render Cloud (`render.yaml`)
