@@ -133,7 +133,6 @@
   }
   .user-pill:hover { border-color: var(--obsidian); }
 
-  /* SPLIT HERO LAYOUT */
   .hero-split {
     max-width: 1220px;
     margin: 36px auto 32px;
@@ -320,7 +319,7 @@
     background: var(--surface-subtle);
     border: 1px solid var(--border-strong);
     color: var(--obsidian);
-    padding: 4px 11px;
+    padding: 5px 12px;
     border-radius: 6px;
     cursor: pointer;
     font-family: 'JetBrains Mono', monospace;
@@ -334,7 +333,6 @@
     color: #fff;
   }
 
-  /* RIGHT COLUMN: INTERACTIVE STUDIO PREVIEW WINDOW */
   .studio-preview-window {
     background: var(--surface);
     border: 1px solid var(--border-strong);
@@ -799,7 +797,8 @@
           <span class="mono" style="font-size:11px;color:var(--emerald);font-weight:700;">● Parallel DNS + Pricing Recon</span>
         </div>
 
-        <form id="scanForm" onsubmit="return runAnalysis(event);">
+        <!-- NO <form> TAG HERE: Prevents native browser reload from ever wiping input -->
+        <div id="scanBox">
           <div id="stealthInputs" class="stealth-grid">
             <div class="stealth-field">
               <label>What do you build or sell?</label>
@@ -816,11 +815,11 @@
               <svg width="17" height="17" fill="none" stroke="#111827" stroke-width="2" viewBox="0 0 24 24">
                 <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
               </svg>
-              <input type="text" id="urlInput" placeholder="Enter startup domain (e.g., easi.run, signedreviews.com, linear.app)" required />
+              <input type="text" id="urlInput" placeholder="Enter startup domain (e.g., easi.run, signedreviews.com, linear.app)" onkeydown="if(event.key==='Enter'){event.preventDefault();runAnalysis();}" />
             </div>
-            <button type="submit" class="cmd-btn" id="runBtn">Launch Teardown →</button>
+            <button type="button" class="cmd-btn" id="runBtn" onclick="runAnalysis()">Launch Teardown →</button>
           </div>
-        </form>
+        </div>
 
         <div class="quick-bar">
           <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
@@ -949,14 +948,14 @@
 
       <div id="authErrorBox" style="display:none;background:var(--rose-bg);border:1px solid #FECDD3;color:var(--rose);padding:8px 12px;border-radius:8px;font-size:12.5px;font-weight:600;margin-bottom:12px;"></div>
 
-      <form onsubmit="return submitAuthModal(event);">
+      <div>
         <input type="hidden" id="authModeField" value="signup" />
 
         <label style="font-size:11px;font-weight:700;color:var(--text-secondary);text-transform:uppercase;">Work / Founder Email *</label>
-        <input type="email" id="authEmailInput" class="auth-input" placeholder="founder@yourstartup.com" required />
+        <input type="email" id="authEmailInput" class="auth-input" placeholder="founder@yourstartup.com" />
 
         <label style="font-size:11px;font-weight:700;color:var(--text-secondary);text-transform:uppercase;">Password *</label>
-        <input type="password" id="authPasswordInput" class="auth-input" placeholder="Minimum 6 characters" minlength="6" required />
+        <input type="password" id="authPasswordInput" class="auth-input" placeholder="Minimum 6 characters" />
 
         <div id="signupDomainWrap">
           <label style="font-size:11px;font-weight:700;color:var(--text-secondary);text-transform:uppercase;">Your Startup Domain *</label>
@@ -965,9 +964,9 @@
 
         <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:8px;">
           <button type="button" class="btn-mailto" onclick="closeAuthModal()">Cancel</button>
-          <button type="submit" id="authSubmitBtn" class="cmd-btn" style="padding:10px 18px;">Create Account &amp; Continue →</button>
+          <button type="button" id="authSubmitBtn" class="cmd-btn" style="padding:10px 18px;" onclick="submitAuthModal()">Create Account &amp; Continue →</button>
         </div>
-      </form>
+      </div>
     </div>
   </div>
 
@@ -1073,8 +1072,7 @@ function startCheckout() {
   window.open(PAYPAL_URL, "_blank", "noopener");
 }
 
-async function submitAuthModal(e) {
-  if (e && e.preventDefault) e.preventDefault();
+async function submitAuthModal() {
   var mode = document.getElementById("authModeField").value;
   var email = document.getElementById("authEmailInput").value.trim();
   var password = document.getElementById("authPasswordInput").value;
@@ -1082,7 +1080,11 @@ async function submitAuthModal(e) {
   var errBox = document.getElementById("authErrorBox");
   var submitBtn = document.getElementById("authSubmitBtn");
 
-  if (!email || !password) return false;
+  if (!email || !password) {
+    errBox.innerText = "Please enter both your email and password.";
+    errBox.style.display = "block";
+    return;
+  }
   errBox.style.display = "none";
   submitBtn.disabled = true;
 
@@ -1094,7 +1096,7 @@ async function submitAuthModal(e) {
       errBox.innerText = res.error || "Authentication failed. Please check your credentials.";
       errBox.style.display = "block";
       submitBtn.disabled = false;
-      return false;
+      return;
     }
     try {
       window.localStorage.setItem("star_intel_email", res.email || email);
@@ -1117,7 +1119,6 @@ async function submitAuthModal(e) {
   } finally {
     submitBtn.disabled = false;
   }
-  return false;
 }
 
 function setMode(mode) {
@@ -1138,8 +1139,10 @@ function setMode(mode) {
 function fillAndRun(domain) {
   setMode("url");
   var inp = document.getElementById("urlInput");
-  inp.value = domain;
-  runAnalysis(null);
+  if (inp) {
+    inp.value = domain;
+  }
+  runAnalysis();
 }
 
 function switchWsTab(tabId, btnEl) {
@@ -1216,8 +1219,7 @@ function openFounderPilotEmail() {
   window.open(gmailUrl, "_blank", "noopener");
 }
 
-async function runAnalysis(e) {
-  if (e && e.preventDefault) e.preventDefault();
+async function runAnalysis() {
   var url = document.getElementById("urlInput").value.trim();
   var desc = document.getElementById("descInput").value.trim();
   var icp = document.getElementById("icpInput").value.trim();
@@ -1226,7 +1228,7 @@ async function runAnalysis(e) {
 
   if (!url && !desc) {
     alert("Please enter a startup domain (e.g., easi.run) or a stealth description.");
-    return false;
+    return;
   }
 
   btn.disabled = true;
@@ -1259,7 +1261,6 @@ async function runAnalysis(e) {
     btn.disabled = false;
     btn.innerText = "Launch Teardown →";
   }
-  return false;
 }
 
 function downloadCSV() {
