@@ -1227,7 +1227,7 @@ function renderDashboard(d) {
         <br>
         <span class="${badgeClass} mono">${badgeLabel}</span>
         <div class="prov-meta mono">
-          Source: ${escapeHtml(c.pricing_source || 'Public Web / Inferred')}<br>
+          URL: <a href="${escapeHtml(c.pricing_source)}" target="_blank" rel="noopener" style="color:var(--obsidian);text-decoration:underline;">${escapeHtml(c.pricing_source)}</a><br>
           Checked: ${escapeHtml(c.check_date || d.check_date || '')}
         </div>
       </td>
@@ -1409,7 +1409,7 @@ Analyze '{clean_url}' ({custom_desc or 'live domain'}) and return ONLY valid JSO
 3. "pricing_and_packaging_strategy": object with keys:
    - "current_or_inferred_model": Pricing tiers if directly observed in context, or clearly labeled inferred positioning if not fetched.
    - "pricing_verification_status": MUST be "observed" if explicit price numbers appear in the scraped signal, or "unverified (inferred)" if the pricing page could not be fetched or hides pricing.
-   - "pricing_source": Specific URL or source (e.g. "https://{clean_url}/pricing (Live Fetch)" or "unverified — inferred from market category").
+   - "pricing_source": MUST always include the exact attempted or source URL starting with https:// (e.g. "https://{clean_url}/pricing").
    - "market_pricing_benchmark": Market average price in this category.
    - "recommended_pricing_wedge": Concrete pricing wedge to win deals.
 4. "competitor_matrix": list of 4 real competitors with keys:
@@ -1417,7 +1417,7 @@ Analyze '{clean_url}' ({custom_desc or 'live domain'}) and return ONLY valid JSO
    - "competitor_domain"
    - "pricing_model_and_cost": Price tiers (if unknown/gated, prefix with "[Unverified / Inferred] ")
    - "verification_status": MUST be "observed" if public pricing is explicitly known/verified, or "unverified" if pricing is gated, contact-sales, or inferred.
-   - "pricing_source": Exact source (e.g. "https://competitor.com/pricing" or "Inferred / Public G2 & Docs Signal")
+   - "pricing_source": MUST be the exact source or attempted pricing-page URL starting with https:// (e.g. "https://competitor.com/pricing"). Never output only text without a URL.
    - "core_product_strength"
    - "exploitable_product_gap"
    - "sales_displacement_wedge"
@@ -1439,9 +1439,18 @@ Analyze '{clean_url}' ({custom_desc or 'live domain'}) and return ONLY valid JSO
                     c["check_date"] = check_date
                     if not c.get("verification_status"):
                         c["verification_status"] = "observed" if "$" in str(c.get("pricing_model_and_cost", "")) else "unverified"
-                    if not c.get("pricing_source"):
-                        dom = c.get("competitor_domain", "competitor")
-                        c["pricing_source"] = f"https://{dom}/pricing" if c["verification_status"] == "observed" else f"unverified (inferred positioning — {dom})"
+                    dom = str(c.get("competitor_domain", "competitor.com")).replace("https://", "").replace("http://", "").split("/")[0].strip()
+                    raw_src = str(c.get("pricing_source", "")).strip()
+                    if not raw_src.startswith("http"):
+                        c["pricing_source"] = f"https://{dom}/pricing"
+                    else:
+                        c["pricing_source"] = raw_src.split(" ")[0].strip()
+
+                p_strat = data.get("pricing_and_packaging_strategy", {})
+                if isinstance(p_strat, dict):
+                    raw_psrc = str(p_strat.get("pricing_source", "")).strip()
+                    if not raw_psrc.startswith("http"):
+                        p_strat["pricing_source"] = f"https://{clean_url}/pricing"
 
                 prospects = data.get("customer_prospects", [])
                 for p in prospects:
