@@ -587,6 +587,7 @@ LANDING_HTML = """<!DOCTYPE html>
         <div>
           <span>Instant demo presets:</span>
           <button type="button" class="pill-btn" onclick="fillAndRun('easi.run')">easi.run</button>
+          <button type="button" class="pill-btn" onclick="fillAndRun('signedreviews.com')">signedreviews.com</button>
           <button type="button" class="pill-btn" onclick="fillAndRun('mintlify.com')">mintlify.com</button>
           <button type="button" class="pill-btn" onclick="fillAndRun('linear.app')">linear.app</button>
           <button type="button" class="pill-btn" onclick="fillAndRun('resend.com')">resend.com</button>
