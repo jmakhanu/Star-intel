@@ -230,102 +230,89 @@ LANDING_HTML = """<!DOCTYPE html>
   }
 
   /* STEPPER RIBBON */
-  .stepper-ribbon {
+  /* EXPLEE-STYLE ASYMMETRIC SPLIT HERO */
+  .hero-split {
+    max-width: 1220px;
+    margin: 36px auto 32px;
+    padding: 0 24px;
+    display: grid;
+    grid-template-columns: 1.12fr 0.88fr;
+    gap: 36px;
+    align-items: center;
+  }
+  @media (max-width: 980px) {
+    .hero-split { grid-template-columns: 1fr; gap: 28px; }
+  }
+  .hero-left {
+    text-align: left;
+  }
+  .eyebrow-badge {
     display: inline-flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     background: var(--surface);
-    border: 1px solid var(--border);
-    padding: 6px 14px;
-    border-radius: 99px;
-    box-shadow: var(--shadow-sm);
-    margin-bottom: 20px;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-  .step-dot {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--text-secondary);
-  }
-  .step-dot span {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background: var(--obsidian);
-    color: #fff;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 11px;
-    font-weight: 700;
-  }
-  .step-line { width: 18px; height: 1px; background: var(--border-strong); }
-  .step-ready {
-    background: var(--emerald-bg);
-    border: 1px solid var(--emerald-border);
-    color: var(--emerald);
-    padding: 3px 10px;
+    border: 1px solid var(--border-strong);
+    padding: 5px 12px;
     border-radius: 99px;
     font-size: 11.5px;
     font-weight: 700;
+    color: var(--obsidian);
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 18px;
   }
-
-  /* HERO CENTER */
-  .hero-center {
-    max-width: 880px;
-    margin: 42px auto 30px;
-    padding: 0 24px;
-    text-align: center;
+  .eyebrow-badge span.tag {
+    background: var(--emerald-bg);
+    color: var(--emerald);
+    border: 1px solid var(--emerald-border);
+    padding: 2px 8px;
+    border-radius: 99px;
+    font-size: 10.5px;
   }
   h1 {
-    font-size: 46px;
+    font-size: 44px;
     font-weight: 800;
-    line-height: 1.1;
+    line-height: 1.08;
     margin: 0 0 16px;
-    letter-spacing: -0.03em;
+    letter-spacing: -0.035em;
     color: var(--obsidian);
   }
-  h1 span {
-    color: var(--emerald);
-    text-decoration: underline;
-    text-decoration-color: rgba(5, 150, 105, 0.28);
-    text-underline-offset: 6px;
+  .grad-accent {
+    background: linear-gradient(135deg, #059669 0%, #0D9488 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
   .hero-sub {
     color: var(--text-secondary);
-    font-size: 16.5px;
-    max-width: 660px;
-    margin: 0 auto 28px;
+    font-size: 15.5px;
+    max-width: 580px;
+    margin: 0 0 22px;
     font-weight: 400;
+    line-height: 1.6;
   }
 
-  /* COMMAND CONSOLE CARD */
+  /* COMMAND CONSOLE CARD (LEFT-ALIGNED) */
   .console-shell {
     background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 18px;
-    padding: 20px;
+    border: 1px solid var(--border-strong);
+    border-radius: 16px;
+    padding: 18px;
     box-shadow: var(--shadow-lg);
     text-align: left;
+    position: relative;
   }
   .mode-tabs {
     display: flex;
     gap: 8px;
-    margin-bottom: 14px;
-    border-bottom: 1px solid var(--border);
-    padding-bottom: 12px;
+    margin-bottom: 12px;
     justify-content: space-between;
+    align-items: center;
     flex-wrap: wrap;
   }
   .mode-tab-group {
     display: inline-flex;
     background: var(--surface-subtle);
-    padding: 4px;
-    border-radius: 99px;
+    padding: 3px;
+    border-radius: 10px;
     border: 1px solid var(--border);
     gap: 4px;
   }
@@ -333,10 +320,10 @@ LANDING_HTML = """<!DOCTYPE html>
     background: transparent;
     border: none;
     color: var(--text-secondary);
-    padding: 6px 14px;
-    border-radius: 99px;
-    font-size: 12.5px;
-    font-weight: 600;
+    padding: 6px 13px;
+    border-radius: 7px;
+    font-size: 12px;
+    font-weight: 700;
     cursor: pointer;
     transition: all 0.15s;
   }
@@ -347,11 +334,11 @@ LANDING_HTML = """<!DOCTYPE html>
   }
   .cmd-row {
     display: flex;
-    gap: 10px;
+    gap: 8px;
     background: var(--bg);
     border: 1.5px solid var(--border-strong);
-    padding: 7px;
-    border-radius: 12px;
+    padding: 6px;
+    border-radius: 11px;
     transition: border-color 0.15s, box-shadow 0.15s;
   }
   .cmd-row:focus-within {
@@ -364,15 +351,15 @@ LANDING_HTML = """<!DOCTYPE html>
     display: flex;
     align-items: center;
     flex: 1;
-    padding-left: 12px;
-    gap: 10px;
+    padding-left: 10px;
+    gap: 8px;
   }
   .cmd-row input, .stealth-grid input {
     width: 100%;
     background: transparent;
     border: none;
     color: var(--obsidian);
-    font-size: 15px;
+    font-size: 14.5px;
     outline: none;
     font-family: 'JetBrains Mono', monospace;
     font-weight: 500;
@@ -380,65 +367,66 @@ LANDING_HTML = """<!DOCTYPE html>
   .stealth-grid {
     display: none;
     grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    margin-bottom: 12px;
+    gap: 10px;
+    margin-bottom: 10px;
   }
   @media (max-width: 680px) { .stealth-grid { grid-template-columns: 1fr; } }
   .stealth-field {
     background: var(--bg);
     border: 1px solid var(--border-strong);
-    padding: 10px 14px;
-    border-radius: 10px;
+    padding: 9px 12px;
+    border-radius: 9px;
   }
   .stealth-field label {
     display: block;
-    font-size: 11px;
+    font-size: 10.5px;
     color: var(--text-secondary);
     text-transform: uppercase;
     letter-spacing: 0.6px;
-    margin-bottom: 4px;
+    margin-bottom: 3px;
     font-weight: 700;
   }
   .cmd-btn {
-    background: var(--emerald);
+    background: var(--obsidian);
     color: #FFFFFF;
     border: none;
-    padding: 13px 24px;
-    border-radius: 9px;
+    padding: 12px 20px;
+    border-radius: 8px;
     font-weight: 700;
-    font-size: 14px;
+    font-size: 13.5px;
     cursor: pointer;
     white-space: nowrap;
-    transition: background 0.15s, transform 0.1s;
-    box-shadow: 0 2px 6px rgba(5, 150, 105, 0.25);
+    transition: all 0.15s;
     text-decoration: none;
     display: inline-flex;
     align-items: center;
     gap: 6px;
   }
-  .cmd-btn:hover { background: #047857; transform: translateY(-1px); }
-  .cmd-btn:disabled { background: #9CA3AF; color: #F3F4F6; cursor: wait; box-shadow: none; }
+  .cmd-btn:hover { background: var(--emerald); transform: translateY(-1px); }
+  .cmd-btn:disabled { background: #9CA3AF; color: #F3F4F6; cursor: wait; }
 
   .quick-bar {
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 14px;
-    font-size: 12px;
+    gap: 8px;
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--border);
+    font-size: 11.5px;
     color: var(--muted);
   }
   .pill-btn {
-    background: var(--surface);
-    border: 1px solid var(--border-strong);
+    background: var(--surface-subtle);
+    border: 1px solid var(--border);
     color: var(--obsidian);
-    padding: 4px 11px;
-    border-radius: 99px;
+    padding: 3px 10px;
+    border-radius: 6px;
     cursor: pointer;
     font-family: 'JetBrains Mono', monospace;
-    font-size: 11.5px;
-    font-weight: 500;
+    font-size: 11px;
+    font-weight: 600;
     transition: all 0.15s;
   }
   .pill-btn:hover {
@@ -447,10 +435,65 @@ LANDING_HTML = """<!DOCTYPE html>
     color: #fff;
   }
 
-  /* 3-PILLAR PIPELINE CARDS */
+  /* RIGHT COLUMN: INTERACTIVE STUDIO PREVIEW WINDOW */
+  .studio-preview-window {
+    background: var(--surface);
+    border: 1px solid var(--border-strong);
+    border-radius: 16px;
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+    text-align: left;
+  }
+  .window-bar {
+    background: var(--surface-subtle);
+    border-bottom: 1px solid var(--border);
+    padding: 10px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .win-dots {
+    display: flex;
+    gap: 6px;
+  }
+  .win-dots span {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--border-strong);
+  }
+  .win-dots span:nth-child(1) { background: #FDA4AF; }
+  .win-dots span:nth-child(2) { background: #FCD34D; }
+  .win-dots span:nth-child(3) { background: #6EE7B7; }
+  .window-body {
+    padding: 18px;
+    background: linear-gradient(180deg, #FFFFFF 0%, #F9FAFB 100%);
+  }
+  .preview-row {
+    background: #FFFFFF;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    box-shadow: var(--shadow-sm);
+  }
+  .preview-lead-box {
+    background: #FFFFFF;
+    border: 1.5px solid var(--obsidian);
+    border-radius: 12px;
+    padding: 14px;
+    margin-top: 12px;
+    box-shadow: var(--shadow-sm);
+  }
+
+  /* COMPACT 3-PILLAR FEATURE BAR */
   .pipeline-strip {
-    max-width: 1160px;
-    margin: 26px auto 40px;
+    max-width: 1220px;
+    margin: 12px auto 36px;
     padding: 0 24px;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -460,38 +503,42 @@ LANDING_HTML = """<!DOCTYPE html>
   .pipe-card {
     background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 20px;
+    border-radius: 12px;
+    padding: 16px 18px;
     box-shadow: var(--shadow-sm);
     transition: all 0.2s;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
   }
   .pipe-card.active-step {
     border-color: var(--emerald);
     box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.15);
   }
-  .pipe-num {
-    display: inline-block;
-    font-size: 11px;
-    color: var(--emerald);
-    background: var(--emerald-bg);
-    border: 1px solid var(--emerald-border);
-    padding: 2px 8px;
-    border-radius: 6px;
+  .pipe-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    background: var(--obsidian);
+    color: #fff;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
     font-weight: 700;
-    letter-spacing: 0.8px;
-    text-transform: uppercase;
-    margin-bottom: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
   }
-  .pipe-card h3 { margin: 0 0 6px; font-size: 16px; color: var(--obsidian); }
-  .pipe-card p { margin: 0; font-size: 13.5px; color: var(--text-secondary); }
+  .pipe-card h3 { margin: 0 0 4px; font-size: 14.5px; color: var(--obsidian); }
+  .pipe-card p { margin: 0; font-size: 12.5px; color: var(--text-secondary); line-height: 1.45; }
 
-  /* WORKSPACE RESULTS & PILL SWITCHER */
-  #results { max-width: 1200px; margin: 20px auto 70px; padding: 0 24px; display: none; }
+  #results { max-width: 1220px; margin: 20px auto 70px; padding: 0 24px; display: none; }
   .res-banner {
     background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 22px 26px;
+    border-left: 4px solid var(--obsidian);
+    border-radius: 14px;
+    padding: 20px 24px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -504,20 +551,20 @@ LANDING_HTML = """<!DOCTYPE html>
     display: inline-flex;
     background: var(--surface-subtle);
     border: 1px solid var(--border);
-    padding: 5px;
-    border-radius: 99px;
-    gap: 6px;
-    margin-bottom: 22px;
+    padding: 4px;
+    border-radius: 10px;
+    gap: 4px;
+    margin-bottom: 20px;
     flex-wrap: wrap;
   }
   .ws-tab {
     background: transparent;
     border: none;
     color: var(--text-secondary);
-    padding: 8px 18px;
-    border-radius: 99px;
+    padding: 8px 16px;
+    border-radius: 7px;
     font-weight: 700;
-    font-size: 13px;
+    font-size: 12.5px;
     cursor: pointer;
     transition: all 0.15s;
   }
@@ -549,10 +596,9 @@ LANDING_HTML = """<!DOCTYPE html>
   .avatar-circle {
     width: 36px;
     height: 36px;
-    border-radius: 50%;
-    background: var(--surface-subtle);
-    border: 1px solid var(--border-strong);
-    color: var(--obsidian);
+    border-radius: 9px;
+    background: var(--obsidian);
+    color: #FFFFFF;
     font-weight: 700;
     font-size: 13px;
     display: inline-flex;
@@ -603,7 +649,6 @@ LANDING_HTML = """<!DOCTYPE html>
     box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.12);
   }
 
-  /* TABLE STYLING */
   .table-wrap {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -637,7 +682,6 @@ LANDING_HTML = """<!DOCTYPE html>
   .gap { color: var(--rose); font-weight: 500; }
   .wedge { color: var(--emerald); font-weight: 600; }
 
-  /* PROVENANCE & VERIFICATION BADGES */
   .badge-observed {
     display: inline-block;
     font-size: 10.5px;
@@ -691,21 +735,6 @@ LANDING_HTML = """<!DOCTYPE html>
     transition: background 0.15s, transform 0.1s;
   }
   .btn-gmail:hover { background: #047857; transform: translateY(-1px); }
-  .btn-copy {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: var(--obsidian);
-    color: #FFFFFF;
-    border: 1px solid var(--obsidian);
-    padding: 8px 13px;
-    border-radius: 8px;
-    font-weight: 600;
-    font-size: 12px;
-    cursor: pointer;
-    transition: all 0.15s;
-  }
-  .btn-copy:hover { background: var(--obsidian-hover); }
   .btn-mailto {
     display: inline-flex;
     align-items: center;
@@ -768,7 +797,7 @@ LANDING_HTML = """<!DOCTYPE html>
     padding: 3px 10px;
     border-radius: 99px;
   }
-  .pilot-wrap { max-width: 1160px; margin: 40px auto; padding: 0 24px; }
+  .pilot-wrap { max-width: 1220px; margin: 40px auto; padding: 0 24px; }
   .pilot-card {
     background: var(--surface);
     border: 1.5px solid var(--obsidian);
@@ -787,16 +816,6 @@ LANDING_HTML = """<!DOCTYPE html>
     font-weight: 500;
     margin-right: 4px;
   }
-  .footer {
-    border-top: 1px solid var(--border);
-    background: var(--surface);
-    padding: 28px 24px;
-    text-align: center;
-    color: var(--muted);
-    font-size: 13px;
-  }
-  .footer a { color: var(--obsidian); font-weight: 600; text-decoration: none; }
-  .footer a:hover { color: var(--emerald); }
   .auth-modal-backdrop {
     display: none;
     position: fixed;
@@ -829,18 +848,16 @@ LANDING_HTML = """<!DOCTYPE html>
     outline: none;
   }
   .auth-input:focus { border-color: var(--obsidian); }
-  .user-pill {
-    background: var(--surface-subtle);
-    border: 1px solid var(--border-strong);
-    color: var(--obsidian);
-    padding: 7px 13px;
-    border-radius: 99px;
-    font-size: 12.5px;
-    font-weight: 600;
-    cursor: pointer;
+  .footer {
+    border-top: 1px solid var(--border);
+    background: var(--surface);
+    padding: 28px 24px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
   }
-  .user-pill:hover { border-color: var(--obsidian); }
-
+  .footer a { color: var(--obsidian); font-weight: 600; text-decoration: none; }
+  .footer a:hover { color: var(--emerald); }
 </style>
 </head>
 <body>
@@ -867,82 +884,135 @@ LANDING_HTML = """<!DOCTYPE html>
     </nav>
   </div>
 
-  <section class="hero-center">
-    <div class="stepper-ribbon">
-      <div class="step-dot"><span>1</span> Map Market & Prices</div>
-      <div class="step-line"></div>
-      <div class="step-dot"><span>2</span> Expose Rival Gaps</div>
-      <div class="step-line"></div>
-      <div class="step-dot"><span>3</span> Verify Buyers</div>
-      <div class="step-line"></div>
-      <div class="step-ready">● Outreach Ready</div>
-    </div>
-
-    <h1>Your AI Go-To-Market &<br><span>Competitive Teardown</span> Studio.</h1>
-    <p class="hero-sub">
-      Enter your company website — or switch to <strong>Stealth Startup Mode</strong>. Star Intel separates <strong>observed prices</strong> from <strong>unverified (inferred) positioning</strong> with source + check-date audit trails and ready-to-send buyer emails.
-    </p>
-
-    <div class="console-shell">
-      <div class="mode-tabs">
-        <div class="mode-tab-group">
-          <button type="button" class="mode-btn active" id="tabUrlBtn" onclick="setMode('url')">🌐 Company Website</button>
-          <button type="button" class="mode-btn" id="tabIdeaBtn" onclick="setMode('idea')">🧠 No Website / Stealth Mode</button>
-        </div>
-        <span class="mono" style="font-size:11.5px;color:var(--emerald);font-weight:600;align-self:center;">✓ Observed vs. Unverified Provenance Tagging</span>
+  <!-- ASYMMETRIC SPLIT HERO: LEFT COMMAND + RIGHT LIVE STUDIO PREVIEW -->
+  <section class="hero-split">
+    <div class="hero-left">
+      <div class="eyebrow-badge">
+        <span class="tag mono">AUTOGTM v4.2</span>
+        <span>Map Market Pricing • Expose Rival Gaps • Draft Buyer Emails</span>
       </div>
 
-      <form onsubmit="runAnalysis(event)">
-        <div id="stealthInputs" class="stealth-grid">
-          <div class="stealth-field">
-            <label>What do you build or sell?</label>
-            <input type="text" id="descInput" placeholder="e.g., AI stroke diagnostic helmet for ambulances" />
+      <h1>Autonomous GTM &<br><span class="grad-accent">Competitive Teardown</span> Studio.</h1>
+      <p class="hero-sub">
+        Enter any startup domain — or switch to <strong>Stealth Mode</strong>. Star Intel probes live <code>/pricing</code> endpoints in parallel, separates <strong>observed prices</strong> from <strong>inferred positioning</strong>, and drafts ready-to-send B2B buyer emails.
+      </p>
+
+      <div class="console-shell">
+        <div class="mode-tabs">
+          <div class="mode-tab-group">
+            <button type="button" class="mode-btn active" id="tabUrlBtn" onclick="setMode('url')">🌐 Company Domain</button>
+            <button type="button" class="mode-btn" id="tabIdeaBtn" onclick="setMode('idea')">🧠 Stealth Startup Brief</button>
           </div>
-          <div class="stealth-field">
-            <label>Who is your ideal B2B customer?</label>
-            <input type="text" id="icpInput" placeholder="e.g., Hospital Directors & Emergency Care Networks" />
+          <span class="mono" style="font-size:11px;color:var(--emerald);font-weight:700;">● Parallel DNS + Pricing Recon</span>
+        </div>
+
+        <form onsubmit="runAnalysis(event)">
+          <div id="stealthInputs" class="stealth-grid">
+            <div class="stealth-field">
+              <label>What do you build or sell?</label>
+              <input type="text" id="descInput" placeholder="e.g., AI stroke diagnostic helmet for ambulances" />
+            </div>
+            <div class="stealth-field">
+              <label>Who is your ideal B2B customer?</label>
+              <input type="text" id="icpInput" placeholder="e.g., Hospital Directors & Emergency Care Networks" />
+            </div>
+          </div>
+
+          <div class="cmd-row">
+            <div class="cmd-input-wrap">
+              <svg width="17" height="17" fill="none" stroke="#111827" stroke-width="2" viewBox="0 0 24 24">
+                <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+              </svg>
+              <input type="text" id="urlInput" placeholder="Enter startup domain (e.g., easi.run, signedreviews.com, linear.app)" required />
+            </div>
+            <button type="submit" class="cmd-btn" id="runBtn">Launch Teardown →</button>
+          </div>
+        </form>
+
+        <div class="quick-bar">
+          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+            <span style="font-weight:700;color:var(--obsidian);">Try instant run:</span>
+            <button type="button" class="pill-btn" onclick="fillAndRun('easi.run')">easi.run ↗</button>
+            <button type="button" class="pill-btn" onclick="fillAndRun('signedreviews.com')">signedreviews.com ↗</button>
+            <button type="button" class="pill-btn" onclick="fillAndRun('mintlify.com')">mintlify.com ↗</button>
+            <button type="button" class="pill-btn" onclick="fillAndRun('linear.app')">linear.app ↗</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT SIDE: EXPLEE-INSPIRED LIVE WORKSPACE PREVIEW WINDOW -->
+    <div class="studio-preview-window">
+      <div class="window-bar">
+        <div class="win-dots"><span></span><span></span><span></span></div>
+        <span class="mono" style="font-size:11px;color:var(--text-secondary);font-weight:600;">studio://battlecard-and-leads.csv</span>
+        <span class="benefit-tag mono" style="font-size:10px;padding:2px 8px;">✓ LIVE SCHEMA</span>
+      </div>
+      <div class="window-body">
+        <div class="section-title mono" style="margin-bottom:8px;">1. COMPETITOR PROVENANCE MATRIX (SAMPLE)</div>
+
+        <div class="preview-row">
+          <div>
+            <strong style="font-size:13px;color:var(--obsidian);">Browserbase</strong>
+            <span class="mono" style="font-size:11px;color:var(--muted);display:block;">https://browserbase.com/pricing</span>
+          </div>
+          <div style="text-align:right;">
+            <span class="mono" style="font-size:12px;font-weight:700;color:var(--obsidian);">$20–$99/mo</span><br>
+            <span class="badge-observed mono" style="margin-top:2px;">✓ OBSERVED PRICE</span>
           </div>
         </div>
 
-        <div class="cmd-row">
-          <div class="cmd-input-wrap">
-            <svg width="18" height="18" fill="none" stroke="#111827" stroke-width="2" viewBox="0 0 24 24">
-              <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
-            </svg>
-            <input type="text" id="urlInput" placeholder="Enter your company website (e.g., easi.run, signedreviews.com, linear.app)" required />
+        <div class="preview-row">
+          <div>
+            <strong style="font-size:13px;color:var(--obsidian);">Enterprise Rival</strong>
+            <span class="mono" style="font-size:11px;color:var(--muted);display:block;">https://rival.io/pricing</span>
           </div>
-          <button type="submit" class="cmd-btn" id="runBtn">Create My GTM Project →</button>
+          <div style="text-align:right;">
+            <span class="mono" style="font-size:11.5px;font-weight:600;color:var(--text-secondary);">Gated / Custom</span><br>
+            <span class="badge-unverified mono" style="margin-top:2px;">⚠ UNVERIFIED (INFERRED)</span>
+          </div>
         </div>
-      </form>
 
-      <div class="quick-bar">
-        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
-          <span style="font-weight:600;color:var(--text-secondary);">Live presets:</span>
-          <button type="button" class="pill-btn" onclick="fillAndRun('easi.run')">easi.run ↗</button>
-          <button type="button" class="pill-btn" onclick="fillAndRun('signedreviews.com')">signedreviews.com ↗</button>
-          <button type="button" class="pill-btn" onclick="fillAndRun('mintlify.com')">mintlify.com ↗</button>
-          <button type="button" class="pill-btn" onclick="fillAndRun('linear.app')">linear.app ↗</button>
+        <div class="preview-lead-box">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <span class="avatar-circle" style="width:28px;height:28px;font-size:11px;">VR</span>
+              <div>
+                <strong style="font-size:12.5px;color:var(--obsidian);">VP of Engineering · Verified B2B Buyer</strong>
+                <div class="mono" style="font-size:10.5px;color:var(--emerald);">● VALID MX/DNS • Trigger-Matched</div>
+              </div>
+            </div>
+            <span class="mono" style="font-size:10.5px;background:var(--emerald-bg);color:var(--emerald);padding:3px 8px;border-radius:6px;font-weight:700;">✉️ Draft in Gmail ↗</span>
+          </div>
+          <div class="mono" style="font-size:11px;color:var(--text-secondary);background:var(--bg);padding:8px 10px;border-radius:7px;border:1px solid var(--border);">
+            "Saw your team scaling headless QA workflows — here is how you can cut session costs by 40% without gated enterprise contracts..."
+          </div>
         </div>
-        <span class="mono" style="color:var(--muted);">CSV includes: verification_status, pricing_source, check_date</span>
       </div>
     </div>
   </section>
 
   <section class="pipeline-strip">
     <div class="pipe-card" id="stepCard1">
-      <div class="pipe-num mono">STEP 01 // PROVENANCE RECON</div>
-      <h3>Observed vs. Inferred Pricing</h3>
-      <p>Scrapes live pricing pages and flags whether each price is directly observed or `unverified` (inferred) with source & check date.</p>
+      <span class="pipe-icon">01</span>
+      <div>
+        <h3>Observed vs. Inferred Pricing</h3>
+        <p>Directly probes <code>/pricing</code> URLs and stamps every row with verification status, source link & UTC check date.</p>
+      </div>
     </div>
     <div class="pipe-card" id="stepCard2">
-      <div class="pipe-num mono">STEP 02 // COMPETITOR ARBITRAGE</div>
-      <h3>Expose Rival Product Gaps</h3>
-      <p>Builds a 4-competitor battlecard matrix showing exact pricing wedges and technical weaknesses you can exploit on sales calls.</p>
+      <span class="pipe-icon">02</span>
+      <div>
+        <h3>4-Rival Displacement Matrix</h3>
+        <p>Exposes technical gaps and exact sales wedges so your outbound pitches land against incumbent tools.</p>
+      </div>
     </div>
     <div class="pipe-card" id="stepCard3">
-      <div class="pipe-num mono">STEP 03 // TRIGGER-BASED OUTREACH</div>
-      <h3>Verified Buyers & Cold Emails</h3>
-      <p>Identifies high-intent B2B target accounts, verifies live DNS/MX records, and opens pre-filled pitches directly in Gmail.</p>
+      <span class="pipe-icon">03</span>
+      <div>
+        <h3>1-Click Gmail Buyer Outreach</h3>
+        <p>Verifies target buyer DNS/MX records and opens live-editable founder emails straight in Gmail Web.</p>
+      </div>
     </div>
   </section>
 
