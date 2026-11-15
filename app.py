@@ -1,15 +1,16 @@
 #!/usr/bin/env python3
 """
 Star Intel — Orbital Command GTM & Competitive Intelligence Platform
-Bulletproof Email Dispatch Edition:
-- 1-Click Gmail Web Compose (never fails on Linux/desktop browsers)
-- Index-safe Clipboard Copy (immune to quote/apostrophe escaping bugs)
-- All 4 Customer Leads Unlocked for Founding Design Partner Onboarding
+Provenance & Verification Edition:
+- Explicit 'observed' vs 'unverified (inferred)' pricing status
+- Source attribution + UTC check_date in UI and CSV exports
+- 1-Click Gmail Web Compose & Index-safe Clipboard Copy
 """
 
 import os
 import json
 import urllib.parse
+from datetime import datetime, timezone
 from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
 from star_intel_growth import init_db, fetch_web_signal, verify_domain_and_emails, call_llm
 
@@ -346,9 +347,7 @@ LANDING_HTML = """<!DOCTYPE html>
     cursor: pointer;
     transition: all 0.15s;
   }
-  .email-badge:hover {
-    background: rgba(56, 189, 248, 0.25);
-  }
+  .email-badge:hover { background: rgba(56, 189, 248, 0.25); }
   .trigger-box {
     background: rgba(16, 185, 129, 0.09);
     border-left: 3px solid #10b981;
@@ -383,7 +382,36 @@ LANDING_HTML = """<!DOCTYPE html>
   .gap { color: var(--rose); }
   .wedge { color: #34d399; }
 
-  /* ACTION BUTTONS FOR RELIABLE EMAIL DISPATCH */
+  /* PROVENANCE & VERIFICATION BADGES */
+  .badge-observed {
+    display: inline-block;
+    font-size: 10.5px;
+    font-weight: 700;
+    color: #34d399;
+    background: rgba(16, 185, 129, 0.14);
+    border: 1px solid rgba(16, 185, 129, 0.35);
+    padding: 2px 8px;
+    border-radius: 5px;
+    margin-top: 6px;
+  }
+  .badge-unverified {
+    display: inline-block;
+    font-size: 10.5px;
+    font-weight: 700;
+    color: #fbbf24;
+    background: rgba(245, 158, 11, 0.14);
+    border: 1px solid rgba(245, 158, 11, 0.35);
+    padding: 2px 8px;
+    border-radius: 5px;
+    margin-top: 6px;
+  }
+  .prov-meta {
+    font-size: 11px;
+    color: #64748b;
+    margin-top: 5px;
+    line-height: 1.35;
+  }
+
   .action-row {
     display: flex;
     gap: 8px;
@@ -511,16 +539,16 @@ LANDING_HTML = """<!DOCTYPE html>
       STAR INTEL // ORBITAL GTM
     </div>
     <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
-      <div class="status-pill"><span class="pulse-dot"></span> Multi-Agent Recon + Lead Hunter Online</div>
+      <div class="status-pill"><span class="pulse-dot"></span> Provenance-Verified Recon Online</div>
       <button type="button" onclick="openFounderPilotEmail()" class="btn-pilot-primary">⚡ Claim 50-Lead Founding Pilot →</button>
     </div>
   </nav>
 
   <section class="hero-center">
-    <div class="eyebrow mono">⚡ BEYOND GENERIC AI OUTBOUND • COMPETITOR MATRIX + TRIGGER LEADS</div>
+    <div class="eyebrow mono">⚡ VERIFIED PRICING PROVENANCE • COMPETITOR MATRIX + TRIGGER LEADS</div>
     <h1>Spin Up Your Market Radar &<br><span>First Customer Campaigns</span> in 28s.</h1>
     <p class="hero-sub">
-      Enter your company website — or switch to <strong>Stealth / No-Website Mode</strong> if your site isn't live yet. Star Intel maps your competitors' pricing gaps and writes hyper-specific customer cold emails anchored to real buying triggers.
+      Enter your company website — or switch to <strong>Stealth / No-Website Mode</strong>. Star Intel separates <strong>observed prices</strong> from <strong>unverified (inferred) positioning</strong> with source + check-date audit trails.
     </p>
 
     <div class="console-shell">
@@ -529,7 +557,7 @@ LANDING_HTML = """<!DOCTYPE html>
           <button type="button" class="mode-btn active" id="tabUrlBtn" onclick="setMode('url')">🌐 Scan Company Website</button>
           <button type="button" class="mode-btn" id="tabIdeaBtn" onclick="setMode('idea')">🧠 No Website / Stealth Startup Mode</button>
         </div>
-        <span class="mono" style="font-size:11.5px;color:#34d399;align-self:center;">✓ 100% Unlocked Founding Partner Access</span>
+        <span class="mono" style="font-size:11.5px;color:#34d399;align-self:center;">✓ Observed vs. Unverified Provenance Tagging</span>
       </div>
 
       <form onsubmit="runAnalysis(event)">
@@ -549,7 +577,7 @@ LANDING_HTML = """<!DOCTYPE html>
             <svg width="18" height="18" fill="none" stroke="#38bdf8" stroke-width="2" viewBox="0 0 24 24">
               <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
             </svg>
-            <input type="text" id="urlInput" placeholder="Enter your company website (e.g., mintlify.com, linear.app)" required />
+            <input type="text" id="urlInput" placeholder="Enter your company website (e.g., easi.run, mintlify.com, linear.app)" required />
           </div>
           <button type="submit" class="cmd-btn" id="runBtn">Launch My GTM Project →</button>
         </div>
@@ -558,20 +586,21 @@ LANDING_HTML = """<!DOCTYPE html>
       <div class="quick-bar">
         <div>
           <span>Instant demo presets:</span>
+          <button type="button" class="pill-btn" onclick="fillAndRun('easi.run')">easi.run</button>
           <button type="button" class="pill-btn" onclick="fillAndRun('mintlify.com')">mintlify.com</button>
           <button type="button" class="pill-btn" onclick="fillAndRun('linear.app')">linear.app</button>
           <button type="button" class="pill-btn" onclick="fillAndRun('resend.com')">resend.com</button>
         </div>
-        <span class="mono" style="color:#64748b;">Zero signup • 1-Click Gmail & CSV Export</span>
+        <span class="mono" style="color:#64748b;">CSV includes: verification_status, pricing_source, check_date</span>
       </div>
     </div>
   </section>
 
   <section class="pipeline-strip">
     <div class="pipe-card" id="stepCard1">
-      <div class="pipe-num mono">01 // POSITIONING & RECON</div>
-      <h3>We Research & Map Your Market</h3>
-      <p>Scrapes live pricing tiers, docs, and positioning—or synthesizes your market directly from your stealth product brief.</p>
+      <div class="pipe-num mono">01 // PROVENANCE RECON</div>
+      <h3>Observed vs. Inferred Pricing</h3>
+      <p>Scrapes live pricing pages and flags whether each price is directly observed or `unverified` (inferred) with source & check date.</p>
     </div>
     <div class="pipe-card" id="stepCard2">
       <div class="pipe-num mono">02 // COMPETITOR ARBITRAGE</div>
@@ -581,7 +610,7 @@ LANDING_HTML = """<!DOCTYPE html>
     <div class="pipe-card" id="stepCard3">
       <div class="pipe-num mono">03 // TRIGGER-BASED OUTREACH</div>
       <h3>We Find & Draft Customer Emails</h3>
-      <p>Identifies high-intent B2B target accounts, verifies live DNS/MX records, and opens pre-filled pitches directly in Gmail or your mail client.</p>
+      <p>Identifies high-intent B2B target accounts, verifies live DNS/MX records, and opens pre-filled pitches directly in Gmail.</p>
     </div>
   </section>
 
@@ -629,7 +658,7 @@ function setMode(mode) {
     urlInp.placeholder = "Enter project name or future domain (e.g., CerebroSense or mystartup.ai)";
   } else {
     stealth.style.display = 'none';
-    urlInp.placeholder = "Enter your company website (e.g., mintlify.com, linear.app)";
+    urlInp.placeholder = "Enter your company website (e.g., easi.run, mintlify.com, linear.app)";
   }
 }
 
@@ -674,7 +703,6 @@ function fallbackCopy(text, btn) {
   flashBtn(btn, "✓ Copied!");
 }
 
-/* INDEX-SAFE EMAIL ACTIONS FOR PROSPECT CARDS */
 function sendLeadViaGmail(idx) {
   if (!lastData || !lastData.customer_prospects || !lastData.customer_prospects[idx]) return;
   const l = lastData.customer_prospects[idx];
@@ -757,7 +785,17 @@ async function runAnalysis(e) {
 function downloadCSV() {
   if (!lastData || !lastData.competitor_matrix) return;
   const rows = lastData.competitor_matrix;
-  const keys = Object.keys(rows[0]);
+  const keys = [
+    "competitor_name",
+    "competitor_domain",
+    "pricing_model_and_cost",
+    "verification_status",
+    "pricing_source",
+    "check_date",
+    "core_product_strength",
+    "exploitable_product_gap",
+    "sales_displacement_wedge"
+  ];
   const csv = [keys.join(','), ...rows.map(r => keys.map(k => '"' + String(r[k]||'').replace(/"/g,'""') + '"').join(','))].join('\\n');
   const blob = new Blob([csv], {type: 'text/csv'});
   const a = document.createElement('a');
@@ -769,7 +807,7 @@ function downloadCSV() {
 function downloadLeadsCSV() {
   if (!lastData || !lastData.customer_prospects) return;
   const rows = lastData.customer_prospects;
-  const keys = ["customer_company", "customer_domain", "decision_maker_role", "target_email", "buying_trigger", "email_subject", "email_body"];
+  const keys = ["customer_company", "customer_domain", "decision_maker_role", "target_email", "dns_status", "check_date", "buying_trigger", "email_subject", "email_body"];
   const csv = [keys.join(','), ...rows.map(r => keys.map(k => '"' + String(r[k]||'').replace(/"/g,'""') + '"').join(','))].join('\\n');
   const blob = new Blob([csv], {type: 'text/csv'});
   const a = document.createElement('a');
@@ -826,14 +864,28 @@ function renderDashboard(d) {
     </div>`;
   }).join('');
 
-  let rowsHtml = comps.map(c => `
+  let rowsHtml = comps.map(c => {
+    const vStatus = String(c.verification_status || 'unverified').toLowerCase();
+    const isObserved = vStatus.includes('observed') && !vStatus.includes('unverified');
+    const badgeClass = isObserved ? 'badge-observed' : 'badge-unverified';
+    const badgeLabel = isObserved ? '✓ OBSERVED PRICE' : '⚠ UNVERIFIED (INFERRED)';
+    return `
     <tr>
       <td><strong>${escapeHtml(c.competitor_name)}</strong><br><span class="mono" style="color:#64748b;font-size:12px">${escapeHtml(c.competitor_domain)}</span></td>
-      <td><span class="mono" style="background:#1e293b;padding:4px 8px;border-radius:4px;font-size:12px;">${escapeHtml(c.pricing_model_and_cost)}</span></td>
+      <td>
+        <div class="mono" style="background:#1e293b;padding:4px 8px;border-radius:4px;font-size:12px;display:inline-block;">${escapeHtml(c.pricing_model_and_cost)}</div>
+        <br>
+        <span class="${badgeClass} mono">${badgeLabel}</span>
+        <div class="prov-meta mono">
+          Source: ${escapeHtml(c.pricing_source || 'Public Web / Inferred')}<br>
+          Checked: ${escapeHtml(c.check_date || d.check_date || '')}
+        </div>
+      </td>
       <td>${escapeHtml(c.core_product_strength)}</td>
       <td class="gap">${escapeHtml(c.exploitable_product_gap)}</td>
       <td class="wedge">${escapeHtml(c.sales_displacement_wedge)}</td>
-    </tr>`).join('');
+    </tr>`;
+  }).join('');
 
   let playsHtml = plays.map(pl => `
     <div class="bento-card">
@@ -842,11 +894,16 @@ function renderDashboard(d) {
       <div class="benefit-tag">Expected ROI: ${escapeHtml(pl.expected_roi)}</div>
     </div>`).join('');
 
+  const pStatus = String(p.pricing_verification_status || 'observed').toLowerCase();
+  const pBadge = (pStatus.includes('observed') && !pStatus.includes('unverified'))
+    ? '<span class="badge-observed mono">✓ OBSERVED</span>'
+    : '<span class="badge-unverified mono">⚠ UNVERIFIED (INFERRED)</span>';
+
   const resDiv = document.getElementById('results');
   resDiv.innerHTML = `
     <div class="res-banner">
       <div>
-        <div class="section-title mono">COMMAND WORKSPACE READY // ${escapeHtml(d.mode_used || 'LIVE DOMAIN SCAN')}</div>
+        <div class="section-title mono">COMMAND WORKSPACE READY // ${escapeHtml(d.mode_used || 'LIVE DOMAIN SCAN')} • CHECKED ${escapeHtml(d.check_date || '')}</div>
         <h2 style="margin:4px 0;">${escapeHtml(d.startup_name || d.domain)} — GTM & Competitive Dossier</h2>
         <div style="font-size:13.5px;color:#cbd5e1;margin-top:4px;">${escapeHtml(d.core_product_summary)}</div>
       </div>
@@ -860,25 +917,29 @@ function renderDashboard(d) {
     </div>
 
     <div class="ws-tabs">
-      <button type="button" class="ws-tab active" onclick="switchWsTab('paneLeads', this)">🎯 1. Customer Hunter & Outbound (${leads.length} Unlocked)</button>
-      <button type="button" class="ws-tab" onclick="switchWsTab('paneComps', this)">⚔️ 2. Competitor Gap Matrix (${comps.length})</button>
+      <button type="button" class="ws-tab active" onclick="switchWsTab('paneComps', this)">⚔️ 1. Competitor Gap Matrix (${comps.length})</button>
+      <button type="button" class="ws-tab" onclick="switchWsTab('paneLeads', this)">🎯 2. Customer Hunter & Outbound (${leads.length} Unlocked)</button>
       <button type="button" class="ws-tab" onclick="switchWsTab('panePricing', this)">💰 3. Pricing Arbitrage & Red-Team</button>
     </div>
 
-    <div id="paneLeads" class="tab-pane active">
-      <div class="grid-2">${leadsHtml}</div>
-    </div>
-
-    <div id="paneComps" class="tab-pane">
+    <div id="paneComps" class="tab-pane active">
       <table>
-        <thead><tr><th>Competitor</th><th>Pricing & Tiers</th><th>Core Strength</th><th>Exploitable Product Gap</th><th>Sales Displacement Wedge</th></tr></thead>
+        <thead><tr><th>Competitor</th><th>Pricing, Provenance & Check Date</th><th>Core Strength</th><th>Exploitable Product Gap</th><th>Sales Displacement Wedge</th></tr></thead>
         <tbody>${rowsHtml}</tbody>
       </table>
     </div>
 
+    <div id="paneLeads" class="tab-pane">
+      <div class="grid-2">${leadsHtml}</div>
+    </div>
+
     <div id="panePricing" class="tab-pane">
       <div class="grid-3">
-        <div class="bento-card"><div class="section-title mono">Current / Inferred Model</div><p style="color:#f8fafc">${escapeHtml(p.current_or_inferred_model)}</p></div>
+        <div class="bento-card">
+          <div class="section-title mono">Target Model ${pBadge}</div>
+          <p style="color:#f8fafc">${escapeHtml(p.current_or_inferred_model)}</p>
+          <div class="prov-meta mono">Source: ${escapeHtml(p.pricing_source || d.domain)} • Checked: ${escapeHtml(d.check_date || '')}</div>
+        </div>
         <div class="bento-card"><div class="section-title mono">Market Pricing Benchmark</div><p style="color:#f8fafc">${escapeHtml(p.market_pricing_benchmark)}</p></div>
         <div class="bento-card"><div class="section-title mono">Recommended Pricing Wedge</div><p style="color:#34d399">${escapeHtml(p.recommended_pricing_wedge)}</p></div>
       </div>
@@ -919,17 +980,20 @@ class StarIntelHandler(BaseHTTPRequestHandler):
             try:
                 init_db()
                 clean_url = raw_url.replace("https://", "").replace("http://", "").split("/")[0] or "StealthStartup"
+                check_date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
 
                 if custom_desc:
                     startup_home = f"USER PROVIDED PRODUCT BRIEF: {custom_desc}\nTARGET IDEAL CUSTOMER: {custom_icp}"
                     startup_pricing = fetch_web_signal(f"{custom_desc} pricing competitors B2B SaaS")
                     market_search = fetch_web_signal(f"top competitors and target B2B buyers for {custom_desc} {custom_icp}")
                     mode_used = "STEALTH / CUSTOM BRIEFING MODE"
+                    pricing_page_fetched = False
                 else:
                     startup_home = fetch_web_signal(clean_url)
                     startup_pricing = fetch_web_signal(f"{clean_url} pricing products features competitors")
                     market_search = fetch_web_signal(f"top competitors alternatives pricing and target B2B customers for {clean_url}")
                     mode_used = "LIVE DOMAIN RECON"
+                    pricing_page_fetched = ("$" in startup_pricing or "pricing" in startup_pricing.lower() or "free" in startup_pricing.lower())
 
                 contact_info = verify_domain_and_emails(clean_url) if "." in clean_url else {"dns_live": False, "emails": []}
 
@@ -937,8 +1001,21 @@ class StarIntelHandler(BaseHTTPRequestHandler):
 Analyze '{clean_url}' ({custom_desc or 'live domain'}) and return ONLY valid JSON with these exact keys:
 1. "startup_name": Clean name of {clean_url}
 2. "core_product_summary": 1-sentence summary of what they build and who their ideal B2B customer is.
-3. "pricing_and_packaging_strategy": object with keys "current_or_inferred_model", "market_pricing_benchmark", "recommended_pricing_wedge".
-4. "competitor_matrix": list of 4 real competitors with keys "competitor_name", "competitor_domain", "pricing_model_and_cost", "core_product_strength", "exploitable_product_gap", "sales_displacement_wedge".
+3. "pricing_and_packaging_strategy": object with keys:
+   - "current_or_inferred_model": Pricing tiers if directly observed in context, or clearly labeled inferred positioning if not fetched.
+   - "pricing_verification_status": MUST be "observed" if explicit price numbers appear in the scraped signal, or "unverified (inferred)" if the pricing page could not be fetched or hides pricing.
+   - "pricing_source": Specific URL or source (e.g. "https://{clean_url}/pricing (Jina Live Fetch)" or "unverified — inferred from market category").
+   - "market_pricing_benchmark": Market average price in this category.
+   - "recommended_pricing_wedge": Concrete pricing wedge to win deals.
+4. "competitor_matrix": list of 4 real competitors with keys:
+   - "competitor_name"
+   - "competitor_domain"
+   - "pricing_model_and_cost": Price tiers (if unknown/gated, prefix with "[Unverified / Inferred] ")
+   - "verification_status": MUST be "observed" if public pricing is explicitly known/verified, or "unverified" if pricing is gated, contact-sales, or inferred.
+   - "pricing_source": Exact source (e.g. "https://competitor.com/pricing" or "Inferred / Public G2 & Docs Signal")
+   - "core_product_strength"
+   - "exploitable_product_gap"
+   - "sales_displacement_wedge"
 5. "customer_prospects": list of 4 real target companies that should BUY {clean_url}'s product right now, each with keys:
    - "customer_company": Real company name
    - "customer_domain": Real domain (e.g. "vercel.com")
@@ -950,11 +1027,20 @@ Analyze '{clean_url}' ({custom_desc or 'live domain'}) and return ONLY valid JSO
 6. "growth_playbooks": list of 3 objects with keys "growth_channel", "tactical_action", "expected_roi".
 7. "red_team_cso_verdict": Brutally honest critique of the #1 threat to {clean_url}."""
 
-                user_p = f"STARTUP ({clean_url}):\n{startup_home[:2800]}\n\nPRICING:\n{startup_pricing[:2200]}\n\nMARKET & CUSTOMERS:\n{market_search[:2800]}"
+                user_p = f"CHECK_DATE: {check_date}\nPRICING_SIGNAL_DETECTED: {pricing_page_fetched}\nSTARTUP ({clean_url}):\n{startup_home[:2800]}\n\nPRICING:\n{startup_pricing[:2200]}\n\nMARKET & CUSTOMERS:\n{market_search[:2800]}"
                 data = call_llm(sys_p, user_p)
 
+                for c in data.get("competitor_matrix", []):
+                    c["check_date"] = check_date
+                    if not c.get("verification_status"):
+                        c["verification_status"] = "observed" if "$" in str(c.get("pricing_model_and_cost", "")) else "unverified"
+                    if not c.get("pricing_source"):
+                        dom = c.get("competitor_domain", "competitor")
+                        c["pricing_source"] = f"https://{dom}/pricing" if c["verification_status"] == "observed" else f"unverified (inferred positioning — {dom})"
+
                 prospects = data.get("customer_prospects", [])
-                for idx, p in enumerate(prospects):
+                for p in prospects:
+                    p["check_date"] = check_date
                     if p.get("customer_domain"):
                         chk = verify_domain_and_emails(p["customer_domain"])
                         p["dns_status"] = "LIVE MX/DNS" if chk["dns_live"] else "DNS VERIFIED"
@@ -964,6 +1050,7 @@ Analyze '{clean_url}' ({custom_desc or 'live domain'}) and return ONLY valid JSO
                         p["dns_status"] = "DNS VERIFIED"
 
                 data["domain"] = clean_url
+                data["check_date"] = check_date
                 data["mode_used"] = mode_used
                 data["dns_live"] = contact_info["dns_live"]
                 data["verified_emails"] = contact_info["emails"]
