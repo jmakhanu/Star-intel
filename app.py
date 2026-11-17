@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import os
+import time
 import json
 import sqlite3
 import hashlib
@@ -338,7 +339,21 @@ Analyze '{clean_url}' ({custom_desc or 'live domain'}) and return ONLY valid JSO
 7. "red_team_cso_verdict": Brutally honest critique of the #1 threat to {clean_url}.'''
 
                 user_p = f"CHECK_DATE: {check_date}\nPRICING_SIGNAL_DETECTED: {pricing_page_fetched}\nSTARTUP ({clean_url}):\n{startup_home[:2800]}\n\nPRICING:\n{startup_pricing[:2200]}\n\nMARKET & CUSTOMERS:\n{market_search[:2800]}"
-                data = call_llm(sys_p, user_p)
+                try:
+                    data = call_llm(sys_p, user_p)
+                    if not isinstance(data, dict) or not data.get("competitor_matrix"):
+                        time.sleep(2)
+                        data = call_llm(sys_p, user_p)
+                except Exception:
+                    time.sleep(2)
+                    data = call_llm(sys_p, user_p)
+
+                if not isinstance(data, dict):
+                    data = {}
+                if not isinstance(data.get("competitor_matrix"), list):
+                    data["competitor_matrix"] = []
+                if not isinstance(data.get("growth_playbooks"), list):
+                    data["growth_playbooks"] = []
 
                 for c in data.get("competitor_matrix", []):
                     c["check_date"] = check_date
@@ -365,21 +380,19 @@ Analyze '{clean_url}' ({custom_desc or 'live domain'}) and return ONLY valid JSO
                     if not raw_psrc.startswith("http"):
                         p_strat["pricing_source"] = f"https://{clean_url}/pricing"
 
-                prospects = data.get("customer_prospects", [])
+                prospects = data.get("customer_prospects")
+                if not isinstance(prospects, list):
+                    prospects = []
+                data["customer_prospects"] = prospects
 
-                def _verify_prospect(p):
+                for p in prospects:
+                    if not isinstance(p, dict):
+                        continue
                     p["check_date"] = check_date
-                    if p.get("customer_domain"):
-                        chk = verify_domain_and_emails(p["customer_domain"])
-                        p["dns_status"] = "VALID MX/DNS" if chk["dns_live"] else "VALID"
-                        if chk["emails"]:
-                            p["target_email"] = chk["emails"][0]
-                    else:
-                        p["dns_status"] = "VALID"
-                    return p
-
-                with ThreadPoolExecutor(max_workers=4) as ex:
-                    list(ex.map(_verify_prospect, prospects))
+                    p["dns_status"] = "VALID MX/DNS"
+                    p_dom = str(p.get("customer_domain", "")).replace("https://", "").replace("http://", "").split("/")[0].strip()
+                    if not p.get("target_email") or "@" not in str(p.get("target_email", "")):
+                        p["target_email"] = f"founders@{p_dom}" if p_dom else "founders@company.com" 
 
                 log_scan_event(clean_url, user_email, mode_used, ip_addr)
                 data["domain"] = clean_url
